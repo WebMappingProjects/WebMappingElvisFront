@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+    --spacing-screen-75: "75vh";
+    --spacing-48: "12rem";
+    --spacing-94-px: "94px";
+    --spacing-100-px: "100px";
+    --spacing-120-px: "120px";
+    --spacing-140-px: "140px";
+    --spacing-150-px: "150px";
+    --spacing-180-px: "180px";
+    --spacing-200-px: "200px";
+    --spacing-210-px: "210px";
+    --spacing-580-px: "580px";
+    --spacing-860-px: "860px";
+    --text-55: "55rem";
+    --color-primary-light: #90baff;
+    --color-primary-default: #013a94;
+    --color-primary-dark: #03255a;
+    --color-primary-light-op: #8fbaff80;
+    --color-primary-default-op: #013a9480;
+    --color-primary-dark-op: #03255a80;
+}
+
+#main-content
+{
+    background: url("./assets/7181.jpg");
+}
+
+.bg-gray-op-25
+{
+    background-color: rgba(98, 98, 98, 0.250);
+    background-color: #8fbaff80;
+}
+
+#statSection
+{
+    background: url("./assets/7181.jpg") fixed center;
+}

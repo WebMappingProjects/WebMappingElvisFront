@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@react-leaflet/core": "^3.0.0",
     "@react-router/node": "^7.1.5",
     "@reduxjs/toolkit": "^2.6.0",
     "@tailwindcss/vite": "^4.0.6",
     "axios": "^1.7.9",
+    "chart.js": "^4.4.9",
     "dotenv": "^16.4.7",
     "file-saver": "^2.0.5",
     "install": "^0.13.0",
@@ -23,7 +25,6 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-image": "^0.4.0",
     "leaflet-simple-map-screenshoter": "^0.5.0",
-    "mapbox-gl": "^3.10.0",
     "npm": "^11.1.0",
     "proj4": "^2.15.0",
     "react": "^19.0.0-rc.1",
