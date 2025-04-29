@@ -12,8 +12,10 @@ import angular from "../../assets/img/angular.jpg";
 import sketch from "../../assets/img/sketch.jpg";
 import react from "../../assets/img/react.jpg";
 import vue from "../../assets/img/vue.jpg";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-export default function CardTable({ color }) {
+export default function CardTable({ color, mainRoute }) {
   return (
     <>
       <div
@@ -161,8 +163,23 @@ export default function CardTable({ color }) {
                     </div>
                   </div>
                 </td>
-                <td className="p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <TableDropdown />
+                <td className="flex flex-row p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                  {/* <TableDropdown /> */}
+                  <Link 
+                    className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
+                    title="Modifier"
+                    to={ mainRoute }>
+                    <FaEdit className="text-sm text-teal-600"/>
+                  </Link>
+                  {/* <button 
+                    className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
+                    title="Modifier"
+                    to={ mainRoute }>
+                    <FaEdit className="text-sm text-teal-600"/>
+                  </button> */}
+                  <button className="p-4 m-2 rounded-full cursor-pointer bg-red-50 hover:bg-red-300" title="Supprimer">
+                    <FaTrash className="text-sm text-red-600"/>
+                  </button>
                 </td>
               </tr>
               <tr>

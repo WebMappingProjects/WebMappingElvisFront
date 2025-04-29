@@ -1,4 +1,4 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 // components
 
@@ -13,7 +13,7 @@ export default function Admin() {
   return (
     <>
       <Sidebar />
-      <div className="relative md:ml-64 bg-blueGray-100">
+      <div className="relative bg-neutral-100 md:ml-64">
         <AdminNavbar />
         {/* Header */}
         <HeaderStats />
