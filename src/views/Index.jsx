@@ -221,6 +221,107 @@ export default function Index() {
             </div>
           </div>
 
+          <div className="flex flex-wrap justify-center mt-24 text-center">
+            <div className="w-full px-12 md:w-6/12 md:px-4">
+              <h2 className="text-4xl pt-[70px] font-semibold" id="featuresTitleIdx">Modules</h2>
+              <p className="mt-4 mb-4 text-lg leading-relaxed text-primary-dark">
+                La plateforme est constituée de 3 principales parties
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative block z-1 bg-primary-dark">
+          <div className="container mx-auto">
+            <div className="flex flex-wrap justify-center">
+              <div className="w-full px-4 -mt-24 lg:w-12/12">
+                <div className="flex flex-wrap">
+                  <div className="w-full px-4 lg:w-4/12">
+                    <h5 className="pb-4 text-xl font-semibold text-center">
+                      Carte interactive
+                    </h5>
+                    {/* <Link to="/auth/login"> */}
+                    <Link to="/admin/maps">
+                      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
+                        <img
+                          alt="..."
+                          className="h-auto max-w-full align-middle border-none rounded-lg md:h-[250px]"
+                          src={ map_screen }
+                        />
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div className="w-full px-4 lg:w-4/12">
+                    <h5 className="pb-4 text-xl font-semibold text-center">
+                      Données géospatiales
+                    </h5>
+                    <Link to="/admin/tables">
+                      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
+                        <img
+                          alt="..."
+                          className="max-w-full align-middle border-none rounded-lg h-auto md:h-[250px]"
+                          src={ tables_screen }
+                        />
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div className="w-full px-4 lg:w-4/12">
+                    <h5 className="pb-4 text-xl font-semibold text-center">
+                      Statistiques
+                    </h5>
+                    <Link to="/landing">
+                      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
+                        <img
+                          alt="..."
+                          className="h-auto max-w-full align-middle border-none rounded-lg md:h-[250px]"
+                          src={landing}
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative mt-20 overflow-hidden bg-primary-dark" id="statSection">
+          <div className="absolute z-0 w-full h-full bg-primary-dark-op backdrop-blur-sm"></div>
+          <div className="container relative z-10 pb-64 mx-auto">
+            <div className="flex flex-wrap justify-center">
+              
+              <h2 className="text-4xl pt-[70px] font-semibold text-center w-full text-white" id="statsTitleIdx">Statistiques</h2>
+
+              <div className="w-full px-12 ml-auto mr-auto md:w-5/12 md:px-4 md:mt-32">
+                <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
+                  <FaCodeBranch />
+                </div>
+                <h3 className="mb-2 text-3xl font-semibold leading-normal text-white">
+                  Statistiques
+                </h3>
+                <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-primary-light">
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
+                </p>
+                <a
+                  href="#"
+                  className="inline-block px-6 py-4 mt-4 mb-1 mr-1 text-sm font-bold text-white uppercase rounded shadow outline-none github-star focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg"
+                >
+                  Plus...
+                </a>
+              </div>
+
+              <div className="relative w-full px-4 mt-32 ml-auto mr-auto md:w-4/12">
+                <i className="absolute left-auto fab fa-github text-blueGray-700 -top-150-px -right-100 opacity-80 text-55"></i>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <section className="relative mt-10">
+
+          {/*  */}
           <div className="container pb-20 mx-auto overflow-hidden">
             <div className="flex flex-wrap items-center">
               <div className="w-full px-12 mt-48 ml-auto mr-auto md:w-4/12 md:px-4">
@@ -440,13 +541,10 @@ export default function Index() {
                     <i className="text-xl fas fa-file-alt"></i>
                   </div>
                   <h3 className="text-3xl font-semibold">
-                    Complex Documentation
+                    More description
                   </h3>
                   <p className="mt-4 text-lg leading-relaxed text-primary-dark">
-                    This extension comes a lot of fully coded examples that help
-                    you get started faster. You can adjust the colors and also the
-                    programming language. You can change the text and images and
-                    you're good to go.
+                      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
                   </p>
                   <ul className="mt-6 list-none">
                     <li className="py-2">
@@ -508,114 +606,13 @@ export default function Index() {
               </div>
             </div>
           </div>
-
-          <div className="flex flex-wrap justify-center mt-24 text-center">
-            <div className="w-full px-12 md:w-6/12 md:px-4">
-              <h2 className="text-4xl pt-[70px] font-semibold" id="featuresTitleIdx">Modules</h2>
-              <p className="mt-4 mb-4 text-lg leading-relaxed text-primary-dark">
-                La plateforme est constituée de 3 principales parties
-              </p>
-            </div>
-          </div>
+          {/*  */}
+          
         </section>
 
-        <section className="relative block z-1 bg-primary-dark">
-          <div className="container mx-auto">
-            <div className="flex flex-wrap justify-center">
-              <div className="w-full px-4 -mt-24 lg:w-12/12">
-                <div className="flex flex-wrap">
-                  <div className="w-full px-4 lg:w-4/12">
-                    <h5 className="pb-4 text-xl font-semibold text-center">
-                      Carte interactive
-                    </h5>
-                    {/* <Link to="/auth/login"> */}
-                    <Link to="/admin/maps">
-                      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
-                        <img
-                          alt="..."
-                          className="h-auto max-w-full align-middle border-none rounded-lg md:h-[250px]"
-                          src={ map_screen }
-                        />
-                      </div>
-                    </Link>
-                  </div>
+        <section className="relative pt-32 pb-16 bg-neutral-200">
+          
 
-                  <div className="w-full px-4 lg:w-4/12">
-                    <h5 className="pb-4 text-xl font-semibold text-center">
-                      Données géospatiales
-                    </h5>
-                    <Link to="/admin/tables">
-                      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
-                        <img
-                          alt="..."
-                          className="max-w-full align-middle border-none rounded-lg h-auto md:h-[250px]"
-                          src={ tables_screen }
-                        />
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="w-full px-4 lg:w-4/12">
-                    <h5 className="pb-4 text-xl font-semibold text-center">
-                      Statistiques
-                    </h5>
-                    <Link to="/landing">
-                      <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
-                        <img
-                          alt="..."
-                          className="h-auto max-w-full align-middle border-none rounded-lg md:h-[250px]"
-                          src={landing}
-                        />
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="relative mt-20 overflow-hidden bg-primary-dark" id="statSection">
-          <div className="absolute z-0 w-full h-full bg-primary-dark-op backdrop-blur-sm"></div>
-          <div className="container relative z-10 pb-64 mx-auto">
-            <div className="flex flex-wrap justify-center">
-              
-              <h2 className="text-4xl pt-[70px] font-semibold text-center w-full text-white" id="statsTitleIdx">Statistiques</h2>
-
-              <div className="w-full px-12 ml-auto mr-auto md:w-5/12 md:px-4 md:mt-32">
-                <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
-                  <FaCodeBranch />
-                </div>
-                <h3 className="mb-2 text-3xl font-semibold leading-normal text-white">
-                  Open Source
-                </h3>
-                <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-primary-light">
-                  Since Tailwind CSS
-                  is an open source project we wanted to continue this movement
-                  too. You can give this version a try to feel the design and also
-                  test the quality of the code!
-                </p>
-                <p className="mt-0 mb-4 text-lg font-light leading-relaxed text-primary-light">
-                  Get it free on Github and please help us spread the news with a
-                  Star!
-                </p>
-                <a
-                  href="https://github.com/creativetimofficial/notus-react?ref=nr-index"
-                  target="_blank"
-                  className="inline-block px-6 py-4 mt-4 mb-1 mr-1 text-sm font-bold text-white uppercase rounded shadow outline-none github-star focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg"
-                >
-                  Github Star
-                </a>
-              </div>
-
-              <div className="relative w-full px-4 mt-32 ml-auto mr-auto md:w-4/12">
-                <i className="absolute left-auto fab fa-github text-blueGray-700 -top-150-px -right-100 opacity-80 text-55"></i>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="relative pt-32 pb-16 bg-blueGray-200">
           <div
             className="absolute top-0 left-0 right-0 bottom-auto w-full h-20 -mt-20"
             style={{ transform: "translateZ(0)" }}
@@ -645,12 +642,10 @@ export default function Index() {
                   </span>
                 </p>
                 <h3 className="text-3xl font-semibold">
-                  Do you love this Starter Kit?
+                  Do you love this Site ?
                 </h3>
                 <p className="mt-4 mb-4 text-lg leading-relaxed text-primary-dark">
-                  Cause if you do, it can be yours now. Hit the buttons below to
-                  navigate to get the Free version for your next project. Build a
-                  new web app or give an old project a new look!
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
                 </p>
                 <div className="flex flex-col mt-10 sm:block">
                   <a

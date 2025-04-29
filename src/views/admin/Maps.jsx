@@ -1,7 +1,6 @@
 // components
 
 import LeafletMap from "../../components/Maps/LeafletMap";
-import MapExample from "../../components/Maps/MapExample";
 
 export default function Maps() {
   return (
