@@ -14,12 +14,16 @@ import Settings from "./views/admin/Settings";
 import Tables from "./views/admin/Tables";
 import Login from "./views/auth/Login";
 import Register from "./views/auth/Register";
+import Test from "./components/Test";
 
 function App() {
 
   return (
     <BrowserRouter>
     <Routes>
+
+      <Route path="/base" element={<Test />} />
+
       {/* add routes with layouts */}
       <Route path="/admin" element={<Admin />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
@@ -40,7 +44,7 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/" element={<Index />} />
       {/* add redirect for first page */}
-      <Route path="*" element={<Navigate  to="/" />} />
+      {/* <Route path="*" element={<Navigate  to="/" />} /> */}
     </Routes>
   </BrowserRouter>
   );
