@@ -16,6 +16,8 @@ import MosqueeFontPointForm from "./components/Forms/MosqueeFontPointForm";
 import Forms from "./views/admin/Forms";
 import NationsUniesPointForm from "./components/Forms/NationsUniesPointForm";
 import NationsUniesPointTable from "./components/Tables/NationsUniesPointTable";
+import GendarmeriesPointForm from "./components/Forms/GendarmeriesPointForm";
+import GendarmeriesPointTable from "./components/Tables/GendarmeriesPointTable";
 import SapeurPompierPointForm from "./components/Forms/SapeurPompierPointForm";
 import SapeurPompierPointTable from "./components/Tables/SapeurPompierPointTable";
 import LaveriesPointTable from "./components/Tables/LaveriesFontPointTable";
@@ -38,6 +40,7 @@ function App() {
           <Route path="/admin/forms" element={<Forms />}>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
             <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
+            <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
             <Route path="/admin/forms/sapeurpompier" element={<SapeurPompierPointForm />} />
             <Route path="/admin/forms/laveries" element={<LaveriesPointForm />} />
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
@@ -49,6 +52,7 @@ function App() {
               <Route path="/admin/tables/nations-unies" element={<NationsUniesPointTable />} />
               <Route path="/admin/tables/sapeurpompier" element={<SapeurPompierPointTable />} />
               <Route path="/admin/tables/laveries" element={<LaveriesPointTable />} />
+              <Route path="/admin/tables/gendarmeries" element={<GendarmeriesPointTable />} />
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 

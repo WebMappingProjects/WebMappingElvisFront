@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaCar, FaMosque, FaServicestack, FaTimes } from "react-icons/fa";
+import { FaBars, FaCar, FaMosque, FaPersonBooth, FaServicestack, FaTimes, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
@@ -253,6 +253,17 @@ export default function Sidebar() {
                   Nations Unies
                 </Link>
               </li>
+            </ul>
+
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
+              Securite
+            </h6>
+            {/* Navigation */}
+
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
 
               <li className="items-center">
                 <Link
@@ -276,14 +287,15 @@ export default function Sidebar() {
               
                {/* <li className="items-center">
                 <Link
-                  className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
-                  to="/profile"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/gendarmeries"
                 >
-                  <i className="mr-2 text-sm fas fa-user-circle text-blueGray-400"></i>{" "}
-                  Profile Page
+                  <FaUser className="mr-2 text-sm"/>
+                  Gendarmeries
                 </Link>
-              </li> */}
+              </li>
             </ul>
+
           </div>
         </div>
       </nav>
