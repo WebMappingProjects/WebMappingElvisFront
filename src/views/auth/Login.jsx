@@ -19,15 +19,16 @@ export default function Login() {
                 <form>
                   <div className="relative w-full mb-3">
                     <label
-                      className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                      htmlFor="grid-password"
+                      className="block mb-2 text-xs font-bold uppercase text-black"
+                      htmlFor="grid-email"
                     >
                       Email
                     </label>
                     <input
                       type="email"
                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring"
-                      placeholder="Email"
+                      placeholder="example@gmail.com"
+                      id="grid-email"
                     />
                   </div>
 
@@ -42,6 +43,7 @@ export default function Login() {
                       type="password"
                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring"
                       placeholder="Password"
+                      id="grid-password"
                     />
                   </div>
                   {/* <div>
@@ -59,7 +61,7 @@ export default function Login() {
 
                   <div className="mt-6 text-center">
                     <button
-                      className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-primary-dark bg-blueGray-800 active:bg-blueGray-600 hover:shadow-lg focus:outline-none"
+                      className="w-full px-6 py-3 mb-1 mr-1 cursor-pointer hover:bg-primary-default text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-primary-dark bg-blueGray-800 active:bg-blueGray-600 hover:shadow-lg focus:outline-none"
                       type="button"
                     >
                       Connexion

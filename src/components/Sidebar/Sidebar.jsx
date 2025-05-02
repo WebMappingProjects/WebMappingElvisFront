@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaMosque, FaPersonBooth, FaServicestack, FaTimes, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
+import { FaBars, FaCar, FaMosque, FaPersonBooth, FaServicestack, FaTimes, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
@@ -253,6 +253,28 @@ export default function Sidebar() {
                   Nations Unies
                 </Link>
               </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/sapeurpompier"
+                >
+                  <FaCar className="mr-2 text-sm"/>
+                  Sapeur pompier
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/laveries"
+                >
+                  <FaCar className="mr-2 text-sm"/>
+                  Laveries
+                </Link>
+              </li>
+              
+               {/* <li className="items-center">
             </ul>
 
             {/* Divider */}
