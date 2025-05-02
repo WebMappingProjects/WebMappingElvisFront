@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaMosque, FaServicestack, FaTimes } from "react-icons/fa";
+import { FaBars, FaCar, FaMosque, FaServicestack, FaTimes } from "react-icons/fa";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
@@ -254,7 +254,27 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              {/* <li className="items-center">
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/sapeurpompier"
+                >
+                  <FaCar className="mr-2 text-sm"/>
+                  Sapeur pompier
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/laveries"
+                >
+                  <FaCar className="mr-2 text-sm"/>
+                  Laveries
+                </Link>
+              </li>
+              
+               {/* <li className="items-center">
                 <Link
                   className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
                   to="/profile"
