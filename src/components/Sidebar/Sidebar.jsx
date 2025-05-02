@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaMosque, FaTimes } from "react-icons/fa";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
@@ -213,18 +213,18 @@ export default function Sidebar() {
             </h6>
             {/* Navigation */}
 
-            {/* <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
               <li className="items-center">
                 <Link
-                  className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
-                  to="/landing"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/mosquee"
                 >
-                  <i className="mr-2 text-sm fas fa-newspaper text-blueGray-400"></i>{" "}
-                  Landing Page
+                  <FaMosque className="mr-2 text-sm"/>
+                  Mosquées
                 </Link>
               </li>
 
-              <li className="items-center">
+              {/* <li className="items-center">
                 <Link
                   className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
                   to="/profile"
@@ -232,8 +232,8 @@ export default function Sidebar() {
                   <i className="mr-2 text-sm fas fa-user-circle text-blueGray-400"></i>{" "}
                   Profile Page
                 </Link>
-              </li>
-            </ul> */}
+              </li> */}
+            </ul>
           </div>
         </div>
       </nav>

@@ -1,18 +1,19 @@
 // components
 
 import { Outlet } from "react-router-dom";
+import LeafletMap from "../../components/Maps/LeafletMap";
 
-export default function Tables() {
+export default function Forms() {
   return (
     <>
       <div className="flex flex-wrap mt-4">
         <div className="w-full px-4 mb-12">
-          {/* <CardTable color="light" /> */}
+            <LeafletMap />
+        </div>
+        
+        <div className="w-full px-4 mb-12">
           <Outlet />
         </div>
-        {/* <div className="w-full px-4 mb-12">
-          <CardTable color="dark" />
-        </div> */}
       </div>
     </>
   );
