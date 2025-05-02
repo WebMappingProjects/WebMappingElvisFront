@@ -14,15 +14,14 @@ import Register from "./views/auth/Register";
 import MosqueeFontPointTable from "./components/Tables/MosqueeFontPointTable";
 import MosqueeFontPointForm from "./components/Forms/MosqueeFontPointForm";
 import Forms from "./views/admin/Forms";
-import Test from "./components/Test";
+import NationsUniesPointForm from "./components/Forms/NationsUniesPointForm";
+import NationsUniesPointTable from "./components/Tables/NationsUniesPointTable";
 
 function App() {
 
   return (
     <BrowserRouter>
     <Routes>
-
-      <Route path="/base" element={<Test />} />
 
       {/* add routes with layouts */}
 
@@ -34,12 +33,14 @@ function App() {
           {/*  Sub layouts for admin data forms */}
           <Route path="/admin/forms" element={<Forms />}>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
+            <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
           </Route>
 
           {/*  Sub Layouts for admin data tables */}
           <Route path="/admin/tables" element={<Tables />}>
               <Route path="/admin/tables/mosquee" element={<MosqueeFontPointTable />} />
+              <Route path="/admin/tables/nations-unies" element={<NationsUniesPointTable />} />
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 
