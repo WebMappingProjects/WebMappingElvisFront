@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaMosque, FaTimes } from "react-icons/fa";
+import { FaBars, FaMosque, FaServicestack, FaTimes } from "react-icons/fa";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
@@ -221,6 +221,36 @@ export default function Sidebar() {
                 >
                   <FaMosque className="mr-2 text-sm"/>
                   Mosquées
+                </Link>
+              </li>
+
+              {/* <li className="items-center">
+                <Link
+                  className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
+                  to="/profile"
+                >
+                  <i className="mr-2 text-sm fas fa-user-circle text-blueGray-400"></i>{" "}
+                  Profile Page
+                </Link>
+              </li> */}
+            </ul>
+            
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
+              Services Publiques
+            </h6>
+            {/* Navigation */}
+
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/nations-unies"
+                >
+                  <FaServicestack className="mr-2 text-sm"/>
+                  Nations Unies
                 </Link>
               </li>
 

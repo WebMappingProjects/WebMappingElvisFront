@@ -2,16 +2,6 @@ import PropTypes from "prop-types";
 
 // components
 
-import TableDropdown from "../Dropdowns/TableDropdown";
-import bootstrap from "../../assets/img/bootstrap.jpg";
-import team_1 from "../../assets/img/team-1-800x800.jpg";
-import team_2 from "../../assets/img/team-2-800x800.jpg";
-import team_3 from "../../assets/img/team-3-800x800.jpg";
-import team_4 from "../../assets/img/team-4-470x470.png";
-import angular from "../../assets/img/angular.jpg";
-import sketch from "../../assets/img/sketch.jpg";
-import react from "../../assets/img/react.jpg";
-import vue from "../../assets/img/vue.jpg";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 

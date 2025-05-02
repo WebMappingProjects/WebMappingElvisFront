@@ -5,8 +5,10 @@ const MosqueeFontPointTable = () => {
     const headRow = [ "Id", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie"];
 
     const datasRows = [
-        [ 1, "AAA", "697542323", "367125", "Melen", "Musulmane", "D7"]
+        [ 1, "AAA", "697542323", "367125", "Melen", "Musulmane", "D7"],
+        [ 2, "BBB", "687542323", "367125", "Melen", "Musulmane", "D2"],
     ]
+
 
     return (
         <>
