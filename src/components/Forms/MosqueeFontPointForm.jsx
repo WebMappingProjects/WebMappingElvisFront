@@ -7,31 +7,93 @@ const MosqueeFontPointForm = ()  => {
             </div>
             <form>
                 <div className="relative w-full mb-3">
-                <label
-                    className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                    htmlFor="grid-password"
-                >
-                    Email
-                </label>
-                <input
-                    type="email"
-                    className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring"
-                    placeholder="Email"
-                />
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="name"
+                    >
+                        Nom
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="Nom"
+                        id="name"
+                    />
                 </div>
 
                 <div className="relative w-full mb-3">
-                <label
-                    className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                    htmlFor="grid-password"
-                >
-                    Password
-                </label>
-                <input
-                    type="password"
-                    className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring"
-                    placeholder="Password"
-                />
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="tel"
+                    >
+                        Téléphone
+                    </label>
+                    <input
+                        type="number"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="Téléphone"
+                        id="tel"
+                    />
+                </div>
+
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="postale"
+                    >
+                        Postale
+                    </label>
+                    <input
+                        type="number"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="postale"
+                        id="postale"
+                    />
+                </div>
+
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="quartier"
+                    >
+                        Quartier
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="quartier"
+                        id="quartier"
+                    />
+                </div>
+
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="religion"
+                    >
+                        Religion
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="religion"
+                        id="religion"
+                    />
+                </div>
+
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="categorie"
+                    >
+                        Catégorie
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="catégorie"
+                        id="categorie"
+                    />
                 </div>
 
                 <div className="flex flex-col mt-6 text-center md:flex-row">

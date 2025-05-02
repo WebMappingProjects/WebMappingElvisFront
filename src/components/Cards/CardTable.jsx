@@ -15,7 +15,7 @@ import vue from "../../assets/img/vue.jpg";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-export default function CardTable({ color, mainRoute }) {
+export default function CardTable({ color, mainRoute, title, headRow, datasRows }) {
   return (
     <>
       <div
@@ -33,7 +33,7 @@ export default function CardTable({ color, mainRoute }) {
                   (color === "light" ? "text-primary-dark" : "text-white")
                 }
               >
-                Card Tables
+                { title }
               </h3>
             </div>
           </div>
@@ -43,56 +43,19 @@ export default function CardTable({ color, mainRoute }) {
           <table className="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-primary-default border-primary-light"
-                      : "bg-cyan-800 text-cyan-300 border-cyan-700")
-                  }
-                >
-                  Project
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-primary-default border-primary-light"
-                      : "bg-cyan-800 text-cyan-300 border-cyan-700")
-                  }
-                >
-                  Budget
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-primary-default border-primary-light"
-                      : "bg-cyan-800 text-cyan-300 border-cyan-700")
-                  }
-                >
-                  Status
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-primary-default border-primary-light"
-                      : "bg-cyan-800 text-cyan-300 border-cyan-700")
-                  }
-                >
-                  Users
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-primary-default border-primary-light"
-                      : "bg-cyan-800 text-cyan-300 border-cyan-700")
-                  }
-                >
-                  Completion
-                </th>
+                {headRow.map((item, index) => (
+                  <th
+                    key={index}
+                    className={
+                      "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                      (color === "light"
+                        ? "bg-blueGray-50 text-primary-default border-primary-light"
+                        : "bg-cyan-800 text-cyan-300 border-cyan-700")
+                    }
+                  >
+                    {item}
+                  </th>
+                ))}
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
@@ -104,7 +67,35 @@ export default function CardTable({ color, mainRoute }) {
               </tr>
             </thead>
             <tbody>
-              <tr>
+              {datasRows.map((item, itemIndex) => (
+                <tr key={itemIndex}>
+                  {item.map((data, dataIndex) => (
+                    <td
+                      key={dataIndex}
+                      className={
+                        "p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap " +
+                        (color === "light"
+                          ? "bg-blueGray-50 text-primary-default border-primary-light"
+                          : "bg-cyan-800 text-cyan-300 border-cyan-700")
+                      }
+                    >
+                      {data}
+                    </td>
+                  ))}
+                  <td className="flex flex-row p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                    <Link 
+                      className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
+                      title="Modifier"
+                      to={ mainRoute }>
+                      <FaEdit className="text-sm text-teal-600"/>
+                    </Link>
+                    <button className="p-4 m-2 rounded-full cursor-pointer bg-red-50 hover:bg-red-300" title="Supprimer">
+                      <FaTrash className="text-sm text-red-600"/>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {/* <tr>
                 <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                   <img
                     src={ bootstrap }
@@ -164,279 +155,25 @@ export default function CardTable({ color, mainRoute }) {
                   </div>
                 </td>
                 <td className="flex flex-row p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  {/* <TableDropdown /> */}
+                  <TableDropdown />
                   <Link 
                     className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
                     title="Modifier"
                     to={ mainRoute }>
                     <FaEdit className="text-sm text-teal-600"/>
                   </Link>
-                  {/* <button 
+                  <button 
                     className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
                     title="Modifier"
                     to={ mainRoute }>
                     <FaEdit className="text-sm text-teal-600"/>
-                  </button> */}
+                  </button>
                   <button className="p-4 m-2 rounded-full cursor-pointer bg-red-50 hover:bg-red-300" title="Supprimer">
                     <FaTrash className="text-sm text-red-600"/>
                   </button>
                 </td>
-              </tr>
-              <tr>
-                <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <img
-                    src={angular}
-                    className="w-12 h-12 bg-white border rounded-full"
-                    alt="..."
-                  ></img>{" "}
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-primary-default" : "text-white")
-                    }
-                  >
-                    Angular Now UI Kit PRO
-                  </span>
-                </th>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  $1,800 USD
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <i className="mr-2 fas fa-circle text-emerald-500"></i>{" "}
-                  completed
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex">
-                    <img
-                      src={team_1}
-                      alt="..."
-                      className="w-10 h-10 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_2}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_3}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_4}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <span className="mr-2">100%</span>
-                    <div className="relative w-full">
-                      <div className="flex h-2 overflow-hidden text-xs rounded bg-emerald-200">
-                        <div
-                          style={{ width: "100%" }}
-                          className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-emerald-500"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <TableDropdown />
-                </td>
-              </tr>
-              <tr>
-                <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <img
-                    src={ sketch }
-                    className="w-12 h-12 bg-white border rounded-full"
-                    alt="..."
-                  ></img>{" "}
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-primary-default" : "text-white")
-                    }
-                  >
-                    Black Dashboard Sketch
-                  </span>
-                </th>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  $3,150 USD
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <i className="mr-2 text-red-500 fas fa-circle"></i> delayed
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex">
-                    <img
-                      src={team_1}
-                      alt="..."
-                      className="w-10 h-10 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_2}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_3}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_4}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <span className="mr-2">73%</span>
-                    <div className="relative w-full">
-                      <div className="flex h-2 overflow-hidden text-xs bg-red-200 rounded">
-                        <div
-                          style={{ width: "73%" }}
-                          className="flex flex-col justify-center text-center text-white bg-red-500 shadow-none whitespace-nowrap"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <TableDropdown />
-                </td>
-              </tr>
-              <tr>
-                <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <img
-                    src={ react }
-                    className="w-12 h-12 bg-white border rounded-full"
-                    alt="..."
-                  ></img>{" "}
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-primary-default" : "text-white")
-                    }
-                  >
-                    React Material Dashboard
-                  </span>
-                </th>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  $4,400 USD
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <i className="mr-2 text-teal-500 fas fa-circle"></i> on
-                  schedule
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex">
-                    <img
-                      src={team_1}
-                      alt="..."
-                      className="w-10 h-10 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_2}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_3}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_4}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <span className="mr-2">90%</span>
-                    <div className="relative w-full">
-                      <div className="flex h-2 overflow-hidden text-xs bg-teal-200 rounded">
-                        <div
-                          style={{ width: "90%" }}
-                          className="flex flex-col justify-center text-center text-white bg-teal-500 shadow-none whitespace-nowrap"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <TableDropdown />
-                </td>
-              </tr>
-              <tr>
-                <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <img
-                    src={ vue }
-                    className="w-12 h-12 bg-white border rounded-full"
-                    alt="..."
-                  ></img>{" "}
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-primary-default" : "text-white")
-                    }
-                  >
-                    React Material Dashboard
-                  </span>
-                </th>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  $2,200 USD
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <i className="mr-2 fas fa-circle text-emerald-500"></i>{" "}
-                  completed
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex">
-                    <img
-                      src={team_1}
-                      alt="..."
-                      className="w-10 h-10 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_2}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_3}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_4}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <span className="mr-2">100%</span>
-                    <div className="relative w-full">
-                      <div className="flex h-2 overflow-hidden text-xs rounded bg-emerald-200">
-                        <div
-                          style={{ width: "100%" }}
-                          className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-emerald-500"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <TableDropdown />
-                </td>
-              </tr>
+              </tr> */}
+              
             </tbody>
           </table>
         </div>
