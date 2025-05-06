@@ -17,6 +17,7 @@ const MosqueeFontPointTable = () => {
                 mainRoute="/admin/forms/mosquee"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Mosquees"
             />
         </>
     );

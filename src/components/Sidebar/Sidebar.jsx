@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaCar, FaMosque, FaPersonBooth, FaServicestack, FaTimes, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
+import { FaBars, FaBreadSlice, FaBuilding, FaCar, FaChargingStation, FaCreditCard, FaHamburger, FaHotel, FaMoneyBill, FaMosque, FaPersonBooth, FaPiggyBank, FaPlus, FaRunning, FaSchool, FaServicestack, FaTimes, FaTruck, FaUniversity, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
   return (
     <>
-      <nav className="relative z-10 flex flex-wrap items-center justify-between px-6 py-4 bg-white shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-64">
+      <nav className="relative z-[1001] flex flex-wrap items-center justify-between px-6 py-4 bg-white shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-64">
         <div className="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-nowrap">
           {/* Toggler */}
           <button
@@ -20,12 +20,14 @@ export default function Sidebar() {
           >
             <FaBars />
           </button>
+
+
           {/* Brand */}
           <Link
             className="inline-block p-4 px-0 mr-0 text-sm font-bold text-left uppercase md:block md:pb-2 text-blueGray-600 whitespace-nowrap"
             to="/"
           >
-            Services
+            Accueil
           </Link>
           {/* User */}
           <ul className="flex flex-wrap items-center list-none md:hidden">
@@ -72,10 +74,19 @@ export default function Sidebar() {
                 <input
                   type="text"
                   placeholder="Search"
-                  className="w-full h-12 px-3 py-2 text-base font-normal leading-snug bg-white border border-0 border-solid rounded shadow-none outline-none border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 focus:outline-none"
+                  className="w-full h-12 px-3 py-2 text-base font-normal leading-snug bg-white border border-solid rounded shadow-none outline-none border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 focus:outline-none"
                 />
               </div>
             </form>
+
+
+
+
+
+
+
+
+
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
@@ -85,95 +96,37 @@ export default function Sidebar() {
             </h6>
             {/* Navigation */}
 
-            {/* <ul className="flex flex-col list-none md:flex-col md:min-w-full">
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
               <li className="items-center">
                 <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/dashboard") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/dashboard"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/ecoles-mat-prim"
                 >
-                  <i
-                    className={
-                      "fas fa-tv mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/dashboard") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Dashboard
+                  <FaSchool className="mr-2 text-sm"/>
+                  Ecoles maternelles et primaires
                 </Link>
               </li>
 
               <li className="items-center">
                 <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/settings") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/settings"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/ens-sec"
                 >
-                  <i
-                    className={
-                      "fas fa-tools mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/settings") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Settings
+                  <FaSchool className="mr-2 text-sm"/>
+                  Enseignement Secondaire
                 </Link>
               </li>
-
+              
               <li className="items-center">
                 <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/tables") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/tables"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/ens-sup"
                 >
-                  <i
-                    className={
-                      "fas fa-table mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/tables") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Tables
+                  <FaUniversity className="mr-2 text-sm"/>
+                  Enseignement superieur
                 </Link>
               </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/maps") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/maps"
-                >
-                  <i
-                    className={
-                      "fas fa-map-marked mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/maps") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Maps
-                </Link>
-              </li>
-            </ul> */}
+            </ul>
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
@@ -183,27 +136,34 @@ export default function Sidebar() {
             </h6>
             {/* Navigation */}
 
-            {/* <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
               <li className="items-center">
                 <Link
-                  className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
-                  to="/auth/login"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/complex-sportif"
                 >
-                  <i className="mr-2 text-sm fas fa-fingerprint text-blueGray-400"></i>{" "}
-                  Login
+                  <FaRunning className="mr-2 text-sm"/>
+                  Complexes Sportifs
                 </Link>
               </li>
 
               <li className="items-center">
                 <Link
-                  className="block py-3 text-xs font-bold uppercase text-blueGray-700 hover:text-blueGray-500"
-                  to="/auth/register"
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/pharmacies"
                 >
-                  <i className="mr-2 text-sm fas fa-clipboard-list text-blueGray-300"></i>{" "}
-                  Register
+                  <FaPlus className="mr-2 text-sm"/>
+                  Pharmacies
                 </Link>
               </li>
-            </ul> */}
+            </ul>
+
+
+
+
+
+
+
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
@@ -212,6 +172,8 @@ export default function Sidebar() {
               Religion
             </h6>
             {/* Navigation */}
+
+            
 
             <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
               <li className="items-center">
@@ -235,6 +197,14 @@ export default function Sidebar() {
               </li> */}
             </ul>
             
+
+
+
+
+
+
+
+
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
@@ -259,7 +229,7 @@ export default function Sidebar() {
                   className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
                   to="/admin/tables/sapeurpompier"
                 >
-                  <FaCar className="mr-2 text-sm"/>
+                  <FaTruck className="mr-2 text-sm"/>
                   Sapeur pompier
                 </Link>
               </li>
@@ -273,7 +243,42 @@ export default function Sidebar() {
                   Laveries
                 </Link>
               </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/stations-services"
+                >
+                  <FaChargingStation className="mr-2 text-sm"/>
+                  Stations Services
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/banques-microfinances"
+                >
+                  <FaMoneyBill className="mr-2 text-sm"/>
+                  Banques et microfinances
+                </Link>
+              </li>
+              
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/cites-municipales"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Cites Municipales
+                </Link>
+              </li>
             </ul>
+
+
+
+
+
 
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
@@ -292,6 +297,71 @@ export default function Sidebar() {
                 >
                   <FaUser className="mr-2 text-sm"/>
                   Gendarmeries
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/commissariats"
+                >
+                  <FaUser className="mr-2 text-sm"/>
+                  Commissariats
+                </Link>
+              </li>
+              
+            </ul>
+
+
+
+
+
+
+
+
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
+              Autres
+            </h6>
+            {/* Navigation */}
+
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/restaurants"
+                >
+                  <FaHamburger className="mr-2 text-sm"/>
+                  Restaurants
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/boulangeries"
+                >
+                  <FaBreadSlice className="mr-2 text-sm"/>
+                  Boulangeries
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/centres-culturels"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Centres Culturels
+                </Link>
+              </li>
+              
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/hotels"
+                >
+                  <FaHotel className="mr-2 text-sm"/>
+                  Hotels
                 </Link>
               </li>
             </ul>

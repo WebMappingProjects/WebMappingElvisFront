@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 // components
 
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function CardTable({ color, mainRoute, title, headRow, datasRows }) {
@@ -16,15 +16,21 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
       >
         <div className="px-4 py-3 mb-0 border-0 rounded-t">
           <div className="flex flex-wrap items-center">
-            <div className="relative flex-1 flex-grow w-full max-w-full px-4">
-              <h3
-                className={
-                  "font-semibold text-lg " +
-                  (color === "light" ? "text-primary-dark" : "text-white")
-                }
+            <div className="relative flex flex-row px-4">
+              <span
+                className={ `font-semibold text-lg ${ color === "light" ? "text-primary-dark" : "text-white"}` }
               >
                 { title }
-              </h3>
+              </span>
+
+              <Link 
+                className="flex flex-row items-center justify-center px-5 ml-4 rounded text-primary-dark hover:bg-primary-light-op" 
+                title="Nouvelle donnee"
+                to={ mainRoute }>
+                <FaPlus className="text-sm"/>
+                <span className="ml-2"> Nouvelle donnee</span>
+              </Link>
+              
             </div>
           </div>
         </div>
@@ -63,7 +69,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                     <td
                       key={dataIndex}
                       className={
-                        "p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap " +
+                        "p-2 px-4 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap " +
                         (color === "light"
                           ? "bg-blueGray-50 text-primary-default border-primary-light"
                           : "bg-cyan-800 text-cyan-300 border-cyan-700")
@@ -72,7 +78,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                       {data}
                     </td>
                   ))}
-                  <td className="flex flex-row p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                  <td className="flex flex-row p-2 px-4 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                     <Link 
                       className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
                       title="Modifier"

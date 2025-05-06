@@ -17,6 +17,7 @@ const SapeurPompierPointTable = () => {
                 mainRoute="/admin/forms/sapeurpompier"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Sapeurs pompier"
             />
         </>
     );

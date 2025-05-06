@@ -1,8 +1,8 @@
 import CardTable from "../Cards/CardTable";
 
-const GendarmeriesPointTable = () => {
+const CommissariatsYdePointTable = () => {
     
-    const headRow = [ "Id", "numero", "Denomination", "Boite Postale", "Numero Telephone", "Specialisation", "Perimetre", "Localisation"];
+    const headRow = [ "Id", "numero", "Nom", "Localisation", "Numero Telephone", "Commissariat", "Quartier", "Arrondissement"];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "367125", "Melen", "Spec Test", "Test Peri", "Test Loc"],
@@ -14,13 +14,13 @@ const GendarmeriesPointTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/gendarmeries"
+                mainRoute="/admin/forms/commissariats"
                 headRow={headRow}
                 datasRows={datasRows}
-                title="Gendarmeries"
+                title="Commissariats"
             />
         </>
     );
 }
 
-export default GendarmeriesPointTable;
+export default CommissariatsYdePointTable;
