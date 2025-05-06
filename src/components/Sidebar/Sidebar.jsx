@@ -253,17 +253,6 @@ export default function Sidebar() {
                   Nations Unies
                 </Link>
               </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
-              Securite
-            </h6>
-            {/* Navigation */}
-
-            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
 
               <li className="items-center">
                 <Link
@@ -284,8 +273,19 @@ export default function Sidebar() {
                   Laveries
                 </Link>
               </li>
+            </ul>
+
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
+              Securite
+            </h6>
+            {/* Navigation */}
+
+            <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
               
-               {/* <li className="items-center">
+               <li className="items-center">
                 <Link
                   className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
                   to="/admin/tables/gendarmeries"
