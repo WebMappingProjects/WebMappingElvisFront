@@ -14,10 +14,11 @@ const LieuxRemarquablesPointTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/lieux remarquables"
+                mainRoute="/admin/forms/lieux-remarquables"
                 headRow={headRow}
                 datasRows={datasRows}
-            />
+                title="lieux remarquables"
+            />  
         </>
     );
 }

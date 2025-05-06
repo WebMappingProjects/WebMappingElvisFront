@@ -273,6 +273,16 @@ export default function Sidebar() {
                   Cites Municipales
                 </Link>
               </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/agencesdevoyages"
+                >
+                  <FaTruck className="mr-2 text-sm"/>
+                  Agences de Voyages
+                </Link>
+              </li>
             </ul>
 
 
@@ -362,6 +372,15 @@ export default function Sidebar() {
                 >
                   <FaHotel className="mr-2 text-sm"/>
                   Hotels
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/lieux-remarquables"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  lieux remarquables
                 </Link>
               </li>
             </ul>

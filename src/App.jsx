@@ -16,8 +16,6 @@ import MosqueeFontPointForm from "./components/Forms/MosqueeFontPointForm";
 import Forms from "./views/admin/Forms";
 import NationsUniesPointForm from "./components/Forms/NationsUniesPointForm";
 import NationsUniesPointTable from "./components/Tables/NationsUniesPointTable";
-import GendarmeriesPointForm from "./components/Forms/GendarmeriesPointForm";
-import GendarmeriesPointTable from "./components/Tables/GendarmeriesPointTable";
 import SapeurPompierPointForm from "./components/Forms/SapeurPompierPointForm";
 import SapeurPompierPointTable from "./components/Tables/SapeurPompierPointTable";
 import LaveriesPointTable from "./components/Tables/LaveriesFontPointTable";
@@ -50,6 +48,7 @@ import HotelsPointForm from "./components/Forms/HotelsPointForm";
 import HotelsPointTable from "./components/Tables/HotelsPointTable";
 import CitesMunicipalesPointForm from "./components/Forms/CitesMunicipalesPointForm";
 import CitesMunicipalesPointTable from "./components/Tables/CitesMunicipalesPointTable";
+import LieuxRemarquablesPointForm from "./components/Forms/LieuxRemarquablesPointForm";
 
 function App() {
 
@@ -85,6 +84,7 @@ function App() {
             <Route path="/admin/forms/cites-municipales" element={<CitesMunicipalesPointForm />} />
             <Route path="/admin/forms/pharmacies" element={<PharmaciesPointForm />} />
             <Route path="/admin/forms/hotels" element={<HotelsPointForm />} />
+            <Route path="/admin/forms/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
           </Route>
 
@@ -108,6 +108,7 @@ function App() {
               <Route path="/admin/tables/cites-municipales" element={<CitesMunicipalesPointTable />} />
               <Route path="/admin/tables/pharmacies" element={<PharmaciesPointTable />} />
               <Route path="/admin/tables/hotels" element={<HotelsPointTable />} />
+              <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 
