@@ -289,7 +289,8 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
-              <li className="items-center">
+              
+               <li className="items-center">
                 <Link
                   className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
                   to="/admin/tables/gendarmeries"
