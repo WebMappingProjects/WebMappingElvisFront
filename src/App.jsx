@@ -48,7 +48,10 @@ import HotelsPointForm from "./components/Forms/HotelsPointForm";
 import HotelsPointTable from "./components/Tables/HotelsPointTable";
 import CitesMunicipalesPointForm from "./components/Forms/CitesMunicipalesPointForm";
 import CitesMunicipalesPointTable from "./components/Tables/CitesMunicipalesPointTable";
+<<<<<<< HEAD
 import LieuxRemarquablesPointForm from "./components/Forms/LieuxRemarquablesPointForm";
+=======
+>>>>>>> origin/stephane
 
 function App() {
 
@@ -57,23 +60,25 @@ function App() {
     <Routes>
 
       {/* add routes with layouts */}
-
       <Route path="/admin" element={<Admin />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/maps" element={<Maps />} />
           {/* <Route path="/admin/settings" element={<Settings />} /> */}
           
           {/*  Sub layouts for admin data forms */}
           <Route path="/admin/forms" element={<Forms />}>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
             <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
+<<<<<<< HEAD
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
+=======
+>>>>>>> origin/stephane
             <Route path="/admin/forms/sapeurpompier" element={<SapeurPompierPointForm />} />
             <Route path="/admin/forms/laveries" element={<LaveriesPointForm />} />
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
             <Route path="/admin/forms/commissariats" element={<CommissariatsYdePointForm />} />
             <Route path="/admin/forms/stations-services" element={<StationsServiceFontPointForm />} />
             <Route path="/admin/forms/banques-microfinances" element={<BanquesEtMicrofinancesCustomPointForm />} />
+            
             <Route path="/admin/forms/complex-sportif" element={<ComplexSportifCustomPointForm />} />
             <Route path="/admin/forms/ecoles-mat-prim" element={<EcolesMatPrimairePointForm />} />
             <Route path="/admin/forms/ens-sup" element={<EnseignementSuperieurCustomPointForm />} />
@@ -84,7 +89,10 @@ function App() {
             <Route path="/admin/forms/cites-municipales" element={<CitesMunicipalesPointForm />} />
             <Route path="/admin/forms/pharmacies" element={<PharmaciesPointForm />} />
             <Route path="/admin/forms/hotels" element={<HotelsPointForm />} />
+<<<<<<< HEAD
             <Route path="/admin/forms/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
+=======
+>>>>>>> origin/stephane
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
           </Route>
 
@@ -108,12 +116,20 @@ function App() {
               <Route path="/admin/tables/cites-municipales" element={<CitesMunicipalesPointTable />} />
               <Route path="/admin/tables/pharmacies" element={<PharmaciesPointTable />} />
               <Route path="/admin/tables/hotels" element={<HotelsPointTable />} />
+<<<<<<< HEAD
               <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
+=======
+>>>>>>> origin/stephane
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 
           <Route path="/admin" element={<Navigate  to="/admin/dashboard" />} />
       </Route>
+
+      {/* Map Route */}
+      <Route path="/map" element={<Maps />} />
+
+      {/* Auth Routes */}
       <Route path="/auth" element={<Auth />}>
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
