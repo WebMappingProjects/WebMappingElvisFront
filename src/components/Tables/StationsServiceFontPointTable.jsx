@@ -17,6 +17,7 @@ const StationsServiceFontPointTable = () => {
                 mainRoute="/admin/forms/stations-services"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Stations services"
             />
         </>
     );

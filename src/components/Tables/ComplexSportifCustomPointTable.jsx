@@ -17,6 +17,7 @@ const ComplexSportifCustomPointTable = () => {
                 mainRoute="/admin/forms/complex-sportif"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Complexes sportif"
             />
         </>
     );

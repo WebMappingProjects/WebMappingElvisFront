@@ -17,6 +17,7 @@ const CitesMunicipalesPointTable = () => {
                 mainRoute="/admin/forms/cites-municipales"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Cites municipales"
             />
         </>
     );

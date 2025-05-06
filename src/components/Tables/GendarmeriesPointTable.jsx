@@ -17,6 +17,7 @@ const GendarmeriesPointTable = () => {
                 mainRoute="/admin/forms/gendarmeries"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Gendarmeries"
             />
         </>
     );

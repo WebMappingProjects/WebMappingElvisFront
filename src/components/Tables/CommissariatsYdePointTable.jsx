@@ -17,6 +17,7 @@ const CommissariatsYdePointTable = () => {
                 mainRoute="/admin/forms/commissariats"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Commissariats"
             />
         </>
     );

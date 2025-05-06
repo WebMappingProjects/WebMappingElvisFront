@@ -17,6 +17,7 @@ const LaveriesPointTable = () => {
                 mainRoute="/admin/forms/laveries"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Laveries"
             />
         </>
     );

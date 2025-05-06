@@ -17,6 +17,7 @@ const PharmaciesPointTable = () => {
                 mainRoute="/admin/forms/pharmacies"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Pharmacies"
             />
         </>
     );

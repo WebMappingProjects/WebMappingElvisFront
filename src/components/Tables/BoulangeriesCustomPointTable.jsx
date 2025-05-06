@@ -17,6 +17,7 @@ const BoulangeriesCustomPointTable = () => {
                 mainRoute="/admin/forms/boulangeries"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Boulangeries"
             />
         </>
     );

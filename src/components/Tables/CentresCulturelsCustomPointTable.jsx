@@ -17,6 +17,7 @@ const CentresCulturelsCustomPointTable = () => {
                 mainRoute="/admin/forms/centres-culturels"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Centres culturels"
             />
         </>
     );

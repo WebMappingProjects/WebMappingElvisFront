@@ -17,6 +17,7 @@ const NationsUniesPointTable = () => {
                 mainRoute="/admin/forms/nations-unies"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Nations unies"
             />
         </>
     );

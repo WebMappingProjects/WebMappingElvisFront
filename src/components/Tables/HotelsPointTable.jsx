@@ -17,6 +17,7 @@ const HotelsPointTable = () => {
                 mainRoute="/admin/forms/hotels"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Hotels"
             />
         </>
     );

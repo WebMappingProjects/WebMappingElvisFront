@@ -17,6 +17,7 @@ const EcolesMatPrimairePointTable = () => {
                 mainRoute="/admin/forms/ecoles-mat-prim"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Ecoles maternelles et primaires"
             />
         </>
     );

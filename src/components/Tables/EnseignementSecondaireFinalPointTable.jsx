@@ -17,6 +17,7 @@ const EnseignementSecondaireFinalPointTable = () => {
                 mainRoute="/admin/forms/ens-sec"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Enseignement secondaire"
             />
         </>
     );

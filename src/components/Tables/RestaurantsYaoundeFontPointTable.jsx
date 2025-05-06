@@ -17,6 +17,7 @@ const RestaurantsYaoundeFontPointTable = () => {
                 mainRoute="/admin/forms/restaurants"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Restaurants"
             />
         </>
     );

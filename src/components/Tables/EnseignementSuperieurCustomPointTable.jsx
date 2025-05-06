@@ -17,6 +17,7 @@ const EnseignementSuperieurCustomPointTable = () => {
                 mainRoute="/admin/forms/ens-sup"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Enseignement superieur"
             />
         </>
     );

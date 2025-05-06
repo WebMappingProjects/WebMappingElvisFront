@@ -17,6 +17,7 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
                 mainRoute="/admin/forms/banques-microfinances"
                 headRow={headRow}
                 datasRows={datasRows}
+                title="Banques et microfinances"
             />
         </>
     );

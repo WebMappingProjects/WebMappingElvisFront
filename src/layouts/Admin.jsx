@@ -17,7 +17,7 @@ export default function Admin() {
         <AdminNavbar />
         {/* Header */}
         <HeaderStats />
-        <div className="w-full px-4 mx-auto -m-24 md:px-10">
+        <div className="w-full px-0 mx-auto -m-24 md:px-10">
           
           <Outlet />
           
