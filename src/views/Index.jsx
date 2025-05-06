@@ -241,7 +241,7 @@ export default function Index() {
                       Carte interactive
                     </h5>
                     {/* <Link to="/auth/login"> */}
-                    <Link to="/admin/maps">
+                    <Link to="/map">
                       <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
                         <img
                           alt="..."

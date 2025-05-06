@@ -1,4 +1,19 @@
+import Actions from "../Forms_blocks/Actions";
+
 const CitesMunicipalesPointForm = ()  => {
+
+    const handleSave = (e) => {
+        e.preventDefault();
+
+        alert("saved succeed");
+    }
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+
+        alert("edit succeed");
+    }
+    
     return (
         <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
             <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Cites municipales</h1>
@@ -158,21 +173,10 @@ const CitesMunicipalesPointForm = ()  => {
                     />
                 </div>
 
-                <div className="flex flex-col mt-6 text-center md:flex-row">
-                    <button
-                        className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-black transition-all duration-150 ease-linear bg-green-300 rounded shadow outline-none cursor-pointer md:mx-3 hover:bg-green-500 hover:shadow-lg focus:outline-none"
-                        type="button"
-                    >
-                        Confirmer les modifications
-                    </button>
-
-                    <button
-                        className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-black transition-all duration-150 ease-linear bg-red-300 rounded shadow outline-none cursor-pointer md:mx-3 hover:bg-red-500 hover:shadow-lg focus:outline-none"
-                        type="button"
-                    >
-                        Annuler les modifications
-                    </button>
-                </div>
+                <Actions 
+                    handleSave={handleSave}
+                    handleEdit={handleEdit}
+                />
             </form>
         </div>
     );

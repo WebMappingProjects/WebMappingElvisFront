@@ -56,10 +56,8 @@ function App() {
     <Routes>
 
       {/* add routes with layouts */}
-
       <Route path="/admin" element={<Admin />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/maps" element={<Maps />} />
           {/* <Route path="/admin/settings" element={<Settings />} /> */}
           
           {/*  Sub layouts for admin data forms */}
@@ -72,6 +70,7 @@ function App() {
             <Route path="/admin/forms/commissariats" element={<CommissariatsYdePointForm />} />
             <Route path="/admin/forms/stations-services" element={<StationsServiceFontPointForm />} />
             <Route path="/admin/forms/banques-microfinances" element={<BanquesEtMicrofinancesCustomPointForm />} />
+            
             <Route path="/admin/forms/complex-sportif" element={<ComplexSportifCustomPointForm />} />
             <Route path="/admin/forms/ecoles-mat-prim" element={<EcolesMatPrimairePointForm />} />
             <Route path="/admin/forms/ens-sup" element={<EnseignementSuperieurCustomPointForm />} />
@@ -110,6 +109,11 @@ function App() {
 
           <Route path="/admin" element={<Navigate  to="/admin/dashboard" />} />
       </Route>
+
+      {/* Map Route */}
+      <Route path="/map" element={<Maps />} />
+
+      {/* Auth Routes */}
       <Route path="/auth" element={<Auth />}>
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />

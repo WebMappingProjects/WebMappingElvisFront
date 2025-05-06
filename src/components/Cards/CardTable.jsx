@@ -3,9 +3,31 @@ import PropTypes from "prop-types";
 // components
 
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CardTable({ color, mainRoute, title, headRow, datasRows }) {
+
+  const navigate = useNavigate();
+
+  const handleCreation = (e) => {
+      e.preventDefault();
+
+      navigate(mainRoute, {
+        state: {
+          type: "create"
+        }
+      });
+  }
+
+  const handleEdition = (e) => {
+    e.preventDefault();
+      navigate(mainRoute, {
+        state: {
+          type: "edit"
+        }
+      });
+  }
+
   return (
     <>
       <div
@@ -23,14 +45,14 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                 { title }
               </span>
 
-              <Link 
-                className="flex flex-row items-center justify-center px-5 ml-4 rounded text-primary-dark hover:bg-primary-light-op" 
+              <Link
+                className="flex flex-row items-center justify-center px-5 ml-4 rounded text-primary-dark hover:bg-primary-light-op"
                 title="Nouvelle donnee"
-                to={ mainRoute }>
+                onClick={handleCreation}>
                 <FaPlus className="text-sm"/>
                 <span className="ml-2"> Nouvelle donnee</span>
               </Link>
-              
+
             </div>
           </div>
         </div>
@@ -79,10 +101,12 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                     </td>
                   ))}
                   <td className="flex flex-row p-2 px-4 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                    <Link 
-                      className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
+                    <Link
+                      className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300"
                       title="Modifier"
-                      to={ mainRoute }>
+                      onClick={handleEdition}
+                      >
+                      {/* to={ mainRoute }> */}
                       <FaEdit className="text-sm text-teal-600"/>
                     </Link>
                     <button className="p-4 m-2 rounded-full cursor-pointer bg-red-50 hover:bg-red-300" title="Supprimer">
@@ -91,85 +115,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                   </td>
                 </tr>
               ))}
-              {/* <tr>
-                <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <img
-                    src={ bootstrap }
-                    className="w-12 h-12 bg-white border rounded-full"
-                    alt="..."
-                  ></img>{" "}
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-primary-default" : "text-white")
-                    }
-                  >
-                    Argon Design System
-                  </span>
-                </th>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  $2,500 USD
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <i className="mr-2 text-orange-500 fas fa-circle"></i> pending
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex">
-                    <img
-                      src={team_1}
-                      alt="..."
-                      className="w-10 h-10 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_2}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_3}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                    <img
-                      src={team_4}
-                      alt="..."
-                      className="w-10 h-10 -ml-4 border-2 rounded-full shadow border-blueGray-50"
-                    ></img>
-                  </div>
-                </td>
-                <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <span className="mr-2">60%</span>
-                    <div className="relative w-full">
-                      <div className="flex h-2 overflow-hidden text-xs bg-red-200 rounded">
-                        <div
-                          style={{ width: "60%" }}
-                          className="flex flex-col justify-center text-center text-white bg-red-500 shadow-none whitespace-nowrap"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="flex flex-row p-4 px-6 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-                  <TableDropdown />
-                  <Link 
-                    className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
-                    title="Modifier"
-                    to={ mainRoute }>
-                    <FaEdit className="text-sm text-teal-600"/>
-                  </Link>
-                  <button 
-                    className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300" 
-                    title="Modifier"
-                    to={ mainRoute }>
-                    <FaEdit className="text-sm text-teal-600"/>
-                  </button>
-                  <button className="p-4 m-2 rounded-full cursor-pointer bg-red-50 hover:bg-red-300" title="Supprimer">
-                    <FaTrash className="text-sm text-red-600"/>
-                  </button>
-                </td>
-              </tr> */}
-              
+
             </tbody>
           </table>
         </div>
