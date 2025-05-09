@@ -7,10 +7,12 @@ export function useAppMainContext () {
 }
 
 const AppProvider = ({ children }) => {
-    const [activeMenu, setActiveMenu] = useState(0);
+    const [ currentLayerName, setCurrentLayerName ] = useState("");
+    const [ currentLayerAttribution, setCurrentLayerAttribution ] = useState("");
 
     const value = {
-        activeMenu, setActiveMenu
+        currentLayerName, setCurrentLayerName,
+        currentLayerAttribution, setCurrentLayerAttribution
     };
 
   return <appMainContext.Provider value={value}>{children}</appMainContext.Provider>;

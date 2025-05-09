@@ -48,6 +48,20 @@ import HotelsPointForm from "./components/Forms/HotelsPointForm";
 import HotelsPointTable from "./components/Tables/HotelsPointTable";
 import CitesMunicipalesPointForm from "./components/Forms/CitesMunicipalesPointForm";
 import CitesMunicipalesPointTable from "./components/Tables/CitesMunicipalesPointTable";
+import MonumentsCustomPointForm from "./components/Forms/MonumentsCustomPointForm";
+import MonumentsCustomPointTable from "./components/Tables/MonumentsCustomPointTable";
+import PrefectureSousPrefectureCustomPointForm from "./components/Forms/PrefectureSousPrefectureCustomPointForm";
+import PrefectureSousPrefectureCustomPointTable from "./components/Tables/PrefectureSousPrefectureCustomPointTable";
+import AmbassadesPointTable from "./components/Tables/AmbassadesPointTable";
+import AmbassadesPointForm from "./components/Forms/AmbassadesPointForm";
+import EglisesCatholiquesFontPointForm from "./components/Forms/EglisesCatholiquesFontPointForm";
+import EglisesPresbyteriennesFontPointForm from "./components/Forms/EglisesPresbyteriennesFontPointForm";
+import EglisesProtestantesPointForm from "./components/Forms/EglisesProtestantesPointForm";
+import EglisesCatholiquesFontPointTable from "./components/Tables/EglisesCatholiquesFontPointTable";
+import EglisesPresbyteriennesFontPointTable from "./components/Tables/EglisesPresbyteriennesFontPointTable";
+import EglisesProtestantesPointTable from "./components/Tables/EglisesProtestantesPointTable";
+import EnseignementDeBaseFontPointForm from "./components/Forms/EnseignementDeBaseFontPointForm";
+import EnseignementDeBaseFontPointTable from "./components/Tables/EnseignementDeBaseFontPointTable";
 
 function App() {
 
@@ -70,7 +84,6 @@ function App() {
             <Route path="/admin/forms/commissariats" element={<CommissariatsYdePointForm />} />
             <Route path="/admin/forms/stations-services" element={<StationsServiceFontPointForm />} />
             <Route path="/admin/forms/banques-microfinances" element={<BanquesEtMicrofinancesCustomPointForm />} />
-            
             <Route path="/admin/forms/complex-sportif" element={<ComplexSportifCustomPointForm />} />
             <Route path="/admin/forms/ecoles-mat-prim" element={<EcolesMatPrimairePointForm />} />
             <Route path="/admin/forms/ens-sup" element={<EnseignementSuperieurCustomPointForm />} />
@@ -81,6 +94,13 @@ function App() {
             <Route path="/admin/forms/cites-municipales" element={<CitesMunicipalesPointForm />} />
             <Route path="/admin/forms/pharmacies" element={<PharmaciesPointForm />} />
             <Route path="/admin/forms/hotels" element={<HotelsPointForm />} />
+            <Route path="/admin/forms/monuments" element={<MonumentsCustomPointForm />} />
+            <Route path="/admin/forms/prefectures-sous-prefectures" element={<PrefectureSousPrefectureCustomPointForm />} />
+            <Route path="/admin/forms/ambassades" element={<AmbassadesPointForm />} />
+            <Route path="/admin/forms/eglises-catholiques" element={<EglisesCatholiquesFontPointForm />} />
+            <Route path="/admin/forms/eglises-presbyteriennes" element={<EglisesPresbyteriennesFontPointForm />} />
+            <Route path="/admin/forms/eglises-protestantes" element={<EglisesProtestantesPointForm />} />
+            <Route path="/admin/forms/enseignement-de-base" element={<EnseignementDeBaseFontPointForm />} />
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
           </Route>
 
@@ -104,6 +124,13 @@ function App() {
               <Route path="/admin/tables/cites-municipales" element={<CitesMunicipalesPointTable />} />
               <Route path="/admin/tables/pharmacies" element={<PharmaciesPointTable />} />
               <Route path="/admin/tables/hotels" element={<HotelsPointTable />} />
+              <Route path="/admin/tables/monuments" element={<MonumentsCustomPointTable />} />
+              <Route path="/admin/tables/prefectures-sous-prefectures" element={<PrefectureSousPrefectureCustomPointTable />} />
+              <Route path="/admin/tables/ambassades" element={<AmbassadesPointTable />} />
+              <Route path="/admin/tables/eglises-catholiques" element={<EglisesCatholiquesFontPointTable />} />
+              <Route path="/admin/tables/eglises-presbyteriennes" element={<EglisesPresbyteriennesFontPointTable />} />
+              <Route path="/admin/tables/eglises-protestantes" element={<EglisesProtestantesPointTable />} />
+              <Route path="/admin/tables/enseignement-de-base" element={<EnseignementDeBaseFontPointTable />} />
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 

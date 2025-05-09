@@ -1,6 +1,6 @@
 import Actions from "../Forms_blocks/Actions";
 
-const StationsServiceFontPointForm = ()  => {
+const EglisesProtestantesPointForm = ()  => {
 
     const handleSave = (e) => {
         e.preventDefault();
@@ -16,11 +16,13 @@ const StationsServiceFontPointForm = ()  => {
     
     return (
         <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Stations Services</h1>
+            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Eglises protestantes</h1>
             <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour la station service
+                Veuillez specifier les informations pour eglise protestante
             </div>
             <form>
+
+
                 <div className="relative w-full mb-3">
                     <label
                         className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
@@ -39,30 +41,15 @@ const StationsServiceFontPointForm = ()  => {
                 <div className="relative w-full mb-3">
                     <label
                         className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="addr"
+                        htmlFor="telephone"
                     >
-                        Adresse
+                        Telephone
                     </label>
                     <input
                         type="number"
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Adresse"
-                        id="addr"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="tel"
-                    >
-                        Téléphone
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Téléphone"
-                        id="tel"
+                        placeholder="Telephone"
+                        id="telephone"
                     />
                 </div>
                 
@@ -70,7 +57,22 @@ const StationsServiceFontPointForm = ()  => {
                 <div className="relative w-full mb-3">
                     <label
                         className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quarter"
+                        htmlFor="postale"
+                    >
+                        Postale
+                    </label>
+                    <input
+                        type="number"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="Postale"
+                        id="postale"
+                    />
+                </div>
+
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="quartier"
                     >
                         Quartier
                     </label>
@@ -78,22 +80,37 @@ const StationsServiceFontPointForm = ()  => {
                         type="text"
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Quartier"
-                        id="quarter"
+                        id="quartier"
                     />
                 </div>
 
                 <div className="relative w-full mb-3">
                     <label
                         className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="arrondissement"
+                        htmlFor="religion"
                     >
-                        Arrondissement
+                        Religion
                     </label>
                     <input
-                        type="nom"
+                        type="text"
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Commissariat"
-                        id="arrondissement"
+                        placeholder="Religion"
+                        id="religion"
+                    />
+                </div>
+
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="categorie"
+                    >
+                        Categorie
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="Categorie"
+                        id="categorie"
                     />
                 </div>
 
@@ -107,4 +124,4 @@ const StationsServiceFontPointForm = ()  => {
     );
 }
 
-export default StationsServiceFontPointForm;
+export default EglisesProtestantesPointForm;

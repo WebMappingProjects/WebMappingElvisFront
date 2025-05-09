@@ -5,8 +5,14 @@ import HeaderStats from "../../components/Headers/HeaderStats";
 import LeafletMap from "../../components/Maps/LeafletMap";
 import AdminNavbar from "../../components/Navbars/AdminNavbar";
 import MapSidebar from "../../components/Sidebar/MapSidebar";
+import { useAppMainContext } from "../../context/AppProvider";
 
 export default function Maps() {
+
+  const { currentLayerName, setCurrentLayerName,
+    currentLayerAttribution, setCurrentLayerAttribution
+   } = useAppMainContext();
+
   return (
     <>
       <MapSidebar />
@@ -21,7 +27,10 @@ export default function Maps() {
             <div className="w-full px-4">
               <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded shadow-lg">
                 {/* <MapExample /> */}
-                <LeafletMap />
+                <LeafletMap 
+                  layer={currentLayerName}
+                  attrib={currentLayerAttribution}
+                />
               </div>
             </div>
           </div>
