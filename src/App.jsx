@@ -93,10 +93,7 @@ function App() {
           <Route path="/admin/forms" element={<Forms />}>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
             <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
-<<<<<<< HEAD
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
-=======
->>>>>>> origin/stephane
             <Route path="/admin/forms/sapeurpompier" element={<SapeurPompierPointForm />} />
             <Route path="/admin/forms/laveries" element={<LaveriesPointForm />} />
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
