@@ -62,10 +62,7 @@ import EglisesPresbyteriennesFontPointTable from "./components/Tables/EglisesPre
 import EglisesProtestantesPointTable from "./components/Tables/EglisesProtestantesPointTable";
 import EnseignementDeBaseFontPointForm from "./components/Forms/EnseignementDeBaseFontPointForm";
 import EnseignementDeBaseFontPointTable from "./components/Tables/EnseignementDeBaseFontPointTable";
-<<<<<<< HEAD
 import LieuxRemarquablesPointForm from "./components/Forms/LieuxRemarquablesPointForm";
-=======
->>>>>>> origin/stephane
 
 function App() {
 
@@ -82,10 +79,7 @@ function App() {
           <Route path="/admin/forms" element={<Forms />}>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
             <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
-<<<<<<< HEAD
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
-=======
->>>>>>> origin/stephane
             <Route path="/admin/forms/sapeurpompier" element={<SapeurPompierPointForm />} />
             <Route path="/admin/forms/laveries" element={<LaveriesPointForm />} />
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
@@ -109,10 +103,7 @@ function App() {
             <Route path="/admin/forms/eglises-presbyteriennes" element={<EglisesPresbyteriennesFontPointForm />} />
             <Route path="/admin/forms/eglises-protestantes" element={<EglisesProtestantesPointForm />} />
             <Route path="/admin/forms/enseignement-de-base" element={<EnseignementDeBaseFontPointForm />} />
-<<<<<<< HEAD
             <Route path="/admin/forms/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
-=======
->>>>>>> origin/stephane
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
           </Route>
 
@@ -143,10 +134,7 @@ function App() {
               <Route path="/admin/tables/eglises-presbyteriennes" element={<EglisesPresbyteriennesFontPointTable />} />
               <Route path="/admin/tables/eglises-protestantes" element={<EglisesProtestantesPointTable />} />
               <Route path="/admin/tables/enseignement-de-base" element={<EnseignementDeBaseFontPointTable />} />
-<<<<<<< HEAD
               <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
-=======
->>>>>>> origin/stephane
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 
