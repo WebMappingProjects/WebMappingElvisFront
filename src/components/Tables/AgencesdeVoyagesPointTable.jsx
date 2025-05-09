@@ -1,6 +1,6 @@
 import CardTable from "../Cards/CardTable";
 
-const SapeurPompierPointTable = () => {
+const AgencesdeVoyagesPointTable = () => {
     
     const headRow = [ "Id", "Nom", "Quartier", "Arrondissement"];
 
@@ -14,7 +14,7 @@ const SapeurPompierPointTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/agencesdevoyages"
+                mainRoute="/admin/forms/agences-de-voyages"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Agences de Voyages"

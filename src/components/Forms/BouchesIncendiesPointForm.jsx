@@ -1,6 +1,6 @@
 import Actions from "../Forms_blocks/Actions";
 
-const LieuxRemarquablesPointForm = ()  => {
+const BouchesIncendiesPointForm = ()  => {
 
     const handleSave = (e) => {
         e.preventDefault();
@@ -13,12 +13,12 @@ const LieuxRemarquablesPointForm = ()  => {
 
         alert("edit succeed");
     }
-
+    
     return (
         <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Gestion des mosquées</h1>
+            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">BouchesIncendies</h1>
             <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour la mosquée
+                Veuillez specifier les informations specifiques a la BouchesIncendies
             </div>
             <form>
                 <div className="relative w-full mb-3">
@@ -39,17 +39,33 @@ const LieuxRemarquablesPointForm = ()  => {
                 <div className="relative w-full mb-3">
                     <label
                         className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="desc"
+                        htmlFor="mat"
                     >
-                        Description
+                        Matricule
                     </label>
-                    <textarea
+                    <input
+                        type="text"
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Description"
-                        id="desc"
-                    > </textarea>
+                        placeholder="Matricule"
+                        id="mat"
+                    />
                 </div>
 
+                <div className="relative w-full mb-3">
+                    <label
+                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                        htmlFor="symb"
+                    >
+                        Symbole
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                        placeholder="Symbole"
+                        id="symb"
+                    />
+                </div>
+        
                 <Actions
                     handleSave={handleSave}
                     handleEdit={handleEdit}
@@ -59,4 +75,4 @@ const LieuxRemarquablesPointForm = ()  => {
     );
 }
 
-export default LieuxRemarquablesPointForm;
+export default BouchesIncendiesPointForm;

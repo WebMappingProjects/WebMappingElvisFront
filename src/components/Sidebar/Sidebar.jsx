@@ -277,12 +277,30 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                  to="/admin/tables/agencesdevoyages"
+                  to="/admin/tables/agences-de-voyages"
                 >
                   <FaTruck className="mr-2 text-sm"/>
                   Agences de Voyages
                 </Link>
               </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/centres-special-detat-civil"
+                >
+                  <FaTruck className="mr-2 text-sm"/>
+                  Centres special detat civil
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/mairies-yaounde"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Mairies Yaounde
+                </Link>
+                </li>
             </ul>
 
 
@@ -383,6 +401,35 @@ export default function Sidebar() {
                   lieux remarquables
                 </Link>
               </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/auberges"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  auberges
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/bouches-incendies"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Bouches incendies
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/garages-custom"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Garages 
+                </Link>
+                </li>
+                
             </ul>
 
           </div>

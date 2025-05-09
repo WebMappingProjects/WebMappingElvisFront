@@ -48,10 +48,20 @@ import HotelsPointForm from "./components/Forms/HotelsPointForm";
 import HotelsPointTable from "./components/Tables/HotelsPointTable";
 import CitesMunicipalesPointForm from "./components/Forms/CitesMunicipalesPointForm";
 import CitesMunicipalesPointTable from "./components/Tables/CitesMunicipalesPointTable";
-<<<<<<< HEAD
 import LieuxRemarquablesPointForm from "./components/Forms/LieuxRemarquablesPointForm";
-=======
->>>>>>> origin/stephane
+import AgencesdeVoyagesPointForm from "./components/Forms/AgencesdeVoyagesPointForm";
+import LieuxRemarquablesPointTable from "./components/Tables/LieuxRemarquablesPointTable";
+import AgencesdeVoyagesPointTable from "./components/Tables/AgencesdeVoyagesPointTable";
+import AubergesPointForm from "./components/Forms/AubergesPointForm";
+import AubergesPointTable from "./components/Tables/AubergesPointTable";
+import BouchesIncendiesPointForm from "./components/Forms/BouchesIncendiesPointForm";
+import BouchesIncendiesPointTable from "./components/Tables/BouchesIncendiesPointTable";
+import CentresSpecialdEtatCivilPointForm from "./components/Forms/CentresSpecialdEtatCivilPointForm";
+import CentresSpecialdEtatCivilPointTable from "./components/Tables/CentresSpecialdetatcivilPointTable";
+import GaragesCustomPointForm from "./components/Forms/GaragesCustomPointForm";
+import GaragesCustomPointTable from "./components/Tables/GaragesCustomPointTable";
+import MairiesYaoundePointForm from "./components/Forms/MairiesYaoundePointForm";
+import MairiesYaoundePointTable from "./components/Tables/MariesYaoundePointTable";
 
 function App() {
 
@@ -60,6 +70,7 @@ function App() {
     <Routes>
 
       {/* add routes with layouts */}
+
       <Route path="/admin" element={<Admin />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           {/* <Route path="/admin/settings" element={<Settings />} /> */}
@@ -68,17 +79,12 @@ function App() {
           <Route path="/admin/forms" element={<Forms />}>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
             <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
-<<<<<<< HEAD
-            <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
-=======
->>>>>>> origin/stephane
             <Route path="/admin/forms/sapeurpompier" element={<SapeurPompierPointForm />} />
             <Route path="/admin/forms/laveries" element={<LaveriesPointForm />} />
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
             <Route path="/admin/forms/commissariats" element={<CommissariatsYdePointForm />} />
             <Route path="/admin/forms/stations-services" element={<StationsServiceFontPointForm />} />
             <Route path="/admin/forms/banques-microfinances" element={<BanquesEtMicrofinancesCustomPointForm />} />
-            
             <Route path="/admin/forms/complex-sportif" element={<ComplexSportifCustomPointForm />} />
             <Route path="/admin/forms/ecoles-mat-prim" element={<EcolesMatPrimairePointForm />} />
             <Route path="/admin/forms/ens-sup" element={<EnseignementSuperieurCustomPointForm />} />
@@ -89,10 +95,13 @@ function App() {
             <Route path="/admin/forms/cites-municipales" element={<CitesMunicipalesPointForm />} />
             <Route path="/admin/forms/pharmacies" element={<PharmaciesPointForm />} />
             <Route path="/admin/forms/hotels" element={<HotelsPointForm />} />
-<<<<<<< HEAD
             <Route path="/admin/forms/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
-=======
->>>>>>> origin/stephane
+            <Route path="/admin/forms/agences-de-voyages" element={<AgencesdeVoyagesPointForm/>} />
+            <Route path="/admin/forms/auberges" element={<AubergesPointForm />} />
+            <Route path="/admin/forms/bouches-incendies" element={<BouchesIncendiesPointForm />} />
+            <Route path="/admin/forms/centres-special-detat-civil" element={<CentresSpecialdEtatCivilPointForm />} />
+            <Route path="/admin/forms/garages-custom" element={<GaragesCustomPointForm />} />
+            <Route path="/admin/forms/mairies-yaounde" element={<MairiesYaoundePointForm />} />
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/mosquee" />} />
           </Route>
 
@@ -116,10 +125,13 @@ function App() {
               <Route path="/admin/tables/cites-municipales" element={<CitesMunicipalesPointTable />} />
               <Route path="/admin/tables/pharmacies" element={<PharmaciesPointTable />} />
               <Route path="/admin/tables/hotels" element={<HotelsPointTable />} />
-<<<<<<< HEAD
-              <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
-=======
->>>>>>> origin/stephane
+              <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointTable />} />
+              <Route path="/admin/tables/agences-de-voyages" element={<AgencesdeVoyagesPointTable />} />
+              <Route path="/admin/tables/auberges" element={<AubergesPointTable />} />
+              <Route path="/admin/tables/bouches-incendies" element={<BouchesIncendiesPointTable/>} />
+              <Route path="/admin/tables/centres-special-detat-civil" element={<CentresSpecialdEtatCivilPointTable />} />
+              <Route path="/admin/tables/garages-custom" element={<GaragesCustomPointTable/>} />
+              <Route path="/admin/tables/mairies-yaounde" element={<MairiesYaoundePointTable/>} />
               <Route path="/admin/tables" element={<Navigate  to="/admin/tables/mosquee" />} />
           </Route>
 
