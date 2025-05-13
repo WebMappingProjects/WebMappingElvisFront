@@ -10,9 +10,12 @@ const AppProvider = ({ children }) => {
     const [ currentLayerName, setCurrentLayerName ] = useState("");
     const [ currentLayerAttribution, setCurrentLayerAttribution ] = useState("");
 
+    const [ authUser, setAuthUser ] = useState(null);
+
     const value = {
         currentLayerName, setCurrentLayerName,
-        currentLayerAttribution, setCurrentLayerAttribution
+        currentLayerAttribution, setCurrentLayerAttribution,
+        authUser, setAuthUser
     };
 
   return <appMainContext.Provider value={value}>{children}</appMainContext.Provider>;
