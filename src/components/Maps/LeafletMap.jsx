@@ -14,7 +14,7 @@ const LeafletMap = ({ layer = "pharmacies_point", attrib }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const popupRef = useRef(null); 
-  const workspaceName = "SIG_WORKSPACE"; //"PostGisWorkspace";
+  const workspaceName = "SIG_WORKSPACE"; //"SIG_WORKSPACE"; //"PostGisWorkspace";
   const mainGeoserverRoute = "/geoserver"; // "http://localhost:8080/geoserver";
 
   const getWMSFeatureInfoUrl = (wmsUrl, latlng, map, layerName, options = {}) => {
