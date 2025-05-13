@@ -121,7 +121,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/ecoles-mat-prim"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "ecoles_mat_primaire_point", "Ecoles Maternelles et Primaires")}
                     >
                       <FaSchool className="mr-2 text-sm"/>
                       Ecoles maternelles et primaires
@@ -131,7 +131,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/ens-sec"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "enseignements_secondaires_final_point", "Enseignement Secondaire")}
                     >
                       <FaSchool className="mr-2 text-sm"/>
                       Enseignement Secondaire
@@ -141,7 +141,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/ens-sup"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "enseignement_superieur_custom_point", "Enseignement Superieur")}
                     >
                       <FaUniversity className="mr-2 text-sm"/>
                       Enseignement superieur
@@ -161,7 +161,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/complex-sportif"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "complexes_sportifs_custom_point", "Complexes Sportifs")}
                     >
                       <FaRunning className="mr-2 text-sm"/>
                       Complexes Sportifs
@@ -171,7 +171,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/pharmacies"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "pharmacies_point", "Pharmacies")}
                     >
                       <FaPlus className="mr-2 text-sm"/>
                       Pharmacies
@@ -260,7 +260,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/nations-unies"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "nations_unies_point", "Nations unies")}
                     >
                       <FaServicestack className="mr-2 text-sm"/>
                       Nations Unies
@@ -290,7 +290,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/stations-services"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "stations_sevices_font_point", "Stations Services")}
                     >
                       <FaChargingStation className="mr-2 text-sm"/>
                       Stations Services
@@ -300,7 +300,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/banques-microfinances"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "banques_et_microfinances_custom_point", "Banques et Microfinances")}
                     >
                       <FaMoneyBill className="mr-2 text-sm"/>
                       Banques et microfinances
@@ -310,7 +310,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/cites-municipales"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "cites_municipales_cuy_point", "Cites Municipales")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       Cites Municipales
@@ -364,7 +364,7 @@ export default function MapSidebar() {
                    <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/gendarmeries"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "gendarmeries_point", "Gendarmeries")}
                     >
                       <FaUser className="mr-2 text-sm"/>
                       Gendarmeries
@@ -373,7 +373,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/commissariats"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "commissariats_yde_font_point", "Commissariats")}
                     >
                       <FaUser className="mr-2 text-sm"/>
                       Commissariats
@@ -401,7 +401,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/restaurants"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "restaurants_yde_font_point", "Restaurants")}
                     >
                       <FaHamburger className="mr-2 text-sm"/>
                       Restaurants
@@ -410,7 +410,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/boulangeries"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "boulangeries_custom_point", "Boulangeries")}
                     >
                       <FaBreadSlice className="mr-2 text-sm"/>
                       Boulangeries
@@ -419,7 +419,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/centres-culturels"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "centres_culturels_custom_point", "Centres Culturels")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       Centres Culturels
@@ -429,7 +429,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/hotels"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "hotels_font_point", "Hotels")}
                     >
                       <FaHotel className="mr-2 text-sm"/>
                       Hotels

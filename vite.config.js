@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/geoserver': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8080/geoserver',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/geoserver/, ''),
       }
