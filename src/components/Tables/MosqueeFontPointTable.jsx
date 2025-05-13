@@ -23,8 +23,6 @@ const MosqueeFontPointTable = () => {
                 });
         
                 const datas = response.data;
-                
-                console.log("DATAS", datas);
 
                 let returnDatas = [];
                 for(let i = 0; i < datas.features.length; i++)
