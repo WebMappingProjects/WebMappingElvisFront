@@ -332,7 +332,27 @@ export default function Sidebar() {
                   <FaBuilding className="mr-2 text-sm"/>
                   Mairies Yaounde
                 </Link>
-                </li>
+              </li>
+              
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/prefectures-sous-prefectures"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Prefectures/sous-prefectures
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/ambassades"
+                >
+                  <FaBuilding className="mr-2 text-sm"/>
+                  Ambassades
+                </Link>
+              </li>
             </ul>
 
 
