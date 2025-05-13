@@ -14,7 +14,7 @@ const LeafletMap = ({ layer, attrib }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const popupRef = useRef(null); 
-  const workspaceName = "PostGisWorkspace";
+  const workspaceName = "SIG_WORKSPACE"; //"PostGisWorkspace";
 
   // Fonction pour construire l'URL GetFeatureInfo manuellement
   const getWMSFeatureInfoUrl = (wmsUrl, latlng, map, layerName) => {

@@ -111,7 +111,7 @@ export default function MapSidebar() {
                 <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/enseignement-de-base"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "enseignement_de_base_font_point", "Enseignement de base")}
                     >
                       <FaSchool className="mr-2 text-sm"/>
                       Enseignement de base
@@ -200,7 +200,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/eglises-catholiques"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "eglises_catholiques_font_point", "Eglises catholiques")}
                     >
                       <FaCross className="mr-2 text-sm"/>
                       Eglises Catholiques
@@ -210,7 +210,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/eglises-presbyteriennes"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "eglises_presbyteriennes_font_point", "Eglises presbyteriennes")}
                     >
                       <FaCross className="mr-2 text-sm"/>
                       Eglises Presbyteriennes
@@ -220,7 +220,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/eglises-protestantes"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "eglises_protestantes_point", "Eglises protestantes")}
                     >
                       <FaCross className="mr-2 text-sm"/>
                       Eglises Protestantes
@@ -270,7 +270,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/sapeurpompier"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "sapeurs_pompier_point", "Sapeurs pompiers")}
                     >
                       <FaTruck className="mr-2 text-sm"/>
                       Sapeur pompier
@@ -280,7 +280,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/laveries"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "laveries_font_point", "Laveries")}
                     >
                       <FaCar className="mr-2 text-sm"/>
                       Laveries
@@ -320,7 +320,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/agences-de-voyages"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "agences_de_voyages_font_point", "Agences de voyages")}
                     >
                       <FaTruck className="mr-2 text-sm"/>
                       Agences de Voyages
@@ -329,7 +329,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/centres-special-detat-civil"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "centre_special_detat_civil_font_point", "Centre detat civil")}
                     >
                       <FaTruck className="mr-2 text-sm"/>
                       Centres special detat civil
@@ -338,7 +338,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/mairies-yaounde"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "mairies_yaounde_custom_point", "Mairies yaounde")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       Mairies Yaounde
@@ -438,7 +438,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/monuments"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "monuments_custom_point", "Monuments")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       Monuments
@@ -447,7 +447,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/lieux-remarquables"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "lieux_remarquables_point", "Lieux remarquables")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       lieux remarquables
@@ -457,7 +457,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/auberges"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "auberges_custom_point", "Auberges custom")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       auberges
@@ -466,7 +466,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/bouches-incendies"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "bouches_incendies_yde_custom_point", "Bouches incendies")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       Bouches incendies
@@ -475,7 +475,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      to="/admin/tables/garages-custom"
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "garages_custom_point", "Garages")}
                     >
                       <FaBuilding className="mr-2 text-sm"/>
                       Garages 
