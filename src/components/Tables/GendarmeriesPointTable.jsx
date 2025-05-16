@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const GendarmeriesPointTable = () => {
     
-    const headRow = [ "Id", "numero", "Denomination", "Boite Postale", "Numero Telephone", "Specialisation", "Perimetre", "Localisation"];
+    const headRow = [ "N°", "numero", "Denomination", "Boite Postale", "Numero Telephone", "Specialisation", "Perimetre", "Localisation"];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "367125", "Melen", "Spec Test", "Test Peri", "Test Loc"],

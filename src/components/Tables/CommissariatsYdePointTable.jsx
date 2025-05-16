@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const CommissariatsYdePointTable = () => {
     
-    const headRow = [ "Id", "numero", "Nom", "Localisation", "Numero Telephone", "Commissariat", "Quartier", "Arrondissement"];
+    const headRow = [ "N°", "numero", "Nom", "Localisation", "Numero Telephone", "Commissariat", "Quartier", "Arrondissement"];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "367125", "Melen", "Spec Test", "Test Peri", "Test Loc"],

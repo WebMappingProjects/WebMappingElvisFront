@@ -54,7 +54,7 @@ export default function Navbar(props) {
                   href="#featuresTitleIdx"
                 >
                   <FaStackOverflow  className="mr-2 text-lg leading-1"/>
-                  Modules
+                  Modules/Fonctionnalités
                 </a>
               </li>
               <li className="flex items-center">

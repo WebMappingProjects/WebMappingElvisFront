@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const CentresCulturelsCustomPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Quartier", "Promoteur",  "Telephone", "Email", "Boite Postale", "Offres", "Commune" ];
+    const headRow = [ "N°", "Nom", "Quartier", "Promoteur",  "Telephone", "Email", "Boite Postale", "Offres", "Commune" ];
 
     const datasRows = [
         [ 1, "AAA", "Quartier", "Promoteur",  "Telephone", "Email", "Boite Postale", "Offres", "Commune"],

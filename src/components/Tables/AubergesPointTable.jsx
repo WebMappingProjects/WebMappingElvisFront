@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const AubergesPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Adresse", "Telephone",  "Quartier", "Arrondissement" ];
+    const headRow = [ "N°", "Nom", "Adresse", "Telephone",  "Quartier", "Arrondissement" ];
 
     const datasRows = [
         [ 1, "AAA", "BP", "Tel","Ngoa Ekelle", "Yde I"],

@@ -19,6 +19,7 @@ import centre_divisions from "../assets/img/960px-Centre_divisions.png";
 import { FaBuilding, FaCodeBranch, FaCross, FaDraftingCompass, FaHotel, FaList, FaPlusSquare, FaRunning, FaSchool, FaShieldAlt, FaSitemap } from "react-icons/fa";
 
 export default function Index() {
+
   return (
     <>
       <IndexNavbar fixed />

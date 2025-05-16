@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const BouchesIncendiesPointTable = () => {
     
-    const headRow = [ "Id", "Matricule", "Symbole"];
+    const headRow = [ "N°", "Matricule", "Symbole"];
 
     const datasRows = [
         [ 1, "AAA", "BP"],

@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const MairiesYaoundePointTable = () => {
     
-    const headRow = [ "Id", "Numero", "Nom", "Quartier"];
+    const headRow = [ "N°", "Numero", "Nom", "Quartier"];
 
     const datasRows = [
         [ 1, "697542323", "AAA", "Melen"],

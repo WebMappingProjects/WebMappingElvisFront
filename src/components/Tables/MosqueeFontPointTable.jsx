@@ -6,7 +6,7 @@ const MosqueeFontPointTable = () => {
     
     const [ datasRows, setDatasRows ] = useState([]);
 
-    const headRow = [ "Id", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
+    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
     
     useEffect(() => {
         const loadDatasRows = async () => {

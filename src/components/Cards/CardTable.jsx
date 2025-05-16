@@ -97,7 +97,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                           : "bg-cyan-800 text-cyan-300 border-cyan-700")
                       }
                     >
-                      {data}
+                      { dataIndex == 0 ? itemIndex : data }
                     </td>
                   ))}
                   <td className="flex flex-row p-2 px-4 text-xs text-right align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
@@ -105,7 +105,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                       className="p-4 m-2 rounded-full cursor-pointer bg-teal-50 hover:bg-teal-300"
                       title="Modifier"
                       onClick={handleEdition}
-                      >
+                    >
                       {/* to={ mainRoute }> */}
                       <FaEdit className="text-sm text-teal-600"/>
                     </Link>

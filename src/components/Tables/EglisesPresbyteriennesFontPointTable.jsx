@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const EglisesPresbyteriennesFontPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Telephone", "Postale", "Quartier", "religion", "categorie" ];
+    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "religion", "categorie" ];
 
     const datasRows = [
         [ 1, "Nom", "Telephone", "Postale", "Quartier", "religion", "categorie" ],

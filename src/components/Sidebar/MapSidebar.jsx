@@ -421,7 +421,7 @@ export default function MapSidebar() {
                   <li className="items-center">
                     <Link
                       className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "restaurants_yde_font_point", "Restaurants")}
+                      onClick={(e) => handleChangeLayerNameAndAttrib(e, "restaurants_yaounde_font_point", "Restaurants")}
                     >
                       <FaHamburger className="mr-2 text-sm"/>
                       Restaurants

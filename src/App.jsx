@@ -76,8 +76,12 @@ import GaragesCustomPointForm from "./components/Forms/GaragesCustomPointForm";
 import GaragesCustomPointTable from "./components/Tables/GaragesCustomPointTable";
 import MairiesYaoundePointForm from "./components/Forms/MairiesYaoundePointForm";
 import MairiesYaoundePointTable from "./components/Tables/MariesYaoundePointTable";
+import { useEffect } from "react";
+import ProtectedRoute from "./views/ProtectedRoute";
 
 function App() {
+
+  
 
   return (
     <BrowserRouter>
@@ -85,12 +89,24 @@ function App() {
 
       {/* add routes with layouts */}
 
-      <Route path="/admin" element={<Admin />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
+      <Route path="/admin" element={
+        <ProtectedRoute>
+          <Admin />
+        </ProtectedRoute>
+      }>
+          <Route path="/admin/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+          } />
           {/* <Route path="/admin/settings" element={<Settings />} /> */}
           
           {/*  Sub layouts for admin data forms */}
-          <Route path="/admin/forms" element={<Forms />}>
+          <Route path="/admin/forms" element={
+            <ProtectedRoute>
+              <Forms />
+            </ProtectedRoute>
+          }>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
             <Route path="/admin/forms/nations-unies" element={<NationsUniesPointForm />} />
             <Route path="/admin/forms/gendarmeries" element={<GendarmeriesPointForm />} />
@@ -128,7 +144,11 @@ function App() {
           </Route>
 
           {/*  Sub Layouts for admin data tables */}
-          <Route path="/admin/tables" element={<Tables />}>
+          <Route path="/admin/tables" element={
+            <ProtectedRoute>
+              <Tables />
+            </ProtectedRoute>
+          }>
               <Route path="/admin/tables/mosquee" element={<MosqueeFontPointTable />} />
               <Route path="/admin/tables/nations-unies" element={<NationsUniesPointTable />} />
               <Route path="/admin/tables/sapeurpompier" element={<SapeurPompierPointTable />} />
@@ -169,7 +189,11 @@ function App() {
       </Route>
 
       {/* Map Route */}
-      <Route path="/map" element={<Maps />} />
+      <Route path="/map" element={
+        <ProtectedRoute>
+          <Maps />
+        </ProtectedRoute>
+      } />
 
       {/* Auth Routes */}
       <Route path="/auth" element={<Auth />}>
@@ -177,12 +201,26 @@ function App() {
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth" element={<Navigate  to="/auth/login" />} />
       </Route>
+      
       {/* add routes without layouts */}
-      <Route path="/landing" element={<Landing />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/" element={<Index />} />
-      {/* add redirect for first page */}
-      {/* <Route path="*" element={<Navigate  to="/" />} /> */}
+      <Route path="/landing" element={
+        <ProtectedRoute>
+          <Landing />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/" element={
+        <ProtectedRoute>
+          <Index />
+        </ProtectedRoute>
+      } />
+
     </Routes>
   </BrowserRouter>
   );

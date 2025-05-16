@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const ComplexSportifCustomPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Type", "Quartier", "Discipline",  "Commune", "Standing" ];
+    const headRow = [ "N°", "Nom", "Type", "Quartier", "Discipline",  "Commune", "Standing" ];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "public", "Melen", "Commune", "Standing"],

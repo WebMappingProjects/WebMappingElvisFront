@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const RestaurantsYaoundeFontPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Téléphone", "Boite postale",  "Quartier", "Standing", "Commune" ];
+    const headRow = [ "N°", "Nom", "Téléphone", "Boite postale",  "Quartier", "Standing", "Commune" ];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "public", "Melen", "Standing", "Commune" ],

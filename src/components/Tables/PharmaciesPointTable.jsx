@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const PharmaciesPointTable = () => {
     
-    const headRow = [ "Id", "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture" ];
+    const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture" ];
 
     const datasRows = [
         [ 1, "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture"],

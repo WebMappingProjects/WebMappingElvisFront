@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const BoulangeriesCustomPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Quartier", "Arrondissement", "Standing", "Telephone", "Boite postale", "Proprietaire" ];
+    const headRow = [ "N°", "Nom", "Quartier", "Arrondissement", "Standing", "Telephone", "Boite postale", "Proprietaire" ];
 
     const datasRows = [
         [ 1, "AAA", "Ngoa Ekelle", "Yde I", "Standing", "Tel", "BP", "Owner" ],

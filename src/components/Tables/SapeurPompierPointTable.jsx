@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const SapeurPompierPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Quartier", "Arrondissement"];
+    const headRow = [ "N°", "Nom", "Quartier", "Arrondissement"];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "367125"],
