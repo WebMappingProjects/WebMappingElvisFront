@@ -76,7 +76,6 @@ import GaragesCustomPointForm from "./components/Forms/GaragesCustomPointForm";
 import GaragesCustomPointTable from "./components/Tables/GaragesCustomPointTable";
 import MairiesYaoundePointForm from "./components/Forms/MairiesYaoundePointForm";
 import MairiesYaoundePointTable from "./components/Tables/MariesYaoundePointTable";
-import { useEffect } from "react";
 import ProtectedRoute from "./views/ProtectedRoute";
 
 function App() {
@@ -201,7 +200,7 @@ function App() {
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth" element={<Navigate  to="/auth/login" />} />
       </Route>
-      
+
       {/* add routes without layouts */}
       <Route path="/landing" element={
         <ProtectedRoute>

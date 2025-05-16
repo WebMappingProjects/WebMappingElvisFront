@@ -91,9 +91,9 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows 
                     <td
                       key={dataIndex}
                       className={
-                        "p-2 px-4 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap " +
+                        "py-1 px-4 text-xs align-middle border-b whitespace-nowrap" +
                         (color === "light"
-                          ? "bg-blueGray-50 text-primary-default border-primary-light"
+                          ? "bg-primary-light-op text-primary-default border-primary-light-op"
                           : "bg-cyan-800 text-cyan-300 border-cyan-700")
                       }
                     >

@@ -1,4 +1,4 @@
-import { Route, Navigate, Routes, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 // components
 
