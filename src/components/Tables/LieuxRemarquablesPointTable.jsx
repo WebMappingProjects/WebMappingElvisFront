@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const LieuxRemarquablesPointTable = () => {
     
-    const headRow = [ "Id", "Descriptio", "Nom"];
+    const headRow = [ "N°", "Descriptio", "Nom"];
 
     const datasRows = [
         [ 1, "AAA", "697542323"],

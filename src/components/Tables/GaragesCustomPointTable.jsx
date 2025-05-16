@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const GaragesCustomPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Telephone", "Postale", "Quartier", "Standing" ];
+    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Standing" ];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "public", "Melen", "Standing"],

@@ -20,14 +20,14 @@ export default function Navbar(props) {
             >
               WEB MAPPING
             </Link>
-            <button
+            {/* <button
               className="block px-3 py-1 text-xl leading-none bg-transparent border border-transparent border-solid rounded outline-none cursor-pointer lg:hidden focus:outline-none"
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
               <i className="text-white fas fa-bars"></i>
               <FaBars className="text-white" />
-            </button>
+            </button> */}
           </div>
           <div
             className={
@@ -36,7 +36,7 @@ export default function Navbar(props) {
             }
             id="example-navbar-warning"
           >
-            <ul className="flex flex-col mr-auto list-none lg:flex-row">
+            {/* <ul className="flex flex-col mr-auto list-none lg:flex-row">
               <li className="flex items-center">
                 <a
                   className="flex items-center px-3 py-4 text-xs font-bold uppercase lg:text-neutral-400 lg:hover:text-primary-light text-primary-dark lg:py-2"
@@ -47,7 +47,7 @@ export default function Navbar(props) {
                 </a>
               </li>
             </ul>
-            {/* <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
+            <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
               <li className="flex items-center">
                 <PagesDropdown />
               </li>

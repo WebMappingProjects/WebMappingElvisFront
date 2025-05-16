@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const EnseignementSecondaireFinalPointTable = () => {
     
-    const headRow = [ "Id", "Numero", "Etablissement", "Localisation", "Fondateur", "Contact",  "Quartier" ];
+    const headRow = [ "N°", "Numero", "Etablissement", "Localisation", "Fondateur", "Contact",  "Quartier" ];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "public", "Melen", "Commune", "Quarter"],

@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const LaveriesPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Adresse", "Quartier", "Standing"];
+    const headRow = [ "N°", "Nom", "Adresse", "Quartier", "Standing"];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "367125", "Melen"],

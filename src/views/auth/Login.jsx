@@ -61,7 +61,7 @@ export default function Login() {
     <>
       <div className="container h-full px-4 mx-auto">
         <div className="flex items-center content-center justify-center h-full">
-          <div className="w-full px-4 lg:w-4/12">
+          <div className="w-full px-4 lg:w-6/12 xl:w-4/12">
             <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-gray-200 border-0 rounded-lg shadow-lg">
               <h3 className="my-4 text-xl font-semibold text-center">Connexion</h3>
               

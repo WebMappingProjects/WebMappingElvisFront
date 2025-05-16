@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const EnseignementDeBaseFontPointTable = () => {
     
-    const headRow = [ "Id", "Numero", "Nom", "Telephone", "Boite postale",  "Quartier", "Arrondissement" ];
+    const headRow = [ "N°", "Numero", "Nom", "Telephone", "Boite postale",  "Quartier", "Arrondissement" ];
 
     const datasRows = [
         [ 1, "Num", "Nom", "Telephone", "Boite postale",  "Quartier", "Arrondissement" ],

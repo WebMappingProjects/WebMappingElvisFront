@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const EnseignementSuperieurCustomPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Téléphone", "Fax",  "Quartier", "Arrondissement" ];
+    const headRow = [ "N°", "Nom", "Téléphone", "Fax",  "Quartier", "Arrondissement" ];
 
     const datasRows = [
         [ 1, "AAA", "697542323", "public", "Melen", "Commune"],

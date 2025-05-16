@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const MonumentsCustomPointTable = () => {
     
-    const headRow = [ "Id", "Numero", "Monument", "Position", "Creation",  "Signification"];
+    const headRow = [ "N°", "Numero", "Monument", "Position", "Creation",  "Signification"];
 
     const datasRows = [
         [ 1, "Num", "Monument", "Position", "Creation",  "Signification" ],

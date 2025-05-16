@@ -2,7 +2,7 @@ import CardTable from "../Cards/CardTable";
 
 const AmbassadesPointTable = () => {
     
-    const headRow = [ "Id", "Nom", "Telephone", "Postale", "Quartier" ];
+    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier" ];
 
     const datasRows = [
         [ 1, "Nom", "Telephone", "Postale", "Quartier" ],
