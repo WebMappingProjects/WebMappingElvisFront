@@ -173,7 +173,6 @@ function App() {
               <Route path="/admin/tables/eglises-presbyteriennes" element={<EglisesPresbyteriennesFontPointTable />} />
               <Route path="/admin/tables/eglises-protestantes" element={<EglisesProtestantesPointTable />} />
               <Route path="/admin/tables/enseignement-de-base" element={<EnseignementDeBaseFontPointTable />} />
-              <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointForm />} />
               <Route path="/admin/tables/lieux-remarquables" element={<LieuxRemarquablesPointTable />} />
               <Route path="/admin/tables/agences-de-voyages" element={<AgencesdeVoyagesPointTable />} />
               <Route path="/admin/tables/auberges" element={<AubergesPointTable />} />

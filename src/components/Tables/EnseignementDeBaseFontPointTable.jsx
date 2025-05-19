@@ -7,15 +7,15 @@ const EnseignementDeBaseFontPointTable = () => {
     const headRow = [ "N°", "Numero", "Nom", "Telephone", "Boite postale",  "Quartier", "Arrondissement" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
-
+            
     useEffect(() => {
         const loadDatasRows = async () => {
         
-              try
-              {
+                try
+                {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/enseignement-de-base-font", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -33,7 +33,7 @@ const EnseignementDeBaseFontPointTable = () => {
                         data.id,
                         data.properties.numero,
                         data.properties.nom,
-                        data.properties.telephonne,
+                        data.properties.telephone,
                         data.properties.bp,
                         data.properties.quartier,
                         data.properties.arrondisse
@@ -43,9 +43,9 @@ const EnseignementDeBaseFontPointTable = () => {
                 }
 
                 setDatasRows(returnDatas);
-              } catch (err) {
+                } catch (err) {
                 console.log("ERROR", err);
-              }
+                }
         }
 
         loadDatasRows();
