@@ -15,7 +15,7 @@ const EglisesProtestantesPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/eglises-protestantes", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`

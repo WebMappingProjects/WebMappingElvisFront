@@ -15,7 +15,7 @@ const EcolesMatPrimairePointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/ecoles-mat-primaire", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`

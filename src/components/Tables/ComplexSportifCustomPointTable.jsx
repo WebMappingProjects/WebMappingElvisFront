@@ -15,7 +15,7 @@ const ComplexSportifCustomPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/complexes-sportifs-custom", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`

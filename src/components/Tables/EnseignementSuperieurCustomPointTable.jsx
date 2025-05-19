@@ -15,7 +15,7 @@ const EnseignementSuperieurCustomPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/enseignement-superieur-custom", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`

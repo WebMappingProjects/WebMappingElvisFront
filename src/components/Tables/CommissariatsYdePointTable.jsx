@@ -15,7 +15,7 @@ const CommissariatsYdePointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/commissariats-yde-font", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
