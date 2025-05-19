@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // components
 
 import IndexDropdown from "../Dropdowns/IndexDropdown";
@@ -8,6 +8,15 @@ import { FaAlignJustify, FaArrowCircleDown, FaBars, FaChartArea, FaFacebook, FaF
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = useState(false);
+
+  const handleLogout = (e) => {
+      e.preventDefault();
+
+      localStorage.clear();
+      
+      window.location.reload();
+  }
+
   return (
     <>
       <nav className="fixed top-0 z-50 flex flex-wrap items-center justify-between w-full px-2 py-3 bg-white shadow navbar-expand-lg">
@@ -82,10 +91,10 @@ export default function Navbar(props) {
               </li> */}
               <li className="flex items-center">
                 <a
-                  className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase hover:text-primary-default lg:py-2 active:bg-primary-light"
-                  href="/auth/login"
+                  className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"
+                  onClick={(e) => handleLogout(e)}
                 >
-                  <FaUnlock className="mr-3 leading-1"/> Connexion
+                  <FaUnlock className="mr-3 leading-1"/> Déconnexion
                 </a>
               </li>
 

@@ -15,7 +15,7 @@ const PrefectureSousPrefectureCustomPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/prefectures-sous-prefectures-custom", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -31,12 +31,9 @@ const PrefectureSousPrefectureCustomPointTable = () => {
                     
                     let tb = [
                         data.id,
+                        data.properties.numero,
                         data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
-                        data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.quartier
                     ];
 
                     returnDatas.push(tb);

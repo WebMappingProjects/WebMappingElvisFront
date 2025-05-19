@@ -15,7 +15,7 @@ const NationsUniesPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/nations-unies", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -32,11 +32,9 @@ const NationsUniesPointTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.telephonne,
+                        data.properties.telephone,
                         data.properties.postale,
-                        data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.quartier
                     ];
 
                     returnDatas.push(tb);

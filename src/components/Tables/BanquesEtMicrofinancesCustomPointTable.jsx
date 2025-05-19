@@ -15,7 +15,7 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/banques-et-microfinances-custom", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -32,11 +32,11 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
+                        data.properties.adresse,
+                        data.properties.telephoniq,
+                        data.properties.type,
                         data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.arrondisse
                     ];
 
                     returnDatas.push(tb);

@@ -15,7 +15,7 @@ const EglisesPresbyteriennesFontPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/eglises-presbyteriennes-font", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -32,7 +32,7 @@ const EglisesPresbyteriennesFontPointTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.telephonne,
+                        data.properties.telephone,
                         data.properties.postale,
                         data.properties.quartier,
                         data.properties.religion,

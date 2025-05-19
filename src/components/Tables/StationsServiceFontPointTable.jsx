@@ -15,7 +15,7 @@ const StationsServiceFontPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get("/gis/stations-sevices-font", {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -32,11 +32,10 @@ const StationsServiceFontPointTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
+                        data.properties.adresse,
+                        data.properties.telephonni,
                         data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.arrondisse
                     ];
 
                     returnDatas.push(tb);
