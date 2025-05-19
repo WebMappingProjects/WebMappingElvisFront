@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import CardTable from "../Cards/CardTable";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const LieuxRemarquablesPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Descriptio", "Nom"];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const LieuxRemarquablesPointTable = () => {
                     {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get("/gis/lieux-remarquables", {
+                    const response = await axios.get(`/gis/lieux-remarquables?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -45,7 +48,7 @@ const LieuxRemarquablesPointTable = () => {
             }
     
             loadDatasRows();
-        }, []);
+        }, [dataSearch]);
 
 
     return (

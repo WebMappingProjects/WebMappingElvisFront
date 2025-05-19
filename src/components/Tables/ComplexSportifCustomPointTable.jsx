@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const ComplexSportifCustomPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Type", "Quartier", "Discipline",  "Commune", "Standing" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const ComplexSportifCustomPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/complexes-sportifs-custom", {
+                const response = await axios.get(`/gis/complexes-sportifs-custom?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const ComplexSportifCustomPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
     return (
         <>

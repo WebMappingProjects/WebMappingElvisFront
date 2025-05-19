@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const RestaurantsYaoundeFontPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Téléphone", "Boite postale",  "Quartier", "Standing", "Commune" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const RestaurantsYaoundeFontPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/restaurants-yaounde-font", {
+                const response = await axios.get(`/gis/restaurants-yaounde-font?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const RestaurantsYaoundeFontPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
 
     return (

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const EglisesProtestantesPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "religion", "categorie" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const EglisesProtestantesPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/eglises-protestantes", {
+                const response = await axios.get(`/gis/eglises-protestantes?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const EglisesProtestantesPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
 
     return (

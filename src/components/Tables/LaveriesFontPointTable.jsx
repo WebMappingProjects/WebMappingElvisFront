@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const LaveriesPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Adresse", "Quartier", "Standing"];
 
     
@@ -16,7 +19,7 @@ const LaveriesPointTable = () => {
                     {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get("/gis/laveries-font", {
+                    const response = await axios.get(`/gis/laveries-font?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -48,7 +51,7 @@ const LaveriesPointTable = () => {
             }
     
             loadDatasRows();
-        }, []);
+        }, [dataSearch]);
 
     return (
         <>

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const EnseignementSecondaireFinalPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Numero", "Etablissement", "Localisation", "Fondateur", "Contact",  "Quartier" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const EnseignementSecondaireFinalPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/enseignements-secondaires-final", {
+                const response = await axios.get(`/gis/enseignements-secondaires-final?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const EnseignementSecondaireFinalPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
     return (
         <>

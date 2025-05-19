@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const EcolesMatPrimairePointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Code", "Nom", "Téléphone", "Boîte postale",  "Quartier", "Arrondissement" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const EcolesMatPrimairePointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/ecoles-mat-primaire", {
+                const response = await axios.get(`/gis/ecoles-mat-primaire?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const EcolesMatPrimairePointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
     return (
         <>

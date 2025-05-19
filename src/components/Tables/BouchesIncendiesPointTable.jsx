@@ -1,8 +1,11 @@
+import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
 
 const BouchesIncendiesPointTable = () => {
     
-    const headRow = [ "N°", "Matricule", "Symbole"];
+    const { dataSearch } = useAppMainContext();
+
+const headRow = [ "N°", "Matricule", "Symbole"];
 
     const datasRows = [
         [ 1, "AAA", "BP"],

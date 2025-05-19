@@ -4,7 +4,9 @@ import axios from "../../api/axios";
 
 const PharmaciesPointTable = () => {
     
-    const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture" ];
+    const { dataSearch } = useAppMainContext();
+
+const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
     

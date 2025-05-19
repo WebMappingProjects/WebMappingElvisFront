@@ -1,7 +1,10 @@
+import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
 
 const AubergesPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Adresse", "Telephone",  "Quartier", "Arrondissement" ];
 
     const datasRows = [

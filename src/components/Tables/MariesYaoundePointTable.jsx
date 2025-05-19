@@ -1,7 +1,10 @@
+import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
 
 const MairiesYaoundePointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Numero", "Nom", "Quartier"];
 
     const datasRows = [

@@ -1,7 +1,10 @@
+import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
 
 const GaragesCustomPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Standing" ];
 
     const datasRows = [

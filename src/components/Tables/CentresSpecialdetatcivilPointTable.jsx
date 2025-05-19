@@ -2,7 +2,9 @@ import CardTable from "../Cards/CardTable";
 
 const CentresSpecialdEtatCivilPointTable = () => {
     
-    const headRow = [ "N°", "nom", "Quartier",  "Arrondissement"];
+    const { dataSearch } = useAppMainContext();
+
+const headRow = [ "N°", "nom", "Quartier",  "Arrondissement"];
     
     const datasRows = [
         [ 1, "AAA", "Melen", "Spec Test" ],

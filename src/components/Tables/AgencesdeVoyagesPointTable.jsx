@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const AgencesdeVoyagesPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Quartier", "Arrondissement"];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const AgencesdeVoyagesPointTable = () => {
                     {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get("/gis/agences-de-voyages-font", {
+                    const response = await axios.get(`/gis/agences-de-voyages-font?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -46,7 +49,7 @@ const AgencesdeVoyagesPointTable = () => {
             }
     
             loadDatasRows();
-        }, []);
+        }, [dataSearch]);
 
     return (
         <>

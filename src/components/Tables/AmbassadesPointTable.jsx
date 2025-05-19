@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const AmbassadesPointTable = () => {
-    
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +17,7 @@ const AmbassadesPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/ambassades", {
+                const response = await axios.get(`/gis/ambassades?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -47,7 +49,7 @@ const AmbassadesPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
     return (
         <>

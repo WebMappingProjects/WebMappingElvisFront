@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const MosqueeFontPointTable = () => {
     
     const [ datasRows, setDatasRows ] = useState([]);
 
-    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
+    const { dataSearch } = useAppMainContext();
+
+const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -15,7 +18,7 @@ const MosqueeFontPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get(`/gis/mosquees-font?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const MosqueeFontPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
     return (
         <>

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const EnseignementDeBaseFontPointTable = () => {
     
+    const { dataSearch } = useAppMainContext();
+
     const headRow = [ "N°", "Numero", "Nom", "Telephone", "Boite postale",  "Quartier", "Arrondissement" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -15,7 +18,7 @@ const EnseignementDeBaseFontPointTable = () => {
                 {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/enseignement-de-base-font", {
+                const response = await axios.get(`/gis/enseignement-de-base-font?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -49,7 +52,7 @@ const EnseignementDeBaseFontPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
 
     return (

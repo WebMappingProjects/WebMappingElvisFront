@@ -1,6 +1,10 @@
+import { useAppMainContext } from "../../context/AppProvider";
 import UserDropdown from "../Dropdowns/UserDropdown";
 
 export default function Navbar() {
+
+  const { dataSearch, setDataSearch } = useAppMainContext();
+
   return (
     <>
       {/* Navbar */}
@@ -22,8 +26,10 @@ export default function Navbar() {
               </span>
               <input
                 type="text"
-                placeholder="Search here..."
+                placeholder="Rechercher ici..."
                 className="relative w-full px-3 py-3 pl-10 text-sm bg-white border-0 rounded shadow outline-none placeholder:text-primary-light text-primary-default focus:outline-none focus:ring-0"
+                value={dataSearch}
+                onChange={(e) => setDataSearch(e.target.value)}
               />
             </div>
           </form>
