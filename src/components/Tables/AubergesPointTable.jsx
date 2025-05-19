@@ -18,7 +18,7 @@ const AubergesPointTable = () => {
                     {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get("/gis/auberges-custom", {
+                    const response = await axios.get(`/gis/auberges-custom?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -51,7 +51,7 @@ const AubergesPointTable = () => {
             }
     
             loadDatasRows();
-        }, []);
+        }, [dataSearch]);
 
 
     return (
