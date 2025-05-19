@@ -57,7 +57,7 @@ const CitesMunicipalesPointTable = () => {
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
 
     return (

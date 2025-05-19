@@ -18,7 +18,7 @@ const MairiesYaoundePointTable = () => {
                   {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get("/gis/mairies-yaounde-custom", {
+                    const response = await axios.get(`/gis/mairies-yaounde-custom?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -50,7 +50,7 @@ const MairiesYaoundePointTable = () => {
             }
     
             loadDatasRows();
-        }, []);
+        }, [dataSearch]);
 
 
     return (

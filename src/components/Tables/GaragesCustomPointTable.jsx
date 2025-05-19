@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
+import axios from "../../api/axios";
 
 const GaragesCustomPointTable = () => {
     
@@ -16,7 +18,7 @@ const GaragesCustomPointTable = () => {
                   {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get("/gis/mosquees-font", {
+                    const response = await axios.get(`/gis/garages-custom?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -33,11 +35,10 @@ const GaragesCustomPointTable = () => {
                         let tb = [
                             data.id,
                             data.properties.nom,
-                            data.properties.telephonne,
+                            data.properties.telephone,
                             data.properties.postale,
                             data.properties.quartier,
-                            data.properties.religion,
-                            data.properties.categorie
+                            data.properties.standing
                         ];
     
                         returnDatas.push(tb);
@@ -50,7 +51,7 @@ const GaragesCustomPointTable = () => {
             }
     
             loadDatasRows();
-        }, []);
+        }, [dataSearch]);
 
 
     return (

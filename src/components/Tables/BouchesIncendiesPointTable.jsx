@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
+import axios from "../../api/axios";
 
 const BouchesIncendiesPointTable = () => {
     
@@ -16,7 +18,7 @@ const headRow = [ "N°", "Matricule", "Symbole"];
                 {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/mosquees-font", {
+                const response = await axios.get(`/gis/bouches-incendies-yde-custom?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -32,12 +34,8 @@ const headRow = [ "N°", "Matricule", "Symbole"];
                     
                     let tb = [
                         data.id,
-                        data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
-                        data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.matricule,
+                        data.properties.symbole
                     ];
 
                     returnDatas.push(tb);
@@ -50,7 +48,7 @@ const headRow = [ "N°", "Matricule", "Symbole"];
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
 
     return (
