@@ -224,7 +224,7 @@ export default function Index() {
 
           <div className="flex flex-wrap justify-center mt-24 text-center">
             <div className="w-full px-12 md:w-6/12 md:px-4">
-              <h2 className="text-4xl pt-[70px] font-semibold" id="featuresTitleIdx">Modules</h2>
+              <h2 className="text-4xl pt-[70px] font-semibold" id="featuresTitleIdx">Modules/Fonctionnaliés</h2>
               <p className="mt-4 mb-4 text-lg leading-relaxed text-primary-dark">
                 La plateforme est constituée de 3 principales parties
               </p>
