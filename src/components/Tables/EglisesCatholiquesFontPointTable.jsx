@@ -32,7 +32,7 @@ const EglisesCatholiquesFontPointTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.telephonne,
+                        data.properties.telephone,
                         data.properties.postale,
                         data.properties.quartier,
                         data.properties.religion,

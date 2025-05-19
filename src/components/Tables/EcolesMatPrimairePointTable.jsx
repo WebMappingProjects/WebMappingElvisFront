@@ -31,12 +31,12 @@ const EcolesMatPrimairePointTable = () => {
                     
                     let tb = [
                         data.id,
+                        data.properties.code_ecole,
                         data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
+                        data.properties.telephone,
+                        data.properties.bp,
                         data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.arrondisse
                     ];
 
                     returnDatas.push(tb);

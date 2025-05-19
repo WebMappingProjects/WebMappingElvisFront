@@ -31,12 +31,9 @@ const PrefectureSousPrefectureCustomPointTable = () => {
                     
                     let tb = [
                         data.id,
+                        data.properties.numero,
                         data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
-                        data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.quartier
                     ];
 
                     returnDatas.push(tb);

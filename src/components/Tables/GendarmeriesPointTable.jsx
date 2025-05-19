@@ -31,12 +31,13 @@ const GendarmeriesPointTable = () => {
                     
                     let tb = [
                         data.id,
-                        data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
-                        data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.numero,
+                        data.properties.d_nominati,
+                        data.properties.bo_te_post,
+                        data.properties.num_ro_t_l,
+                        data.properties.sp_cialisa,
+                        data.properties.p_rim_tre_,
+                        data.properties.localisati
                     ];
 
                     returnDatas.push(tb);

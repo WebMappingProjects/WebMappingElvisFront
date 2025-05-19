@@ -31,12 +31,11 @@ const MonumentsCustomPointTable = () => {
                     
                     let tb = [
                         data.id,
-                        data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
-                        data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.num,
+                        data.properties.monument,
+                        data.properties.position,
+                        data.properties.creation,
+                        data.properties.significat
                     ];
 
                     returnDatas.push(tb);

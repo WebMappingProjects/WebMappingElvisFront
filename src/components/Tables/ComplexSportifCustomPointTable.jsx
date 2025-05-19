@@ -31,12 +31,12 @@ const ComplexSportifCustomPointTable = () => {
                     
                     let tb = [
                         data.id,
-                        data.properties.nom,
-                        data.properties.telephonne,
-                        data.properties.postale,
+                        data.properties.noms,
+                        data.properties.type,
                         data.properties.quartier,
-                        data.properties.religion,
-                        data.properties.categorie
+                        data.properties.discipline,
+                        data.properties.commune,
+                        data.properties.standing
                     ];
 
                     returnDatas.push(tb);
