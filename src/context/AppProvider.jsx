@@ -14,11 +14,19 @@ const AppProvider = ({ children }) => {
 
     const [ dataSearch, setDataSearch ] = useState("");
 
+    const [ reloadDatas, setReloadDatas ] = useState(false);
+    const [ currentProjectionSystem, setCurrentProjectionSystem ] = useState(4326);
+
+    const [ currentEditionPoint, setCurrentEditionPoint ] = useState([]);
+
     const value = {
         currentLayerName, setCurrentLayerName,
         currentLayerAttribution, setCurrentLayerAttribution,
         authUser, setAuthUser,
-        dataSearch, setDataSearch
+        dataSearch, setDataSearch,
+        currentEditionPoint, setCurrentEditionPoint,
+        reloadDatas, setReloadDatas,
+        currentProjectionSystem, setCurrentProjectionSystem
     };
 
   return <appMainContext.Provider value={value}>{children}</appMainContext.Provider>;

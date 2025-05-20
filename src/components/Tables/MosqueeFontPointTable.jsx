@@ -7,9 +7,9 @@ const MosqueeFontPointTable = () => {
     
     const [ datasRows, setDatasRows ] = useState([]);
 
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, setCurrentEditionPoint } = useAppMainContext();
 
-const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
+    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -31,6 +31,11 @@ const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", 
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
+                    
+                    let lat = data.geometry.coordinates[1];
+                    let long = data.geometry.coordinates[0];
+
+                    setCurrentEditionPoint([ lat, long ]);
                     
                     let tb = [
                         data.id,

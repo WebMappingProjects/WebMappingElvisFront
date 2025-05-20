@@ -17,6 +17,7 @@ import tables_screen from "../assets/img/tables-screen.png";
 import landing from "../assets/img/landing.jpg";
 import centre_divisions from "../assets/img/960px-Centre_divisions.png";
 import { FaBuilding, FaCodeBranch, FaCross, FaDraftingCompass, FaHotel, FaList, FaPlusSquare, FaRunning, FaSchool, FaShieldAlt, FaSitemap } from "react-icons/fa";
+import SimpleMessagePopup from "../components/popups/SimpleMessagePopup";
 
 export default function Index() {
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
 
 const PharmaciesPointTable = () => {
     
@@ -17,7 +18,7 @@ const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Télép
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get("/gis/pharmacies", {
+                const response = await axios.get(`/gis/pharmacies?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -54,7 +55,7 @@ const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Télép
         }
 
         loadDatasRows();
-    }, []);
+    }, [dataSearch]);
 
 
     return (
