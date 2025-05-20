@@ -7,9 +7,10 @@ const PharmaciesPointTable = () => {
     
     const { dataSearch } = useAppMainContext();
 
-const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture" ];
+    const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Téléphone", "Boite postale",  "Quartier", "Arrondissement", "Ouverture" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,6 +29,7 @@ const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Télép
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -45,10 +47,17 @@ const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Télép
                         data.properties.ouverture
                     ];
 
+                    let c = [
+                        data.geometry.coordinates[1],
+                        data.geometry.coordinates[0]
+                    ];
+
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
@@ -66,6 +75,9 @@ const headRow = [ "N°", "Numero", "Nom", "Localisation", "Pharmacien", "Télép
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Pharmacies"
+                coordsRows={coordsRows}
+                apiRoute="/gis/pharmacies/"
+                originalEpsg={4326}
             />
         </>
     );

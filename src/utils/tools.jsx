@@ -45,7 +45,7 @@ export function convertCoords(coords) {
  * @param {[number, number]} coords - Input coordinates
  * @returns {[number, number]} - Coordinates in EPSG:4326
  */
-export function ensureEPSG4326(coords) {
+/*export function ensureEPSG4326(coords) {
     const [x, y] = coords;
     const is4326 = Math.abs(x) <= 180 && Math.abs(y) <= 90;
     if (is4326) {
@@ -54,5 +54,42 @@ export function ensureEPSG4326(coords) {
         const epsg4326 = "EPSG:4326";
         const epsg32632 = "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs";
         return { coords: proj4(epsg32632, epsg4326, coords), epsg: 32632 };
+    }
+}*/
+
+/**
+ * Converts coordinates from EPSG:32632 (UTM zone 32N) to EPSG:4326 (longitude, latitude).
+ * @param {[number, number]} coords - Input coordinates in EPSG:32632 ([easting, northing])
+ * @returns {[number, number]} - Converted coordinates in EPSG:4326 ([longitude, latitude])
+ */
+export function epsg32632To4326(coords) {
+    const epsg4326 = "EPSG:4326";
+    const epsg32632 = "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs";
+    return proj4(epsg32632, epsg4326, coords);
+}
+
+const EPSG4326 = 'EPSG:4326';
+const EPSG32632 = '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs';
+
+/**
+ * Convertit des coordonnées en EPSG:32632 vers EPSG:4326 si besoin.
+ * @param {Array} coords - Coordonnées au format [x, y], dans une projection inconnue.
+ * @returns {Object} - { coords: [lon, lat], epsg: 4326 }
+ */
+export function ensureEPSG4326(coords) {
+    if (!Array.isArray(coords) || coords.length !== 2) {
+        throw new Error("Coordonnées invalides : format attendu [x, y]");
+    }
+
+    const [x, y] = coords;
+
+    // Supposons que si x est supérieur à 100000, on est en UTM (EPSG:32632)
+    const isProbablyUTM = x > 100000 && x < 900000 && y > 0;
+
+    if (isProbablyUTM) {
+        const converted = proj4(EPSG32632, EPSG4326, coords); // retourne [lon, lat]
+        return { coords: converted, epsg: 4326 };
+    } else {
+        return { coords: coords, epsg: 4326 };
     }
 }

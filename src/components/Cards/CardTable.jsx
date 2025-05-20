@@ -9,8 +9,9 @@ import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ConfirmMessagePopup from "../popups/ConfirmMessagePopup";
+import { ensureEPSG4326 } from "../../utils/tools";
 
-export default function CardTable({ color, mainRoute, title, headRow, datasRows, coordsRows = null, apiRoute }) {
+export default function CardTable({ color, mainRoute, title, headRow, datasRows, coordsRows = null, apiRoute, originalEpsg }) {
 
   const { reloadDatas, setReloadDatas } = useAppMainContext();
 
@@ -19,7 +20,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
 
   const [ currentItemIndex, setCurrentItemIndex ] = useState(null);
 
-  const { dataSearch, setCurrentEditionPoint } = useAppMainContext();
+  const { dataSearch, setCurrentEditionPoint, setCurrentProjectionSystem } = useAppMainContext();
 
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
       e.preventDefault();
 
       setCurrentEditionPoint([]);
+      setCurrentProjectionSystem(originalEpsg);
 
       navigate(mainRoute, {
         state: {
@@ -56,7 +58,13 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
   const handleEdition = (e, index) => {
     e.preventDefault();
     const globalIndex = (currentPage - 1) * rowsPerPage + index;
-    setCurrentEditionPoint([ coordsRows[globalIndex][0], coordsRows[globalIndex][1] ]);
+    const ensureTool = ensureEPSG4326([ coordsRows[globalIndex][1], coordsRows[globalIndex][0] ]);
+    const epsg4326Coords = ensureTool.coords;
+    setCurrentProjectionSystem(originalEpsg);
+    
+    setCurrentEditionPoint([ epsg4326Coords[1], epsg4326Coords[0] ]);
+    //setCurrentEditionPoint([ coordsRows[globalIndex][0], coordsRows[globalIndex][1] ]);
+
     navigate(mainRoute, {
       state: {
         type: "edit",

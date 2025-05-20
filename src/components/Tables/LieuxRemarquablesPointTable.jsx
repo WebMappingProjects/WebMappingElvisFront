@@ -3,6 +3,8 @@ import axios from "../../api/axios";
 import CardTable from "../Cards/CardTable";
 import { useAppMainContext } from "../../context/AppProvider";
 
+
+const API_URL = "/gis/lieux-remarquables";
 const LieuxRemarquablesPointTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
@@ -10,7 +12,6 @@ const LieuxRemarquablesPointTable = () => {
     const headRow = [ "N°", "Description", "Nom"];
 
     const [ datasRows, setDatasRows ] = useState([]);
-
     const [ coordsRows, setCoordsRows ] = useState([]);
                     
         useEffect(() => {
@@ -20,7 +21,7 @@ const LieuxRemarquablesPointTable = () => {
                 {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get(`/gis/lieux-remarquables?search=${dataSearch}`, {
+                    const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -71,7 +72,8 @@ const LieuxRemarquablesPointTable = () => {
                 datasRows={datasRows}
                 title="lieux remarquables"
                 coordsRows={coordsRows}
-                apiRoute="/gis/lieux-remarquables/"
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
             />  
         </>
     );

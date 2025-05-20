@@ -10,48 +10,57 @@ const MairiesYaoundePointTable = () => {
     const headRow = [ "N°", "Numero", "Nom", "Quartier"];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
         
-        useEffect(() => {
-            const loadDatasRows = async () => {
-            
-                  try
-                  {
-                    const token = localStorage.getItem("token");
+    useEffect(() => {
+        const loadDatasRows = async () => {
         
-                    const response = await axios.get(`/gis/mairies-yaounde-custom?search=${dataSearch}`, {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-            
-                    const datas = response.data;
-    
-                    let returnDatas = [];
-                    for(let i = 0; i < datas.features.length; i++)
-                    {
-                        let data = datas.features[i];
-                        
-                        let tb = [
-                            data.id,
-                            data.properties.numero,
-                            data.properties.nom,
-                            data.properties.quartier,
+            try
+            {
+                const token = localStorage.getItem("token");
 
-                        ];
-    
-                        returnDatas.push(tb);
+                const response = await axios.get(`/gis/mairies-yaounde-custom?search=${dataSearch}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
                     }
-    
-                    setDatasRows(returnDatas);
-                  } catch (err) {
-                    console.log("ERROR", err);
-                  }
-            }
-    
-            loadDatasRows();
-        }, [dataSearch]);
+                });
+        
+                const datas = response.data;
 
+                let returnDatas = [];
+                let cDatasRows = [];
+                for(let i = 0; i < datas.features.length; i++)
+                {
+                    let data = datas.features[i];
+                    
+                    let tb = [
+                        data.id,
+                        data.properties.numero,
+                        data.properties.nom,
+                        data.properties.quartier,
+                    ];
+                    let c = null;
+                        if(data.geometry != null && data.geometry != undefined)
+                        {
+                            c = [
+                                data.geometry.coordinates[1],
+                                data.geometry.coordinates[0]
+                            ]
+                        }
+                    returnDatas.push(tb);
+                    cDatasRows.push(c);
+                }
+
+                setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
+            } catch (err) {
+                console.log("ERROR", err);
+            }
+        }
+
+        loadDatasRows();
+    }, [dataSearch]);
 
     return (
         <>
@@ -61,6 +70,9 @@ const MairiesYaoundePointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Mairies Yaounde"
+                coordsRows={coordsRows}
+                apiRoute="/gis/mairies-yaounde-custom/"
+                originalEpsg={4326}
             />
         </>
     );

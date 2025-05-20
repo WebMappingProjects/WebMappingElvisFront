@@ -10,6 +10,7 @@ const NationsUniesPointTable = () => {
     const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier"];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,6 +29,7 @@ const NationsUniesPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -39,11 +41,17 @@ const NationsUniesPointTable = () => {
                         data.properties.postale,
                         data.properties.quartier
                     ];
+                    let c = [
+                        data.geometry.coordinates[1],
+                        data.geometry.coordinates[0]
+                    ];
 
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
@@ -61,6 +69,9 @@ const NationsUniesPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Nations unies"
+                coordsRows={coordsRows}
+                apiRoute="/gis/nations-unies/"
+                originalEpsg={4326}
             />
         </>
     );

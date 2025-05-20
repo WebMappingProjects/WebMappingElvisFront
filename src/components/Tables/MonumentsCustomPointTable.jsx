@@ -10,6 +10,7 @@ const MonumentsCustomPointTable = () => {
     const headRow = [ "N°", "Numero", "Monument", "Position", "Creation",  "Signification"];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
 
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,6 +29,7 @@ const MonumentsCustomPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -41,10 +43,17 @@ const MonumentsCustomPointTable = () => {
                         data.properties.significat
                     ];
 
+                    let c = [
+                        data.geometry.coordinates[1],
+                        data.geometry.coordinates[0]
+                    ];
+
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
@@ -62,6 +71,9 @@ const MonumentsCustomPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Monuments"
+                coordsRows={coordsRows}
+                apiRoute="/gis/monuments/"
+                originalEpsg={4326}
             />
         </>
     );

@@ -3,22 +3,25 @@ import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 
+const API_URL = "/gis/bouches-incendies-yde-custom;"
+
 const BouchesIncendiesPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
-const headRow = [ "N°", "Matricule", "Symbole"];
+    const headRow = [ "N°", "Matricule", "Symbole"];
 
     const [ datasRows, setDatasRows ] = useState([]);
-        
+         const [ coordsRows, setCoordsRows ] = useState([]);
+   
     useEffect(() => {
         const loadDatasRows = async () => {
         
                 try
                 {
                 const token = localStorage.getItem("token");
-    
-                const response = await axios.get(`/gis/bouches-incendies-yde-custom?search=${dataSearch}`, {
+                
+                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -27,7 +30,9 @@ const headRow = [ "N°", "Matricule", "Symbole"];
         
                 const datas = response.data;
 
-                let returnDatas = [];
+                let returnDatas = [];                    
+                let cDatasRows = [];
+
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -38,17 +43,21 @@ const headRow = [ "N°", "Matricule", "Symbole"];
                         data.properties.symbole
                     ];
 
-                    returnDatas.push(tb);
+                    returnDatas.push(tb);                        
+                    cDatasRows.push(tb);
+
                 }
 
-                setDatasRows(returnDatas);
+                setDatasRows(returnDatas);                    
+                setCoordsRows(cDatasRows);
+
                 } catch (err) {
                 console.log("ERROR", err);
                 }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+        }, [dataSearch, reloadDatas]);
 
 
     return (
@@ -57,8 +66,12 @@ const headRow = [ "N°", "Matricule", "Symbole"];
                 color="light"
                 mainRoute="/admin/forms/bouches-incendies"
                 headRow={headRow}
-                datasRows={datasRows}
-                title="Bouches-Incendies"
+                datasRows={datasRows}                
+                title="Bouches-Incendies"                
+                coordsRows={coordsRows}
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
+
             />
         </>
     );

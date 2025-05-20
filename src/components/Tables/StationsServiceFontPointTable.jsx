@@ -10,6 +10,7 @@ const StationsServiceFontPointTable = () => {
     const headRow = [ "N°", "nom", "Adresse", "Telephone", "Quartier",  "Arrondissement"];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,6 +29,7 @@ const StationsServiceFontPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -40,11 +42,17 @@ const StationsServiceFontPointTable = () => {
                         data.properties.quartier,
                         data.properties.arrondisse
                     ];
+                    let c = [
+                        data.geometry.coordinates[1],
+                        data.geometry.coordinates[0]
+                    ];
 
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
@@ -62,6 +70,9 @@ const StationsServiceFontPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Stations services"
+                coordsRows={coordsRows}
+                apiRoute="/gis/stations-sevices-font/"
+                originalEpsg={4326}
             />
         </>
     );

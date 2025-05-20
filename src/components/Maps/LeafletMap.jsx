@@ -181,7 +181,7 @@ const LeafletMap = ({ layer = "pharmacies_point", attrib }) => {
       const layerName = `${workspaceName}:${layer}`;
 
       // Ajout d'une couche WMS depuis GeoServer
-      const wmsLayer = L.tileLayer.wms(wmsUrl, {
+      L.tileLayer.wms(wmsUrl, {
         layers: layerName,
         format: 'image/png',
         transparent: true,

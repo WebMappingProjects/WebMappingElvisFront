@@ -3,13 +3,15 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
+const API_URL = "/gis/centres-culturels-custom"
 const CentresCulturelsCustomPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "Nom", "Quartier", "Promoteur",  "Telephone", "Email", "Boite Postale", "Offres", "Commune" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -17,8 +19,7 @@ const CentresCulturelsCustomPointTable = () => {
               try
               {
                 const token = localStorage.getItem("token");
-    
-                const response = await axios.get(`/gis/centres-culturels-custom?search=${dataSearch}`, {
+                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -28,6 +29,7 @@ const CentresCulturelsCustomPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -44,17 +46,28 @@ const CentresCulturelsCustomPointTable = () => {
                         data.properties.communes
                     ];
 
+                    let c = null;
+                    if(data.geometry != null && data.geometry != undefined)
+                    {
+                        c = [
+                            data.geometry.coordinates[1],
+                            data.geometry.coordinates[0]
+                        ]
+                    }
+
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+        }, [dataSearch, reloadDatas]);
 
 
     return (
@@ -65,6 +78,9 @@ const CentresCulturelsCustomPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Centres culturels"
+                coordsRows={coordsRows}
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
             />
         </>
     );

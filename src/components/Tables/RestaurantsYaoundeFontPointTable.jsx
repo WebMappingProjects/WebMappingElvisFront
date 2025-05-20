@@ -10,6 +10,7 @@ const RestaurantsYaoundeFontPointTable = () => {
     const headRow = [ "N°", "Nom", "Téléphone", "Boite postale",  "Quartier", "Standing", "Commune" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,6 +29,7 @@ const RestaurantsYaoundeFontPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -42,10 +44,17 @@ const RestaurantsYaoundeFontPointTable = () => {
                         data.properties.commune
                     ];
 
+                    let c = [
+                        data.geometry.coordinates[1],
+                        data.geometry.coordinates[0]
+                    ];
+
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
@@ -63,6 +72,9 @@ const RestaurantsYaoundeFontPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Restaurants"
+                coordsRows={coordsRows}
+                apiRoute="/gis/restaurants-yaounde-font/"
+                originalEpsg={4326}
             />
         </>
     );
