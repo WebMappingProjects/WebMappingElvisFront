@@ -5,7 +5,7 @@ import { useAppMainContext } from "../../context/AppProvider";
 
 const MonumentsCustomPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "Numero", "Monument", "Position", "Creation",  "Signification"];
 
@@ -43,10 +43,14 @@ const MonumentsCustomPointTable = () => {
                         data.properties.significat
                     ];
 
-                    let c = [
-                        data.geometry.coordinates[1],
-                        data.geometry.coordinates[0]
-                    ];
+                    let c = null;
+                        if(data.geometry != null && data.geometry != undefined)
+                        {
+                            c = [
+                                data.geometry.coordinates[1],
+                                data.geometry.coordinates[0]
+                            ]
+                        }
 
                     returnDatas.push(tb);
                     cDatasRows.push(c);
@@ -60,7 +64,7 @@ const MonumentsCustomPointTable = () => {
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+    }, [dataSearch, reloadDatas]);
 
 
     return (

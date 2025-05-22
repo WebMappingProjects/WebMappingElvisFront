@@ -7,7 +7,7 @@ import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import { convertCoords } from "../../utils/tools";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/lieux-remarquables/`;
+const API_URL = `/gis/stations-sevices-font/`;
 
 const StationsServiceFontPointForm = ()  => {
 
@@ -16,7 +16,10 @@ const StationsServiceFontPointForm = ()  => {
     const navigate = useNavigate();
 
     const [ name, setName ] = useState("");
-    const [ description, setDescription ] = useState("");
+    const [ adresse, setAdresse ] = useState("");
+    const [ tel, setTel ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
+    const [ arrondissement, setArrondissement ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -26,8 +29,11 @@ const StationsServiceFontPointForm = ()  => {
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[2]);
-            setDescription(datas[1]);
+            setName(datas[1]);
+            setAdresse(datas[2]);
+            setTel(datas[3]);
+            setQuartier(datas[4]);
+            setArrondissement(datas[1]);
         }
     }, []);
 
@@ -54,7 +60,10 @@ const StationsServiceFontPointForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
-                "descriptio": description,
+                "adresse": parseInt(adresse),
+                "telephonni": parseInt(tel),
+                "quartier": quartier,
+                "arrondisse": arrondissement,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -92,7 +101,10 @@ const StationsServiceFontPointForm = ()  => {
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
                 "nom": name,
-                "descriptio": description,
+                "adresse": parseInt(adresse),
+                "telephonni": parseInt(tel),
+                "quartier": quartier,
+                "arrondisse": arrondissement,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -108,95 +120,110 @@ const StationsServiceFontPointForm = ()  => {
     }
     
     return (
-        <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Stations Services</h1>
-            <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour la station service
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+
+            <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Stations Services</h1>
+                <div className="mt-4 mb-3 text-center text-primary-dark">
+                    Veuillez specifier les informations pour la station service
+                </div>
+                <form>
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="nom"
+                        >
+                            Nom
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Nom"
+                            id="nom"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="addr"
+                        >
+                            Adresse
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Adresse"
+                            id="addr"
+                            value={adresse}
+                            onChange={(e) => setAdresse(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="tel"
+                        >
+                            Téléphone
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Téléphone"
+                            id="tel"
+                            value={tel}
+                            onChange={(e) => setTel(e.target.value)}
+                        />
+                    </div>
+                    
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="quarter"
+                        >
+                            Quartier
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Quartier"
+                            id="quarter"
+                            value={quartier}
+                            onChange={(e) => setQuartier(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="arrondissement"
+                        >
+                            Arrondissement
+                        </label>
+                        <input
+                            type="nom"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Commissariat"
+                            id="arrondissement"
+                            value={arrondissement}
+                            onChange={(e) => setArrondissement(e.target.value)}
+                        />
+                    </div>
+
+
+                    <Actions 
+                        handleSave={handleSave}
+                        handleEdit={handleEdit}
+                    />
+                </form>
             </div>
-            <form>
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="nom"
-                    >
-                        Nom
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Nom"
-                        id="nom"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="addr"
-                    >
-                        Adresse
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Adresse"
-                        id="addr"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="tel"
-                    >
-                        Téléphone
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Téléphone"
-                        id="tel"
-                    />
-                </div>
-                
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quarter"
-                    >
-                        Quartier
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Quartier"
-                        id="quarter"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="arrondissement"
-                    >
-                        Arrondissement
-                    </label>
-                    <input
-                        type="nom"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Commissariat"
-                        id="arrondissement"
-                    />
-                </div>
-
-
-                <Actions 
-                    handleSave={handleSave}
-                    handleEdit={handleEdit}
-                />
-            </form>
-        </div>
+        </>
     );
 }
 
