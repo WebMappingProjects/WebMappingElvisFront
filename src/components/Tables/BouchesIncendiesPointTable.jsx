@@ -3,7 +3,7 @@ import { useAppMainContext } from "../../context/AppProvider";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 
-const API_URL = "/gis/bouches-incendies-yde-custom;"
+const API_URL = "/gis/bouches-incendies-yde-custom"
 
 const BouchesIncendiesPointTable = () => {
     

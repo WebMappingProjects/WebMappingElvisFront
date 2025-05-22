@@ -26,6 +26,8 @@ const NationsUniesPointForm = ()  => {
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
 
     useEffect(() => {
+        console.log("DATAS", datas);
+        
         if(datas != null)
         {
             setName(datas[1]);
