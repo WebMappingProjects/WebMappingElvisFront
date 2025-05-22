@@ -3,14 +3,17 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
+const API_URL = "/gis/banques-et-microfinances-custom;"
+
 const BanquesEtMicrofinancesCustomPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "nom", "Adresse", "Telephone", "Quartier",  "Arrondissement"];
 
     const [ datasRows, setDatasRows ] = useState([]);
-    
+        const [ coordsRows, setCoordsRows ] = useState([]);
+
     useEffect(() => {
         const loadDatasRows = async () => {
         
@@ -18,7 +21,7 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get(`/gis/banques-et-microfinances-custom?search=${dataSearch}`, {
+                    const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -27,7 +30,9 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
         
                 const datas = response.data;
 
-                let returnDatas = [];
+                let returnDatas = [];                    
+                let cDatasRows = [];
+
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -42,17 +47,21 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
                         data.properties.arrondisse
                     ];
 
-                    returnDatas.push(tb);
+                    returnDatas.push(tb);                        
+                    cDatasRows.push(tb);
+
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
+
               } catch (err) {
                 console.log("ERROR", err);
               }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+        }, [dataSearch, reloadDatas]);
 
     return (
         <>
@@ -62,8 +71,12 @@ const BanquesEtMicrofinancesCustomPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Banques et microfinances"
-            />
-        </>
+                coordsRows={coordsRows}
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
+            />                
+
+        </>                
     );
 }
 

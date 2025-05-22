@@ -3,13 +3,15 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
+const API_URL = "/gis/boulangeries-custom"
 const BoulangeriesCustomPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "Nom", "Quartier", "Arrondissement", "Standing", "Telephone", "Boite postale", "Proprietaire" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -17,8 +19,8 @@ const BoulangeriesCustomPointTable = () => {
               try
               {
                 const token = localStorage.getItem("token");
-    
-                const response = await axios.get(`/gis/boulangeries-custom?search=${dataSearch}`, {
+                
+                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -28,6 +30,7 @@ const BoulangeriesCustomPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                    let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -42,18 +45,29 @@ const BoulangeriesCustomPointTable = () => {
                         data.properties.postale,
                         data.properties.propri_tai
                     ];
+                    
+                    let c = null;
+                    if(data.geometry != null && data.geometry != undefined)
+                    {
+                        c = [
+                            data.geometry.coordinates[1],
+                            data.geometry.coordinates[0]
+                        ]
+                    }
 
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+        }, [dataSearch, reloadDatas]);
 
 
     return (
@@ -64,6 +78,9 @@ const BoulangeriesCustomPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Boulangeries"
+                coordsRows={coordsRows}
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
             />
         </>
     );

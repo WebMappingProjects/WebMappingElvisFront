@@ -1,123 +1,162 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
+import { useEffect, useState } from "react";
+import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
+import SimpleMessagePopup from "../popups/SimpleMessagePopup";
+import { convertCoords } from "../../utils/tools";
+import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+
+const API_URL = `/gis/lieux-remarquables/`;
+import { useEffect, useState } from "react";
+import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
+import SimpleMessagePopup from "../popups/SimpleMessagePopup";
+import { convertCoords } from "../../utils/tools";
+
+const API_URL = `/gis/mosquees-font/`;
 
 const MosqueeFontPointForm = ()  => {
+    const location = useLocation();
+    const { datas } = location.state || "";
+    const navigate = useNavigate();
 
-    const handleSave = (e) => {
+    const [ name, setName ] = useState("");
+    const [ telephone, setTelephone ] = useState("");
+    const [ postale, setPostale ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
+    const [ religion, setReligion ] = useState("ISLAM");
+    const [ categorie, setCategorie ] = useState("MUSULMANE");
+
+    const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
+    const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
+
+    useEffect(() => {
+        console.log("INITIAL POINTS", currentEditionPoint);
+        if(datas != null) {
+            setName(datas[1]);
+            setTelephone(datas[2]);
+            setPostale(datas[3]);
+            setQuartier(datas[4]);
+            setReligion(datas[5]);
+            setCategorie(datas[6]);
+        }
+    }, []);
+
+    const handleSave = async (e) => {
         e.preventDefault();
+        try {
+            const token = localStorage.getItem("token");
+            const returnToOriginalCoordSys = currentEditionPoint ? 
+                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords([ currentEditionPoint[1], currentEditionPoint[0] ]).coords)
+                  : null;
+            const geometry = returnToOriginalCoordSys
+            ? {
+                type: "Point",
+                coordinates: [
+                    currentProjectionSystem == 4326 ? returnToOriginalCoordSys[1] : returnToOriginalCoordSys[0],
+                    currentProjectionSystem == 4326 ? returnToOriginalCoordSys[0] : returnToOriginalCoordSys[1]
+                ]
+            }
+            : null;
 
-        alert("saved succeed");
+            console.log("COORDS", geometry);
+            const response = await axios.post(API_URL, {
+                "nom": name,
+                "telephonne": parseInt(telephone),
+                "postale": parseInt(postale),
+                "quartier": quartier,
+                "religion": religion,
+                "categorie": categorie,
+                "geom": geometry
+            }, { headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }});
+
+            console.log("RESPONSE", response);
+            setMessagePopupVisible(true);
+        } catch (e) {
+            console.error("ERROR", e);
+        }
     }
 
-    const handleEdit = (e) => {
+    const handleEdit = async (e) => {
         e.preventDefault();
+        try {
+            const token = localStorage.getItem("token");
+            const returnToOriginalCoordSys = currentEditionPoint ? 
+                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords([ currentEditionPoint[1], currentEditionPoint[0] ]).coords)
+                  : null;
+            const geometry = returnToOriginalCoordSys
+            ? {
+                type: "Point",
+                coordinates: [
+                    currentProjectionSystem == 4326 ? returnToOriginalCoordSys[1] : returnToOriginalCoordSys[0],
+                    currentProjectionSystem == 4326 ? returnToOriginalCoordSys[0] : returnToOriginalCoordSys[1]
+                ]
+            }
+            : null;
 
-        alert("edit succeed");
+            const response = await axios.patch(`${API_URL}${datas[0]}`, {
+                "nom": name,
+                "telephonne": parseInt(telephone),
+                "postale": parseInt(postale),
+                "quartier": quartier,
+                "religion": religion,
+                "categorie": categorie,
+                "geom": geometry
+            }, { headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }});
+
+            console.log("RESPONSE", response);
+
+            setMessagePopupVisible(true);
+        } catch (e) {
+            console.error("ERROR", e);
+        }
     }
-    
 
     return (
-        <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Gestion des mosquées</h1>
-            <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour la mosquée
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Gestion des mosquées</h1>
+                <div className="mt-4 mb-3 text-center text-primary-dark">
+                    Veuillez specifier les informations pour la mosquée
+                </div>
+                <form>
+                    <div className="relative w-full mb-3">
+                        <label className="block mb-2 text-xs font-bold uppercase text-blueGray-600" htmlFor="name">Nom</label>
+                        <input type="text" className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring" placeholder="Nom" id="name" value={name} onChange={e => setName(e.target.value)} />
+                    </div>
+                    <div className="relative w-full mb-3">
+                        <label className="block mb-2 text-xs font-bold uppercase text-blueGray-600" htmlFor="tel">Téléphone</label>
+                        <input type="number" className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring" placeholder="Téléphone" id="tel" value={telephone} onChange={e => setTelephone(e.target.value)} />
+                    </div>
+                    <div className="relative w-full mb-3">
+                        <label className="block mb-2 text-xs font-bold uppercase text-blueGray-600" htmlFor="postale">Postale</label>
+                        <input type="number" className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring" placeholder="postale" id="postale" value={postale} onChange={e => setPostale(e.target.value)} />
+                    </div>
+                    <div className="relative w-full mb-3">
+                        <label className="block mb-2 text-xs font-bold uppercase text-blueGray-600" htmlFor="quartier">Quartier</label>
+                        <input type="text" className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring" placeholder="quartier" id="quartier" value={quartier} onChange={e => setQuartier(e.target.value)} />
+                    </div>
+                    <div className="relative w-full mb-3">
+                        <label className="block mb-2 text-xs font-bold uppercase text-blueGray-600" htmlFor="religion">Religion</label>
+                        <input type="text" className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring" placeholder="religion" id="religion" value={religion} onChange={e => setReligion(e.target.value)} />
+                    </div>
+                    <div className="relative w-full mb-3">
+                        <label className="block mb-2 text-xs font-bold uppercase text-blueGray-600" htmlFor="categorie">Catégorie</label>
+                        <input type="text" className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring" placeholder="catégorie" id="categorie" value={categorie} onChange={e => setCategorie(e.target.value)} />
+                    </div>
+                    <Actions handleSave={handleSave} handleEdit={handleEdit} />
+                </form>
             </div>
-            <form>
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="name"
-                    >
-                        Nom
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Nom"
-                        id="name"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="tel"
-                    >
-                        Téléphone
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Téléphone"
-                        id="tel"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="postale"
-                    >
-                        Postale
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="postale"
-                        id="postale"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quartier"
-                    >
-                        Quartier
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="quartier"
-                        id="quartier"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="religion"
-                    >
-                        Religion
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="religion"
-                        id="religion"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="categorie"
-                    >
-                        Catégorie
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="catégorie"
-                        id="categorie"
-                    />
-                </div>
-
-                <Actions 
-                    handleSave={handleSave}
-                    handleEdit={handleEdit}
-                />
-            </form>
-        </div>
+        </>
     );
 }
 

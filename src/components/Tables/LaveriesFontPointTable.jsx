@@ -3,6 +3,7 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
+const API_URL = "/gis/laveries-font";
 const LaveriesPointTable = () => {
     
     const { dataSearch } = useAppMainContext();
@@ -11,6 +12,7 @@ const LaveriesPointTable = () => {
 
     
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
                     
         useEffect(() => {
             const loadDatasRows = async () => {
@@ -19,7 +21,7 @@ const LaveriesPointTable = () => {
                     {
                     const token = localStorage.getItem("token");
         
-                    const response = await axios.get(`/gis/laveries-font?search=${dataSearch}`, {
+                    const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
@@ -29,6 +31,7 @@ const LaveriesPointTable = () => {
                     const datas = response.data;
     
                     let returnDatas = [];
+                    let cDatasRows = [];
                     for(let i = 0; i < datas.features.length; i++)
                     {
                         let data = datas.features[i];
@@ -40,11 +43,17 @@ const LaveriesPointTable = () => {
                             data.properties.quartier,
                             data.properties.standing
                         ];
+                        let c = [
+                            data.geometry.coordinates[1],
+                            data.geometry.coordinates[0]
+                        ];
     
                         returnDatas.push(tb);
+                        cDatasRows.push(c);
                     }
     
                     setDatasRows(returnDatas);
+                    setCoordsRows(cDatasRows);
                     } catch (err) {
                     console.log("ERROR", err);
                     }
@@ -61,6 +70,9 @@ const LaveriesPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Laveries"
+                coordsRows={coordsRows}
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
             />
         </>
     );

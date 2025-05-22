@@ -19,7 +19,7 @@ const Actions = ({ handleSave, handleEdit }) => {
             {type == "create" ? (
                 <div className="flex flex-col mt-6 text-center md:flex-row">
                     <button
-                        className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-black transition-all duration-150 ease-linear bg-green-300 rounded shadow outline-none cursor-pointer md:mx-3 hover:bg-green-500 hover:shadow-lg focus:outline-none"
+                        className="w-full px-6 py-3 mb-2 mr-1 text-sm font-bold text-black transition-all duration-150 ease-linear bg-green-300 rounded shadow outline-none cursor-pointer md:mx-3 hover:bg-green-500 hover:shadow-lg focus:outline-none"
                         type="button"
                         onClick={handleSave}
                     >
@@ -36,7 +36,7 @@ const Actions = ({ handleSave, handleEdit }) => {
             ) : (
                 <div className="flex flex-col mt-6 text-center md:flex-row">
                     <button
-                        className="w-full px-6 py-3 mb-1 mr-1 text-sm font-bold text-black transition-all duration-150 ease-linear bg-green-300 rounded shadow outline-none cursor-pointer md:mx-3 hover:bg-green-500 hover:shadow-lg focus:outline-none"
+                        className="w-full px-6 py-3 mb-2 mr-1 text-sm font-bold text-black transition-all duration-150 ease-linear bg-green-300 rounded shadow outline-none cursor-pointer md:mx-3 hover:bg-green-500 hover:shadow-lg focus:outline-none"
                         type="button"
                         onClick={handleEdit}
                     >

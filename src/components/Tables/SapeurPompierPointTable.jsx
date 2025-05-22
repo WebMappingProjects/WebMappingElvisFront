@@ -10,6 +10,7 @@ const SapeurPompierPointTable = () => {
     const headRow = [ "N°", "Nom", "Quartier", "Arrondissement"];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
                 
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,6 +29,7 @@ const SapeurPompierPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -38,11 +40,17 @@ const SapeurPompierPointTable = () => {
                         data.properties.quartier,
                         data.properties.arrondisse
                     ];
+                    let c = [
+                        data.geometry.coordinates[1],
+                        data.geometry.coordinates[0]
+                    ];
 
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
                 } catch (err) {
                 console.log("ERROR", err);
                 }
@@ -60,6 +68,9 @@ const SapeurPompierPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Sapeurs pompier"
+                coordsRows={coordsRows}
+                apiRoute="/gis/sapeurs-pompier/"
+                originalEpsg={4326}
             />
         </>
     );

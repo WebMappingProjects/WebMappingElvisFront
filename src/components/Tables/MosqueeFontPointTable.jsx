@@ -6,10 +6,11 @@ import { useAppMainContext } from "../../context/AppProvider";
 const MosqueeFontPointTable = () => {
     
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
 
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
-const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
+    const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", "Categorie" ];
     
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -28,9 +29,18 @@ const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", 
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
+                    
+                    let lat = null;
+                    let long = null;
+                    if(data.geometry != null && data.geometry != undefined)
+                    {
+                        lat = data.geometry.coordinates[1];
+                        long = data.geometry.coordinates[0];
+                    }
                     
                     let tb = [
                         data.id,
@@ -41,18 +51,21 @@ const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", 
                         data.properties.religion,
                         data.properties.categorie
                     ];
+                    let c = [lat, long];
 
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+    }, [dataSearch, reloadDatas]);
 
     return (
         <>
@@ -62,6 +75,9 @@ const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "Religion", 
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Mosquees"
+                coordsRows={coordsRows}
+                apiRoute="/gis/mosquees-font/"
+                originalEpsg={4326}
             />
         </>
     );
