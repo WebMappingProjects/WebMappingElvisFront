@@ -61,7 +61,7 @@ const EnseignementDeBaseFontPointForm = ()  => {
             : null;
 
             const response = await axios.post(API_URL, {
-                "numero": numero,
+                "numero": parseInt(numero),
                 "nom": name,
                 "telephone": telephone,
                 "bp": bp,
@@ -103,7 +103,7 @@ const EnseignementDeBaseFontPointForm = ()  => {
             : null;
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "numero": numero,
+                "numero": parseInt(numero),
                 "nom": name,
                 "telephone": telephone,
                 "bp": bp,
