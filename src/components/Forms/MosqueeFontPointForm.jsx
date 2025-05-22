@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
@@ -7,13 +6,6 @@ import { useAppMainContext } from "../../context/AppProvider";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import { convertCoords } from "../../utils/tools";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
-
-const API_URL = `/gis/lieux-remarquables/`;
-import { useEffect, useState } from "react";
-import axios from "../../api/axios";
-import { useAppMainContext } from "../../context/AppProvider";
-import SimpleMessagePopup from "../popups/SimpleMessagePopup";
-import { convertCoords } from "../../utils/tools";
 
 const API_URL = `/gis/mosquees-font/`;
 
@@ -123,6 +115,8 @@ const MosqueeFontPointForm = ()  => {
     return (
         <>
             <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+
             <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
                 <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Gestion des mosquées</h1>
                 <div className="mt-4 mb-3 text-center text-primary-dark">

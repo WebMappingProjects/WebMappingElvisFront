@@ -15,6 +15,7 @@ const EnseignementSecondaireFinalPointForm = ()  => {
     const { datas } = location.state || "";
     const navigate = useNavigate();
 
+    const [ numero, setNumero ] = useState("");
     const [ name, setName ] = useState("");
     const [ description, setDescription ] = useState("");
 
