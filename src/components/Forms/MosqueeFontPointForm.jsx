@@ -1,5 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
+import { useEffect, useState } from "react";
+import axios from "../../api/axios";
+import { useAppMainContext } from "../../context/AppProvider";
+import SimpleMessagePopup from "../popups/SimpleMessagePopup";
+import { convertCoords } from "../../utils/tools";
+import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+
+const API_URL = `/gis/lieux-remarquables/`;
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
