@@ -248,10 +248,10 @@ const LeafletMap = ({ layer = "pharmacies_point", attrib }) => {
             const feature = data.features[0];
             const properties = feature.properties;
             
-            let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3>Propriétés</h3><table>';
+            let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3 class="font-bold text-lg mb-3 text-center text-primary-dark">Propriétés</h3><table>';
             
             for (const [key, value] of Object.entries(properties)) {
-              popupContent += `<tr><td className="px-3 py-2"><strong>${key}</strong></td><td className="px-3 py-2">${value || 'N/A'}</td></tr>`;
+              popupContent += `<tr class="border"><td class="px-3 py-2 border"><strong>${key}</strong></td><td class="px-2 py-2">${value || 'N/A'}</td></tr>`;
             }
             
             popupContent += '</table></div>';

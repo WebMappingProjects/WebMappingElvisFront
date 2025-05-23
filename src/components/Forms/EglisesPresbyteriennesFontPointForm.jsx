@@ -19,8 +19,8 @@ const EglisesPresbyteriennesFontPointForm = ()  => {
     const [ tel, setTel ] = useState("");
     const [ postale, setPostale ] = useState("");
     const [ quartier, setQuartier ] = useState("");
-    const [ religion, setReligion ] = useState("");
-    const [ categorie, setCategorie ] = useState("");
+    const [ religion, setReligion ] = useState("CHRISTIANISME");
+    const [ categorie, setCategorie ] = useState("PRESBYTERIENNE");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
