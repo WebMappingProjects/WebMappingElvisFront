@@ -41,14 +41,14 @@ export default function MapSidebar() {
                 Accueil
               </Link>
               {/* User */}
-              <ul className="flex flex-wrap items-center list-none md:hidden">
+              {/* <ul className="flex flex-wrap items-center list-none md:hidden">
                 <li className="relative inline-block">
                   <NotificationDropdown />
                 </li>
                 <li className="relative inline-block">
                   <UserDropdown />
                 </li>
-              </ul>
+              </ul> */}
               {/* Collapse */}
               <div
                 className={

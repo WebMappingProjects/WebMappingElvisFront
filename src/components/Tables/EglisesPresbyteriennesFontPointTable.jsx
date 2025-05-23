@@ -45,6 +45,15 @@ const EglisesPresbyteriennesFontPointTable = () => {
                         data.properties.categorie
                     ];
 
+                    let c = null;
+                    if(data.geometry != null && data.geometry != undefined)
+                    {
+                        c = [
+                                data.geometry.coordinates[1],
+                                data.geometry.coordinates[0]
+                            ]
+                    }
+                    
                     returnDatas.push(tb);
                     cDatasRows.push(c);
                 }

@@ -1,3 +1,4 @@
+import { FaSearch } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
 import UserDropdown from "../Dropdowns/UserDropdown";
 
@@ -12,17 +13,17 @@ export default function Navbar() {
         <div className="flex flex-wrap items-center justify-between w-full px-4 mx-autp md:flex-nowrap md:px-10">
           {/* Brand */}
           <a
-            className="hidden text-sm font-semibold text-white uppercase lg:inline-block"
+            className="hidden text-sm font-semibold text-white uppercase md:inline-block"
             href="#pablo"
             onClick={(e) => e.preventDefault()}
           >
             Données du SIG
           </a>
           {/* Form */}
-          <form className="flex-row flex-wrap items-center hidden mr-3 md:flex lg:ml-auto">
+          <form className="flex-row flex-wrap items-center w-full mr-3 md:w-2/3 lg:w-1/4 md:flex lg:ml-auto">
             <div className="relative flex flex-wrap items-stretch w-full">
               <span className="absolute z-10 items-center justify-center w-8 h-full py-3 pl-3 text-base font-normal leading-snug text-center bg-transparent rounded text-primary-light">
-                <i className="fas fa-search"></i>
+                <FaSearch className="text-primary-default" />
               </span>
               <input
                 type="text"
@@ -34,9 +35,9 @@ export default function Navbar() {
             </div>
           </form>
           {/* User */}
-          <ul className="flex-col items-center hidden list-none md:flex-row md:flex">
+          {/* <ul className="flex-col items-center hidden list-none md:flex-row md:flex">
             <UserDropdown />
-          </ul>
+          </ul> */}
         </div>
       </nav>
       {/* End Navbar */}

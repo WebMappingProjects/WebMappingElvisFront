@@ -9,10 +9,10 @@ export default function FooterAdmin() {
               <div className="py-1 text-sm font-semibold text-center text-blueGray-500 md:text-left">
                 Copyright © {new Date().getFullYear()}{" "}
                 <a
-                  href="https://www.creative-tim.com?ref=nr-footer-admin"
+                  href="#"
                   className="py-1 text-sm font-semibold text-blueGray-500 hover:text-blueGray-700"
                 >
-                  Creative Tim
+                  sig geoportal app
                 </a>
               </div>
             </div>
@@ -20,23 +20,15 @@ export default function FooterAdmin() {
               <ul className="flex flex-wrap justify-center list-none md:justify-end">
                 <li>
                   <a
-                    href="https://www.creative-tim.com?ref=nr-footer-admin"
+                    href="#"
                     className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
                   >
-                    Creative Tim
+                    A propos de nous
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://www.creative-tim.com/presentation?ref=nr-footer-admin"
-                    className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="http://blog.creative-tim.com?ref=nr-footer-admin"
+                    href="#"
                     className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
                   >
                     Blog
@@ -44,7 +36,7 @@ export default function FooterAdmin() {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/creativetimofficial/notus-react/blob/main/LICENSE.md?ref=nr-footer-admin"
+                    href="#"
                     className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
                   >
                     MIT License
