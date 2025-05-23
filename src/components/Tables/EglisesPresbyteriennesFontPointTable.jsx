@@ -3,13 +3,15 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
+const API_URL = "/gis/eglises-presbyteriennes-font"
 const EglisesPresbyteriennesFontPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "Nom", "Telephone", "Postale", "Quartier", "religion", "categorie" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
+    const [ coordsRows, setCoordsRows ] = useState([]);
 
     useEffect(() => {
         const loadDatasRows = async () => {
@@ -18,7 +20,7 @@ const EglisesPresbyteriennesFontPointTable = () => {
               {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get(`/gis/eglises-presbyteriennes-font?search=${dataSearch}`, {
+                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
@@ -28,6 +30,7 @@ const EglisesPresbyteriennesFontPointTable = () => {
                 const datas = response.data;
 
                 let returnDatas = [];
+                let cDatasRows = [];
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -43,16 +46,18 @@ const EglisesPresbyteriennesFontPointTable = () => {
                     ];
 
                     returnDatas.push(tb);
+                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
               } catch (err) {
                 console.log("ERROR", err);
               }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+    }, [dataSearch, reloadDatas]);
 
 
     return (
@@ -63,6 +68,9 @@ const EglisesPresbyteriennesFontPointTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Eglises Presbyteriennes"
+                coordsRows={coordsRows}
+                apiRoute={`${API_URL}/`}
+                originalEpsg={4326}
             />
         </>
     );

@@ -24,6 +24,8 @@ const MosqueeFontPointForm = ()  => {
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
 
+    const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
+
     useEffect(() => {
         console.log("INITIAL POINTS", currentEditionPoint);
         if(datas != null) {
