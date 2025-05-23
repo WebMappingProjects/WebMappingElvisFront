@@ -100,10 +100,7 @@ export default function Index() {
                       Presentation de la plateforme
                     </h4>
                     <p className="mt-2 font-light text-white text-md">
-                      Putting together a page has never been easier than matching
-                      together pre-made components. From landing pages
-                      presentation to login areas, you can easily customise and
-                      built your pages.
+                      Découvrez notre GeoPortail Évolutif, une plateforme dynamique qui vous permet d'explorer, d'analyser et de modifier des données géographiques. Que vous soyez un professionnel ou un amateur, notre interface intuitive vous offre un accès facile à une multitude d'informations géospatiales.
                     </p>
                   </blockquote>
                 </div>
@@ -398,7 +395,7 @@ export default function Index() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center pt-32">
+            {/* <div className="flex flex-wrap items-center pt-32">
               <div className="w-full px-4 mt-32 ml-auto mr-auto md:w-6/12">
                 <div className="relative flex flex-wrap justify-center">
                   <div className="w-full px-4 my-4 lg:w-6/12">
@@ -532,7 +529,7 @@ export default function Index() {
                   <i className="ml-1 leading-relaxed fa fa-angle-double-right"></i>
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="container px-4 pt-48 pb-32 mx-auto">

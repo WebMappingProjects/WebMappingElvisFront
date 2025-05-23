@@ -161,7 +161,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
                       ? "bg-primary-light-op text-primary-default border-primary-light"
                       : "bg-cyan-800 text-cyan-300 border-cyan-700")
                   }
-                >OPTIONS</th>
+                >ACTIONS</th>
               </tr>
             </thead>
             <tbody>

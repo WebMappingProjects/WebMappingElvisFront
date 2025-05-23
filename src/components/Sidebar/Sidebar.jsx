@@ -33,14 +33,14 @@ export default function Sidebar() {
             Accueil
           </Link>
           {/* User */}
-          <ul className="flex flex-wrap items-center list-none md:hidden">
+          {/* <ul className="flex flex-wrap items-center list-none md:hidden">
             <li className="relative inline-block">
               <NotificationDropdown />
             </li>
             <li className="relative inline-block">
               <UserDropdown />
             </li>
-          </ul>
+          </ul> */}
           {/* Collapse */}
           <div
             className={
@@ -72,7 +72,7 @@ export default function Sidebar() {
             </div>
 
             {/* Form */}
-            <form className="mt-6 mb-4 md:hidden">
+            <form className="hidden mt-6 mb-4 md:hidden">
               <div className="pt-0 mb-3">
                 <input
                   type="text"

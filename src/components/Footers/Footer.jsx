@@ -59,21 +59,21 @@ export default function Footer() {
               <div className="flex flex-wrap mb-6 items-top">
                 <div className="w-full px-4 ml-auto lg:w-4/12">
                   <span className="block mb-2 text-sm font-semibold uppercase text-blueGray-500">
-                    Useful Links
+                    Liens utiles
                   </span>
                   <ul className="list-unstyled">
                     <li>
                       <a
                         className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://www.creative-tim.com/presentation?ref=nr-footer"
+                        href="#"
                       >
-                        About Us
+                        A propos de nous
                       </a>
                     </li>
                     <li>
                       <a
                         className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://blog.creative-tim.com?ref=nr-footer"
+                        href="#"
                       >
                         Blog
                       </a>
@@ -81,56 +81,24 @@ export default function Footer() {
                     <li>
                       <a
                         className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://www.github.com/creativetimofficial?ref=nr-footer"
+                        href="#"
                       >
-                        Github
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://www.creative-tim.com/bootstrap-themes/free?ref=nr-footer"
-                      >
-                        Free Products
+                        Produit gratuit
                       </a>
                     </li>
                   </ul>
                 </div>
                 <div className="w-full px-4 lg:w-4/12">
                   <span className="block mb-2 text-sm font-semibold uppercase text-blueGray-500">
-                    Other Resources
+                    Resources
                   </span>
                   <ul className="list-unstyled">
                     <li>
                       <a
                         className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://github.com/creativetimofficial/notus-react/blob/main/LICENSE.md?ref=nr-footer"
+                        href="#"
                       >
-                        MIT License
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://creative-tim.com/terms?ref=nr-footer"
-                      >
-                        Terms & Conditions
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://creative-tim.com/privacy?ref=nr-footer"
-                      >
-                        Privacy Policy
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="block pb-2 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                        href="https://creative-tim.com/contact-us?ref=nr-footer"
-                      >
-                        Contact Us
+                        Contactez nous
                       </a>
                     </li>
                   </ul>
@@ -142,12 +110,12 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center md:justify-between">
             <div className="w-full px-4 mx-auto text-center md:w-4/12">
               <div className="py-1 text-sm font-semibold text-blueGray-500">
-                Copyright © {new Date().getFullYear()} Notus React by{" "}
+                Copyright © {new Date().getFullYear()} Geoportal app by{" "}
                 <a
-                  href="https://www.creative-tim.com?ref=nr-footer"
+                  href="#"
                   className="text-blueGray-500 hover:text-blueGray-800"
                 >
-                  Creative Tim
+                  ENSPY Students
                 </a>
                 .
               </div>
