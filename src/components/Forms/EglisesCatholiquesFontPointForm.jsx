@@ -7,7 +7,7 @@ import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import { convertCoords } from "../../utils/tools";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/lieux-remarquables/`;
+const API_URL = `/gis/eglises-catholiques-font/`;
 
 const EglisesCatholiquesFontPointForm = ()  => {
 
@@ -16,7 +16,11 @@ const EglisesCatholiquesFontPointForm = ()  => {
     const navigate = useNavigate();
 
     const [ name, setName ] = useState("");
-    const [ description, setDescription ] = useState("");
+    const [ tel, setTel ] = useState("");
+    const [ postale, setPostale ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
+    const [ religion, setReligion ] = useState("");
+    const [ categorie, setCategorie ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -26,8 +30,12 @@ const EglisesCatholiquesFontPointForm = ()  => {
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[2]);
-            setDescription(datas[1]);
+            setName(datas[1]);
+            setTel(datas[2]);
+            setPostale(datas[3]);
+            setQuartier(datas[4]);
+            setReligion(datas[5]);
+            setCategorie(datas[6]);
         }
     }, []);
 
@@ -54,7 +62,11 @@ const EglisesCatholiquesFontPointForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
-                "descriptio": description,
+                "telephone": tel,
+                "postale": postale,
+                "quartier": quartier,
+                "religion": religion,
+                "categorie": categorie,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -92,7 +104,11 @@ const EglisesCatholiquesFontPointForm = ()  => {
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
                 "nom": name,
-                "descriptio": description,
+                "telephone": tel,
+                "postale": postale,
+                "quartier": quartier,
+                "religion": religion,
+                "categorie": categorie,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -108,112 +124,135 @@ const EglisesCatholiquesFontPointForm = ()  => {
     }
     
     return (
-        <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Eglises catholiques</h1>
-            <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour eglise catholique
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+
+            <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Eglises catholiques</h1>
+                <div className="mt-4 mb-3 text-center text-primary-dark">
+                    Veuillez specifier les informations pour eglise catholique
+                </div>
+                <form>
+
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="nom"
+                        >
+                            Nom
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Nom"
+                            id="nom"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="telephone"
+                        >
+                            Telephone
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Telephone"
+                            id="telephone"
+                            value={tel}
+                            onChange={(e) => setTel(e.target.value)}
+
+                        />
+                    </div>
+                    
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="postale"
+                        >
+                            Postale
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Postale"
+                            id="postale"
+                            value={postale}
+                            onChange={(e) => setPostale(e.target.value)}
+
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="quartier"
+                        >
+                            Quartier
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Quartier"
+                            id="quartier"
+                            value={quartier}
+                            onChange={(e) => setQuartier(e.target.value)}
+
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="religion"
+                        >
+                            Religion
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Religion"
+                            id="religion"
+                            value={religion}
+                            onChange={(e) => setReligion(e.target.value)}
+
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="categorie"
+                        >
+                            Categorie
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Categorie"
+                            id="categorie"
+                            value={categorie}
+                            onChange={(e) => setCategorie(e.target.value)}
+
+                        />
+                    </div>
+
+
+                    <Actions 
+                        handleSave={handleSave}
+                        handleEdit={handleEdit}
+                    />
+                </form>
             </div>
-            <form>
-
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="nom"
-                    >
-                        Nom
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Nom"
-                        id="nom"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="telephone"
-                    >
-                        Telephone
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Telephone"
-                        id="telephone"
-                    />
-                </div>
-                
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="postale"
-                    >
-                        Postale
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Postale"
-                        id="postale"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quartier"
-                    >
-                        Quartier
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Quartier"
-                        id="quartier"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="religion"
-                    >
-                        Religion
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Religion"
-                        id="religion"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="categorie"
-                    >
-                        Categorie
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Categorie"
-                        id="categorie"
-                    />
-                </div>
-
-
-                <Actions 
-                    handleSave={handleSave}
-                    handleEdit={handleEdit}
-                />
-            </form>
-        </div>
+        </>
     );
 }
 

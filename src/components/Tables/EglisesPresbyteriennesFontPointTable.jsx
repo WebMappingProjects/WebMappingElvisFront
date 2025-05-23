@@ -3,7 +3,8 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/eglises-presbyteriennes-font"
+const API_URL = `/gis/eglises-presbyteriennes-font`;
+
 const EglisesPresbyteriennesFontPointTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();

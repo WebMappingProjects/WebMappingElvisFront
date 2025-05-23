@@ -7,7 +7,7 @@ import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import { convertCoords } from "../../utils/tools";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/lieux-remarquables/`;
+const API_URL = `/gis/eglises-protestantes/`;
 
 const EglisesProtestantesPointForm = ()  => {
 
