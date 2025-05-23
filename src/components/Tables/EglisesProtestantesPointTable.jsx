@@ -58,13 +58,14 @@ const EglisesProtestantesPointTable = () => {
                 }
 
                 setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows)
               } catch (err) {
                 console.log("ERROR", err);
               }
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+    }, [dataSearch, reloadDatas]);
 
 
     return (
