@@ -16,7 +16,12 @@ const EglisesProtestantesPointForm = ()  => {
     const navigate = useNavigate();
 
     const [ name, setName ] = useState("");
-    const [ description, setDescription ] = useState("");
+    const [ tel, setTel ] = useState("");
+    const [ postale, setPostale ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
+    const [ religion, setReligion ] = useState("");
+    const [ categorie, setCategorie ] = useState("");
+
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -26,8 +31,12 @@ const EglisesProtestantesPointForm = ()  => {
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[2]);
-            setDescription(datas[1]);
+            setName(datas[1]);
+            setTel(datas[2]);
+            setPostale(datas[3]);
+            setQuartier(datas[4]);
+            setReligion(datas[5]);
+            setCategorie(datas[6]);
         }
     }, []);
 
@@ -54,7 +63,11 @@ const EglisesProtestantesPointForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
-                "descriptio": description,
+                "telephone": tel,
+                "postale": postale,
+                "quartier": quartier,
+                "religion": religion,
+                "categorie": categorie,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -92,7 +105,11 @@ const EglisesProtestantesPointForm = ()  => {
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
                 "nom": name,
-                "descriptio": description,
+                "telephone": tel,
+                "postale": postale,
+                "quartier": quartier,
+                "religion": religion,
+                "categorie": categorie,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -108,6 +125,9 @@ const EglisesProtestantesPointForm = ()  => {
     }
     
     return (
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
         <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
             <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Eglises protestantes</h1>
             <div className="mt-4 mb-3 text-center text-primary-dark">
@@ -128,6 +148,8 @@ const EglisesProtestantesPointForm = ()  => {
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Nom"
                         id="nom"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                 </div>
 
@@ -143,6 +165,8 @@ const EglisesProtestantesPointForm = ()  => {
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Telephone"
                         id="telephone"
+                        value={tel}
+                        onChange={(e) => setTel(e.target.value)}
                     />
                 </div>
                 
@@ -159,6 +183,8 @@ const EglisesProtestantesPointForm = ()  => {
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Postale"
                         id="postale"
+                        value={postale}
+                        onChange={(e) => setPostale(e.target.value)}
                     />
                 </div>
 
@@ -174,6 +200,8 @@ const EglisesProtestantesPointForm = ()  => {
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Quartier"
                         id="quartier"
+                        value={quartier}
+                        onChange={(e) => setQuartier(e.target.value)}
                     />
                 </div>
 
@@ -189,6 +217,8 @@ const EglisesProtestantesPointForm = ()  => {
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Religion"
                         id="religion"
+                        value={religion}
+                        onChange={(e) => setReligion(e.target.value)}
                     />
                 </div>
 
@@ -204,6 +234,8 @@ const EglisesProtestantesPointForm = ()  => {
                         className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
                         placeholder="Categorie"
                         id="categorie"
+                        value={categorie}
+                        onChange={(e) => setCategorie(e.target.value)}
                     />
                 </div>
 
@@ -214,6 +246,7 @@ const EglisesProtestantesPointForm = ()  => {
                 />
             </form>
         </div>
+        </>
     );
 }
 
