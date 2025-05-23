@@ -5,7 +5,7 @@ import axios from "../../api/axios";
 
 const MairiesYaoundePointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "Numero", "Nom", "Quartier"];
 
@@ -60,7 +60,7 @@ const MairiesYaoundePointTable = () => {
         }
 
         loadDatasRows();
-    }, [dataSearch]);
+    }, [dataSearch, reloadDatas]);
 
     return (
         <>

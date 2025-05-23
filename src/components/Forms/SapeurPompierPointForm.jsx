@@ -7,16 +7,17 @@ import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import { convertCoords } from "../../utils/tools";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/lieux-remarquables/`;
+const API_URL = `/gis/sapeurs-pompier/`;
 
 const SapeurPompierPointForm = ()  => {
 
-        const location = useLocation();
+    const location = useLocation();
     const { datas } = location.state || "";
     const navigate = useNavigate();
 
     const [ name, setName ] = useState("");
-    const [ description, setDescription ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
+    const [ arrondissement, setArrondissement ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -26,8 +27,9 @@ const SapeurPompierPointForm = ()  => {
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[2]);
-            setDescription(datas[1]);
+            setName(datas[1]);
+            setQuartier(datas[2]);
+            setArrondissement(datas[3]);
         }
     }, []);
 
@@ -54,7 +56,8 @@ const SapeurPompierPointForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
-                "descriptio": description,
+                "quartier": quartier,
+                "arrondisse": arrondissement,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -92,7 +95,8 @@ const SapeurPompierPointForm = ()  => {
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
                 "nom": name,
-                "descriptio": description,
+                "quartier": quartier,
+                "arrondisse": arrondissement,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -108,64 +112,75 @@ const SapeurPompierPointForm = ()  => {
     }
     
     return (
-        <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Sapeur Pompier</h1>
-            <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour sapeur pompier
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+
+            <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Sapeur Pompier</h1>
+                <div className="mt-4 mb-3 text-center text-primary-dark">
+                    Veuillez specifier les informations pour sapeur pompier
+                </div>
+                <form>
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="
+                            name"
+                        >
+                            Nom
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Nom"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="quart"
+                        >
+                            Quartier
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Quartier"
+                            id="quart"
+                            value={quartier}
+                            onChange={(e) => setQuartier(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="arrond"
+                        >
+                            Arrondissement
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Arrondissement"
+                            id="arrond"
+                            value={arrondissement}
+                            onChange={(e) => setArrondissement(e.target.value)}
+                        />
+                    </div>
+
+                    <Actions 
+                        handleSave={handleSave}
+                        handleEdit={handleEdit}
+                    />
+                </form>
             </div>
-            <form>
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="
-                        name"
-                    >
-                        Nom
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Nom"
-                        id="name"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quart"
-                    >
-                        Quartier
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Quartier"
-                        id="quart"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="arrond"
-                    >
-                        Arrondissement
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Arrondissement"
-                        id="arrond"
-                    />
-                </div>
-
-                <Actions 
-                    handleSave={handleSave}
-                    handleEdit={handleEdit}
-                />
-            </form>
-        </div>
+        </>
     );
 }
 

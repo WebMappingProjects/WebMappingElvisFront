@@ -5,9 +5,12 @@ import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
 import { FaBars, FaBreadSlice, FaBuilding, FaCar, FaChargingStation, FaCreditCard, FaCross, FaHamburger, FaHotel, FaMoneyBill, FaMosque, FaPersonBooth, FaPiggyBank, FaPlus, FaRunning, FaSchool, FaServicestack, FaTimes, FaTruck, FaUniversity, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
+import { useAppMainContext } from "../../context/AppProvider";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = useState("hidden");
+  const { dataSearch, setDataSearch } = useAppMainContext();
+
   return (
     <>
       <nav className="relative z-[1001] flex flex-wrap items-center justify-between px-6 py-4 bg-white shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-64">
@@ -75,6 +78,8 @@ export default function Sidebar() {
                   type="text"
                   placeholder="Search"
                   className="w-full h-12 px-3 py-2 text-base font-normal leading-snug bg-white border border-solid rounded shadow-none outline-none border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 focus:outline-none"
+                  value={dataSearch}
+                  onChange={(e) => setDataSearch(e.target.value)}
                 />
               </div>
             </form>

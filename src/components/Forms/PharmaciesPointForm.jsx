@@ -7,7 +7,7 @@ import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import { convertCoords } from "../../utils/tools";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/lieux-remarquables/`;
+const API_URL = `/gis/pharmacies/`;
 
 const PharmaciesPointForm = ()  => {
 
@@ -15,8 +15,15 @@ const PharmaciesPointForm = ()  => {
     const { datas } = location.state || "";
     const navigate = useNavigate();
 
+    const [ numero, setNumero ] = useState("");
     const [ name, setName ] = useState("");
-    const [ description, setDescription ] = useState("");
+    const [ localisation, setLocalisation ] = useState("");
+    const [ pharmacien, setPharmacien ] = useState("");
+    const [ tel, setTel ] = useState("");
+    const [ bp, setBp ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
+    const [ arrondissement, setArrondissement ] = useState("");
+    const [ ouverture, setOuverture ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -26,8 +33,15 @@ const PharmaciesPointForm = ()  => {
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[2]);
-            setDescription(datas[1]);
+            setNumero(datas[1])
+            setName(datas[2])
+            setLocalisation(datas[3])
+            setPharmacien(datas[4])
+            setTel(datas[5])
+            setBp(datas[6])
+            setQuartier(datas[7])
+            setArrondissement(datas[8])
+            setOuverture(datas[9])
         }
     }, []);
 
@@ -53,8 +67,15 @@ const PharmaciesPointForm = ()  => {
             : null;
 
             const response = await axios.post(API_URL, {
-                "nom": name,
-                "descriptio": description,
+                "numero": numero,
+                "noms": name,
+                "localisati": localisation,
+                "pharmacien": pharmacien,
+                "t_l_phone": tel,
+                "bo_te_postale": bp,
+                "quartier": quartier,
+                "arrondisse": arrondissement,
+                "ouverture": ouverture,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -91,8 +112,15 @@ const PharmaciesPointForm = ()  => {
             : null;
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "nom": name,
-                "descriptio": description,
+                "numero": numero,
+                "noms": name,
+                "localisati": localisation,
+                "pharmacien": pharmacien,
+                "t_l_phone": tel,
+                "bo_te_postale": bp,
+                "quartier": quartier,
+                "arrondisse": arrondissement,
+                "ouverture": ouverture,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -108,153 +136,174 @@ const PharmaciesPointForm = ()  => {
     }
     
     return (
-        <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Enseignement supérieur</h1>
-            <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour enseignement supérieur
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+
+            <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Enseignement supérieur</h1>
+                <div className="mt-4 mb-3 text-center text-primary-dark">
+                    Veuillez specifier les informations pour enseignement supérieur
+                </div>
+                <form>
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="numero"
+                        >
+                            Numero
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Numero"
+                            id="numero"
+                            value={numero}
+                            onChange={(e) => setNumero(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="name"
+                        >
+                            Nom
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Nom"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="location"
+                        >
+                            Localisation
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Localisation"
+                            id="location"
+                            value={localisation}
+                            onChange={(e) => setLocalisation(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="pharmacien"
+                        >
+                            Pharmacien
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Pharmacien"
+                            id="pharmacien"
+                            value={pharmacien}
+                            onChange={(e) => setPharmacien(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="tel"
+                        >
+                            Téléphone
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Téléphone"
+                            id="tel"
+                            value={tel}
+                            onChange={(e) => setTel(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="bp"
+                        >
+                            Boite postale
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Boite postale"
+                            id="bp"
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="quarter"
+                        >
+                            Quartier
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Quartier"
+                            id="quarter"
+                            value={quartier}
+                            onChange={(e) => setQuartier(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="arrond"
+                        >
+                            Arrondissement
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Arrondissement"
+                            id="arrond"
+                            value={arrondissement}
+                            onChange={(e) => setArrondissement(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="ouverture"
+                        >
+                            Ouverture
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Ouverture"
+                            id="ouverture"
+                            value={ouverture}
+                            onChange={(e) => setOuverture(e.target.value)}
+                        />
+                    </div>
+
+                    <Actions 
+                        handleSave={handleSave}
+                        handleEdit={handleEdit}
+                    />
+                </form>
             </div>
-            <form>
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="numero"
-                    >
-                        Numero
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Numero"
-                        id="numero"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="name"
-                    >
-                        Nom
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Nom"
-                        id="name"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="location"
-                    >
-                        Localisation
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Localisation"
-                        id="location"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="pharmacien"
-                    >
-                        Pharmacien
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Pharmacien"
-                        id="pharmacien"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="tel"
-                    >
-                        Téléphone
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Téléphone"
-                        id="tel"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="bp"
-                    >
-                        Boite postale
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Boite postale"
-                        id="bp"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quarter"
-                    >
-                        Quartier
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Quartier"
-                        id="quarter"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="arrond"
-                    >
-                        Arrondissement
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Arrondissement"
-                        id="arrond"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="ouverture"
-                    >
-                        Ouverture
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Ouverture"
-                        id="ouverture"
-                    />
-                </div>
-
-                <Actions 
-                    handleSave={handleSave}
-                    handleEdit={handleEdit}
-                />
-            </form>
-        </div>
+        </>
     );
 }
 

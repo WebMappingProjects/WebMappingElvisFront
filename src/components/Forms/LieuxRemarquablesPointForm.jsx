@@ -111,6 +111,7 @@ const LieuxRemarquablesPointForm = ()  => {
         <>
             <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
             <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+            
             <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
                 <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Gestion des lieux remarquables</h1>
                 <div className="mt-4 mb-3 text-center text-primary-dark">

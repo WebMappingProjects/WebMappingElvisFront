@@ -16,8 +16,11 @@ const EnseignementSecondaireFinalPointForm = ()  => {
     const navigate = useNavigate();
 
     const [ numero, setNumero ] = useState("");
-    const [ name, setName ] = useState("");
-    const [ description, setDescription ] = useState("");
+    const [ ets, setEts ] = useState("");
+    const [ localisation, setLocalisation ] = useState("");
+    const [ founder, setFounder ] = useState("");
+    const [ contact, setContact ] = useState("");
+    const [ quartier, setQuartier ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -27,8 +30,12 @@ const EnseignementSecondaireFinalPointForm = ()  => {
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[2]);
-            setDescription(datas[1]);
+            setNumero(datas[1]);
+            setEts(datas[2]);
+            setLocalisation(datas[3]);
+            setFounder(datas[4]);
+            setContact(datas[5]);
+            setQuartier(datas[6]);
         }
     }, []);
 
@@ -54,8 +61,12 @@ const EnseignementSecondaireFinalPointForm = ()  => {
             : null;
 
             const response = await axios.post(API_URL, {
-                "nom": name,
-                "descriptio": description,
+                "numero": parseInt(numero),
+                "etablissem": ets,
+                "localisati": localisation,
+                "fondateur": founder,
+                "contact": contact,
+                "quartier": quartier,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -92,8 +103,12 @@ const EnseignementSecondaireFinalPointForm = ()  => {
             : null;
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "nom": name,
-                "descriptio": description,
+                "numero": parseInt(numero),
+                "etablissem": ets,
+                "localisati": localisation,
+                "fondateur": founder,
+                "contact": contact,
+                "quartier": quartier,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -109,108 +124,125 @@ const EnseignementSecondaireFinalPointForm = ()  => {
     }
     
     return (
-        <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-            <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Enseignement secondaire</h1>
-            <div className="mt-4 mb-3 text-center text-primary-dark">
-                Veuillez specifier les informations pour enseignement secondaire
+        <>
+            <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
+            <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+
+            <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Enseignement secondaire</h1>
+                <div className="mt-4 mb-3 text-center text-primary-dark">
+                    Veuillez specifier les informations pour enseignement secondaire
+                </div>
+                <form>
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="number"
+                        >
+                            Numero
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Numero"
+                            id="number"
+                            value={numero}
+                            onChange={(e) => setNumero(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="ets"
+                        >
+                            Etablissement
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Etablissement"
+                            id="ets"
+                            value={ets}
+                            onChange={(e) => setEts(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="location"
+                        >
+                            Localisation
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Localisation"
+                            id="location"
+                            value={localisation}
+                            onChange={(e) => setLocalisation(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="founder"
+                        >
+                            Fondateur
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Fondateur"
+                            id="founder"
+                            value={founder}
+                            onChange={(e) => setFounder(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="tel"
+                        >
+                            Contact
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Téléphone"
+                            id="tel"
+                            value={contact}
+                            onChange={(e) => setContact(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="quarter"
+                        >
+                            Quartier
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            placeholder="Quartier"
+                            id="quarter"
+                            value={quartier}
+                            onChange={(e) => setQuartier(e.target.value)}
+                        />
+                    </div>
+
+                    <Actions 
+                        handleSave={handleSave}
+                        handleEdit={handleEdit}
+                    />
+                </form>
             </div>
-            <form>
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="number"
-                    >
-                        Numero
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Numero"
-                        id="number"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="ets"
-                    >
-                        Etablissement
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Etablissement"
-                        id="ets"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="location"
-                    >
-                        Localisation
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Localisation"
-                        id="location"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="founder"
-                    >
-                        Fondateur
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Fondateur"
-                        id="founder"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="tel"
-                    >
-                        Contact
-                    </label>
-                    <input
-                        type="number"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Téléphone"
-                        id="tel"
-                    />
-                </div>
-
-                <div className="relative w-full mb-3">
-                    <label
-                        className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
-                        htmlFor="quarter"
-                    >
-                        Quartier
-                    </label>
-                    <input
-                        type="text"
-                        className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                        placeholder="Quartier"
-                        id="quarter"
-                    />
-                </div>
-
-                <Actions 
-                    handleSave={handleSave}
-                    handleEdit={handleEdit}
-                />
-            </form>
-        </div>
+        </>
     );
 }
 

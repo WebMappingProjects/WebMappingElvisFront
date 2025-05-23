@@ -42,7 +42,9 @@ const GaragesCustomPointTable = () => {
                             data.properties.postale,
                             data.properties.quartier,
                             data.properties.standing
-                        ];let c = null;
+                        ];
+                        
+                        let c = null;
                         if(data.geometry != null && data.geometry != undefined)
                         {
                             c = [

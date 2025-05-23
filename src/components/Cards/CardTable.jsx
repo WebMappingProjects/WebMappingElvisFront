@@ -219,8 +219,16 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
             >
               Précédent
             </button>
-            <span>
+            {/* <span>
               Page {currentPage} / {totalPages}
+            </span> */}
+            <span>
+              Page <input type="number" 
+                value={currentPage}
+                min={1} 
+                max={totalPages}
+                onChange={(e) => setCurrentPage(e.target.value)} 
+                className="w-10 px-2 py-1 mx-2 border rounded-sm no-arrows"/> / {totalPages}
             </span>
             <button
               className="px-3 py-1 border rounded cursor-pointer disabled:opacity-50 w-30 hover:bg-gray-100"

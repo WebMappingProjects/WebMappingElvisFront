@@ -22,6 +22,17 @@
     --color-primary-dark-op: #03255a80;
 }
 
+.no-arrows::-webkit-inner-spin-button, .no-arrows::-webkit-outer-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no-arrows
+{
+    -moz-appearance: textfield;
+}
+
 #main-content
 {
     background: url("./assets/7181.jpg");

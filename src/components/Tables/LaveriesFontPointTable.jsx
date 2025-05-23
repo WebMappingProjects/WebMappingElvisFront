@@ -6,7 +6,7 @@ import { useAppMainContext } from "../../context/AppProvider";
 const API_URL = "/gis/laveries-font";
 const LaveriesPointTable = () => {
     
-    const { dataSearch } = useAppMainContext();
+    const { dataSearch, reloadDatas } = useAppMainContext();
 
     const headRow = [ "N°", "Nom", "Adresse", "Quartier", "Standing"];
 
@@ -43,10 +43,15 @@ const LaveriesPointTable = () => {
                             data.properties.quartier,
                             data.properties.standing
                         ];
-                        let c = [
-                            data.geometry.coordinates[1],
-                            data.geometry.coordinates[0]
-                        ];
+                        
+                        let c = null;
+                        if(data.geometry != null && data.geometry != undefined)
+                        {
+                            c = [
+                                data.geometry.coordinates[1],
+                                data.geometry.coordinates[0]
+                            ]
+                        }
     
                         returnDatas.push(tb);
                         cDatasRows.push(c);
@@ -60,7 +65,7 @@ const LaveriesPointTable = () => {
             }
     
             loadDatasRows();
-        }, [dataSearch]);
+        }, [dataSearch, reloadDatas]);
 
     return (
         <>
