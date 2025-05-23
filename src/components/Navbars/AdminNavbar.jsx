@@ -16,7 +16,7 @@ export default function Navbar() {
             href="#pablo"
             onClick={(e) => e.preventDefault()}
           >
-            Dashboard
+            Données du SIG
           </a>
           {/* Form */}
           <form className="flex-row flex-wrap items-center hidden mr-3 md:flex lg:ml-auto">
