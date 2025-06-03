@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbars/AuthNavbar";
 import Footer from "../components/Footers/Footer";
 import mountainImage from "../assets/mountain.avif";
 import profileImage from "../assets/profile.avif";
 import { FaCheck, FaPen, FaTimes } from "react-icons/fa";
+import axios from "../api/axios";
 
+const API_URL = "/auth/users";
 export default function Profile() {
   // États pour les champs et l'édition
   const [username, setUsername] = useState("Jenna Stones");
@@ -15,6 +17,14 @@ export default function Profile() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Initialisation
+  useEffect(() => {
+    const usernameDt = localStorage.getItem("username");
+    const emailDt = localStorage.getItem("email");
+
+    setUsername(usernameDt);
+    setEmail(emailDt);
+  }, [])
   // Fonctions de gestion
   const handleEdit = (field) => {
     setEditField(field);
@@ -26,8 +36,28 @@ export default function Profile() {
     }
   };
   const handleCancel = () => setEditField(null);
-  const handleSave = () => {
-    if (editField === "username") setUsername(tempUsername);
+  const handleSave = async () => {
+    if (editField === "username") {
+      
+        try
+        {
+            const token = localStorage.getItem("token");
+            const userId = localStorage.getItem("userId");
+            const response = await axios.patch(`${API_URL}/${userId}`, {
+                "username": username
+            }, { headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }});
+
+            console.log("RESPONSE", response);
+            localStorage.setItem("username", username);
+            alert("Modification effectuee avec success")
+          } catch (e) {
+            alert("Echec de la modification")
+            console.error("ERROR", e);
+        }
+    }
     if (editField === "email") setEmail(tempEmail);
     if (editField === "password") {
       // Ici, vous pouvez ajouter la logique de validation et d'envoi du mot de passe
