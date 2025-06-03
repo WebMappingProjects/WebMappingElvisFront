@@ -8,7 +8,7 @@ import { useState } from "react";
 import { FaBars, FaFacebook, FaFileAlt, FaHome } from "react-icons/fa";
 
 export default function Navbar(props) {
-  const [navbarOpen, setNavbarOpen] = useState(false);
+  const [navbarOpen, setNavbarOpen] = useState(true);
   return (
     <>
       <nav className="absolute top-0 z-50 flex flex-wrap items-center justify-between w-full px-2 py-3 navbar-expand-lg">

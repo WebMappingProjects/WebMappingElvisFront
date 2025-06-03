@@ -237,7 +237,7 @@ export default function Index() {
                 <div className="flex flex-wrap">
                   <div className="w-full px-4 lg:w-4/12">
                     <h5 className="pb-4 text-xl font-semibold text-center">
-                      Carte interactive
+                      Carte interactive (Géoportail)
                     </h5>
                     {/* <Link to="/auth/login"> */}
                     <Link to="/map">
@@ -291,14 +291,14 @@ export default function Index() {
           <div className="container relative z-10 pb-64 mx-auto">
             <div className="flex flex-wrap justify-center">
               
-              <h2 className="text-4xl pt-[70px] font-semibold text-center w-full text-white" id="statsTitleIdx">Statistiques</h2>
+              <h2 className="text-4xl pt-[70px] font-semibold text-center w-full text-white" id="statsTitleIdx">Statistiques Globales</h2>
 
               <div className="w-full px-12 ml-auto mr-auto md:w-5/12 md:px-4 md:mt-32">
                 <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
                   <FaCodeBranch />
                 </div>
                 <h3 className="mb-2 text-3xl font-semibold leading-normal text-white">
-                  Statistiques
+                  Statistiques Globales
                 </h3>
                 <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-primary-light">
                   Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
