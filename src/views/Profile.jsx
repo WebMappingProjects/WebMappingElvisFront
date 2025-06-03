@@ -44,7 +44,7 @@ export default function Profile() {
             const token = localStorage.getItem("token");
             const userId = localStorage.getItem("userId");
             const response = await axios.patch(`${API_URL}/${userId}`, {
-                "username": username
+                "username": tempUsername
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`

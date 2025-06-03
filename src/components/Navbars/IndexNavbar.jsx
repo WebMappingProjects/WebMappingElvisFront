@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import IndexDropdown from "../Dropdowns/IndexDropdown";
 import { useState } from "react";
-import { FaAlignJustify, FaArrowCircleDown, FaBars, FaChartArea, FaFacebook, FaFileAlt, FaGithub, FaHamburger, FaPlusCircle, FaPlusSquare, FaStackExchange, FaStackOverflow, FaTimes, FaTwitter, FaUnlock, FaUser, FaUserAltSlash, FaUserFriends, FaUserTimes } from "react-icons/fa";
+import { FaAlignJustify, FaArrowCircleDown, FaBars, FaChartArea, FaFacebook, FaFileAlt, FaGithub, FaHamburger, FaPersonBooth, FaPlusCircle, FaPlusSquare, FaStackExchange, FaStackOverflow, FaTimes, FaTwitter, FaUnlock, FaUser, FaUserAltSlash, FaUserFriends, FaUserShield, FaUserTimes } from "react-icons/fa";
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -89,6 +89,14 @@ export default function Navbar(props) {
               {/* <li className="flex items-center">
                 <IndexDropdown />
               </li> */}
+              <li className="flex items-center">
+                <a
+                  className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"
+                  href="/users-administration"
+                >
+                  <FaUserShield className="mr-3 leading-1"/> Administration
+                </a>
+              </li>
               <li className="flex items-center">
                 <a
                   className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"

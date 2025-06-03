@@ -77,6 +77,7 @@ import GaragesCustomPointTable from "./components/Tables/GaragesCustomPointTable
 import MairiesYaoundePointForm from "./components/Forms/MairiesYaoundePointForm";
 import MairiesYaoundePointTable from "./components/Tables/MariesYaoundePointTable";
 import ProtectedRoute from "./views/ProtectedRoute";
+import AdminPage from "./views/AdminPage";
 
 function App() {
 
@@ -210,6 +211,12 @@ function App() {
       <Route path="/profile" element={
         <ProtectedRoute>
           <Profile />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/users-administration" element={
+        <ProtectedRoute>
+          <AdminPage />
         </ProtectedRoute>
       } />
 
