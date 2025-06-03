@@ -1,3 +1,5 @@
+import { FaDribbble, FaFacebookSquare, FaTwitter } from "react-icons/fa";
+
 export default function Footer() {
   return (
     <>
@@ -24,40 +26,34 @@ export default function Footer() {
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap text-center lg:text-left">
             <div className="w-full px-4 lg:w-6/12">
-              <h4 className="text-3xl font-semibold">Let's keep in touch!</h4>
+              <h4 className="text-3xl font-semibold">Sig Geospatial App</h4>
               <h5 className="mt-0 mb-2 text-lg text-blueGray-600">
-                Find us on any of these platforms, we respond 1-2 business days.
+                Let's keep our world into a single web app
               </h5>
               <div className="mt-6 mb-6 lg:mb-0">
                 <button
                   className="items-center justify-center w-10 h-10 mr-2 font-normal bg-white rounded-full shadow-lg outline-none text-lightBlue-400 align-center focus:outline-none"
                   type="button"
                 >
-                  <i className="fab fa-twitter"></i>
+                  <FaTwitter />
                 </button>
                 <button
                   className="items-center justify-center w-10 h-10 mr-2 font-normal bg-white rounded-full shadow-lg outline-none text-lightBlue-600 align-center focus:outline-none"
                   type="button"
                 >
-                  <i className="fab fa-facebook-square"></i>
+                  <FaFacebookSquare />
                 </button>
                 <button
                   className="items-center justify-center w-10 h-10 mr-2 font-normal text-pink-400 bg-white rounded-full shadow-lg outline-none align-center focus:outline-none"
                   type="button"
                 >
-                  <i className="fab fa-dribbble"></i>
-                </button>
-                <button
-                  className="items-center justify-center w-10 h-10 mr-2 font-normal bg-white rounded-full shadow-lg outline-none text-blueGray-800 align-center focus:outline-none"
-                  type="button"
-                >
-                  <i className="fab fa-github"></i>
+                  <FaDribbble />
                 </button>
               </div>
             </div>
             <div className="w-full px-4 lg:w-6/12">
               <div className="flex flex-wrap mb-6 items-top">
-                <div className="w-full px-4 ml-auto lg:w-4/12">
+                {/* <div className="w-full px-4 ml-auto lg:w-4/12">
                   <span className="block mb-2 text-sm font-semibold uppercase text-blueGray-500">
                     Liens utiles
                   </span>
@@ -87,7 +83,7 @@ export default function Footer() {
                       </a>
                     </li>
                   </ul>
-                </div>
+                </div> */}
                 <div className="w-full px-4 lg:w-4/12">
                   <span className="block mb-2 text-sm font-semibold uppercase text-blueGray-500">
                     Resources
