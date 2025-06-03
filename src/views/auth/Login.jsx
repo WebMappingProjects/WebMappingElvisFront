@@ -37,6 +37,9 @@ export default function Login() {
         console.log("RESPONSE", response);
 
         const token = response.data.access;
+        const userId = response.data.user_id;
+        const email = response.data.email;
+        const usernameDt = response.data.username;
 
         const authUser = {
           "id": response.data.user_id,
@@ -45,6 +48,9 @@ export default function Login() {
         };
 
         localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("email", email);
+        localStorage.setItem("username", usernameDt);
         setAuthUser(authUser);
 
         navigate("/");
