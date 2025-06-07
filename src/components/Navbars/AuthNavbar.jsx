@@ -8,7 +8,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -51,7 +51,7 @@ export default function Navbar() {
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 font-semibold text-red-500 transition-colors rounded hover:text-red-700"
+            className="flex items-center gap-2 px-4 py-2 font-semibold text-red-500 transition-colors rounded cursor-pointer hover:text-red-700"
           >
             <FaSignOutAlt /> Déconnexion
           </button>

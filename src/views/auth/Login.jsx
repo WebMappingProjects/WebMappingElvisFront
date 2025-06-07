@@ -37,20 +37,15 @@ export default function Login() {
         console.log("RESPONSE", response);
 
         const token = response.data.access;
-        const userId = response.data.user_id;
-        const email = response.data.email;
-        const usernameDt = response.data.username;
-
         const authUser = {
           "id": response.data.user_id,
           "username": response.data.username,
-          "email": response.data.email
+          "email": response.data.email,
+          "role": response.data.role
         };
 
         localStorage.setItem("token", token);
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("email", email);
-        localStorage.setItem("username", usernameDt);
+        localStorage.setItem("authUser", JSON.stringify(authUser));
         setAuthUser(authUser);
 
         navigate("/");

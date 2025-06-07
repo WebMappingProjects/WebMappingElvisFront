@@ -81,32 +81,68 @@ export default function AdminPage() {
             </button>
           </div>
           {showAdd && (
-            <div className="flex gap-2 mb-6">
-              <input
-                className="w-1/4 px-3 py-1 border rounded"
-                placeholder="Nom utilisateur"
-                value={newUser.username}
-                onChange={e => setNewUser({ ...newUser, username: e.target.value })}
-              />
-              <input
-                className="w-1/3 px-3 py-1 border rounded"
-                placeholder="Email"
-                value={newUser.email}
-                onChange={e => setNewUser({ ...newUser, email: e.target.value })}
-              />
-              <input
-                className="w-1/4 px-3 py-1 border rounded"
-                placeholder="Mot de passe"
-                type="password"
-                value={newUser.password}
-                onChange={e => setNewUser({ ...newUser, password: e.target.value })}
-              />
-              <button className="ml-2 text-2xl text-green-500 cursor-pointer" onClick={handleAddUser} title="Ajouter">
-                <FaCheck />
-              </button>
-              <button className="ml-1 text-2xl text-red-500 cursor-pointer" onClick={() => setShowAdd(false)} title="Annuler">
-                <FaTimes />
-              </button>
+            <div className="flex flex-col w-full gap-2 mb-6">
+              <div className="flex flex-col justify-center flex-1 w-full mb-4">
+                <label className="mb-2">Nom d&apos;utilisateur :</label>
+                <input
+                  className="w-full px-3 py-1 border rounded"
+                  placeholder="Nom utilisateur"
+                  value={newUser.username}
+                  onChange={e => setNewUser({ ...newUser, username: e.target.value })}
+                />
+              </div>
+
+              <div className="flex flex-col justify-center flex-1 w-full mb-4">
+                <label className="mb-2">Email :</label>
+                <input
+                  className="w-full px-3 py-1 border rounded"
+                  placeholder="Email"
+                  value={newUser.email}
+                  onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+                />
+              </div>
+
+              <div className="flex flex-col justify-center flex-1 w-full mb-4">
+                <label className="mb-2">Type d&apos;utilisateur :</label>
+
+                <select className="w-full px-3 py-1 border rounded">
+                  <option value="admin">Administrateur</option>
+                  <option value="technicien">Technicien</option>
+                  <option value="decideur">Decideur</option>
+                  <option value="lambda" defaultChecked>Utilisateur lambda</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col justify-center flex-1 w-full mb-4">
+                <label className="mb-2">Mot de passe :</label>
+                <input
+                  className="w-full px-3 py-1 border rounded"
+                  placeholder="Mot de passe"
+                  type="password"
+                  value={newUser.password}
+                  onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+                />
+              </div>
+
+              <div className="flex flex-col justify-center flex-1 w-full mb-4">
+                <label className="mb-2">Confirmer le mot de passe :</label>
+                <input
+                  className="w-full px-3 py-1 border rounded"
+                  placeholder="Confirmer le mot de passe"
+                  type="password"
+                  //value={newUser.password}
+                  //onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <button className="ml-2 text-2xl text-green-500 cursor-pointer" onClick={handleAddUser} title="Ajouter">
+                  <FaCheck />
+                </button>
+                <button className="ml-1 text-2xl text-red-500 cursor-pointer" onClick={() => setShowAdd(false)} title="Annuler">
+                  <FaTimes />
+                </button>
+              </div>
             </div>
           )}
           <table className="w-full text-left border-t">
