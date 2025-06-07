@@ -75,15 +75,6 @@ export default function Navbar(props) {
                   Statistiques Globales
                 </a>
               </li>
-              <li className="flex items-center">
-                <a
-                  className="flex items-center px-3 py-4 text-xs font-bold uppercase text-primary-default hover:text-primary-dark lg:py-2"
-                  href="#crcTitleIdx"
-                >
-                  <FaUserFriends  className="mr-2 text-lg leading-1"/>
-                  Conseil Régional du Centre
-                </a>
-              </li>
             </ul>
             <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
               {/* <li className="flex items-center">
