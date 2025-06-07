@@ -39,13 +39,13 @@ export default function Index() {
               <div className="flex gap-4 mt-12">
                 <Link
                   to="/map"
-                  className="px-8 py-4 text-lg font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow-lg bg-primary-default hover:bg-primary-dark focus:outline-none animate-bounce-in"
+                  className="px-8 py-4 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow-lg md:text-lg bg-primary-default hover:bg-primary-dark focus:outline-none animate-bounce-in"
                 >
                   Découvrir la carte
                 </Link>
                 <a
                   href="#featuresTitleIdx"
-                  className="px-8 py-4 text-lg font-bold uppercase transition-all duration-150 ease-linear bg-white border-2 rounded shadow-lg text-primary-default hover:bg-primary-default hover:text-white border-primary-default focus:outline-none"
+                  className="px-8 py-4 text-sm font-bold uppercase transition-all duration-150 ease-linear bg-white border-2 rounded shadow-lg md:text-lg text-primary-default hover:bg-primary-default hover:text-white border-primary-default focus:outline-none"
                 >
                   En Savoir Plus
                 </a>
@@ -170,445 +170,132 @@ export default function Index() {
         {/* ...existing code... */}
       </section>
 
-      <section className="relative block z-1 bg-primary-dark">
-        <div className="container mx-auto">
-          <div className="flex flex-wrap justify-center">
-            <div className="w-full px-4 -mt-24 lg:w-12/12">
-              <div className="flex flex-wrap">
-                <div className="w-full px-4 lg:w-4/12">
-                  <h5 className="pb-4 text-xl font-semibold text-center">
-                    Carte interactive (Géoportail)
-                  </h5>
-                  {/* <Link to="/auth/login"> */}
-                  <Link to="/map">
-                    <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
-                      <img
-                        alt="..."
-                        className="h-auto max-w-full align-middle border-none rounded-lg md:h-[250px]"
-                        src={ map_screen }
-                      />
-                    </div>
-                  </Link>
-                </div>
-
-                <div className="w-full px-4 lg:w-4/12">
-                  <h5 className="pb-4 text-xl font-semibold text-center">
-                    Données géospatiales
-                  </h5>
-                  <Link to="/admin/tables">
-                    <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
-                      <img
-                        alt="..."
-                        className="max-w-full align-middle border-none rounded-lg h-auto md:h-[250px]"
-                        src={ tables_screen }
-                      />
-                    </div>
-                  </Link>
-                </div>
-
-                <div className="w-full px-4 lg:w-4/12">
-                  <h5 className="pb-4 text-xl font-semibold text-center">
-                    Statistiques
-                  </h5>
-                  <Link to="/landing">
-                    <div className="relative flex flex-col w-full min-w-0 mb-6 break-words transition-all duration-150 ease-linear bg-white rounded-lg shadow-lg hover:-mt-4">
-                      <img
-                        alt="..."
-                        className="h-auto max-w-full align-middle border-none rounded-lg md:h-[250px]"
-                        src={landing}
-                      />
-                    </div>
-                  </Link>
-                </div>
+      {/* MODULES/FONCTIONNALITÉS EN CARDS MODERNES */}
+      <section className="relative block z-1 bg-primary-light-op">
+        <div className="container py-20 mx-auto">
+          <h2 className="mb-12 text-4xl font-semibold text-center text-black" id="featuresTitleIdx">Modules / Fonctionnalités</h2>
+          <div className="flex flex-wrap justify-center gap-8">
+            {/* Carte interactive */}
+            <div className="flex flex-col items-center w-full max-w-xs p-8 transition-transform duration-200 shadow-2xl bg-white/90 rounded-2xl hover:scale-105 group">
+              <div className="inline-flex items-center justify-center w-20 h-20 mb-4 text-4xl text-white transition-colors rounded-full shadow-lg bg-primary-default group-hover:bg-primary-dark">
+                <FaSitemap />
               </div>
+              <h5 className="mb-2 text-xl font-bold text-center text-primary-dark">Carte interactive (Géoportail)</h5>
+              <p className="mb-4 text-base text-center text-primary-dark">Explorez, visualisez et interagissez avec les données géospatiales sur une carte dynamique et intuitive.</p>
+              <Link to="/map" className="px-6 py-2 mt-auto text-sm font-bold text-white uppercase transition-colors rounded bg-primary-default hover:bg-primary-dark">Accéder</Link>
+            </div>
+            {/* Données géospatiales */}
+            <div className="flex flex-col items-center w-full max-w-xs p-8 transition-transform duration-200 shadow-2xl bg-white/90 rounded-2xl hover:scale-105 group">
+              <div className="inline-flex items-center justify-center w-20 h-20 mb-4 text-4xl text-white transition-colors rounded-full shadow-lg bg-primary-default group-hover:bg-primary-dark">
+                <FaBuilding />
+              </div>
+              <h5 className="mb-2 text-xl font-bold text-center text-primary-dark">Données géospatiales</h5>
+              <p className="mb-4 text-base text-center text-primary-dark">Consultez, filtrez et analysez toutes les données géospatiales disponibles sur la plateforme.</p>
+              <Link to="/admin/tables" className="px-6 py-2 mt-auto text-sm font-bold text-white uppercase transition-colors rounded bg-primary-default hover:bg-primary-dark">Accéder</Link>
+            </div>
+            {/* Statistiques */}
+            <div className="flex flex-col items-center w-full max-w-xs p-8 transition-transform duration-200 shadow-2xl bg-white/90 rounded-2xl hover:scale-105 group">
+              <div className="inline-flex items-center justify-center w-20 h-20 mb-4 text-4xl text-white transition-colors rounded-full shadow-lg bg-primary-default group-hover:bg-primary-dark">
+                <FaCodeBranch />
+              </div>
+              <h5 className="mb-2 text-xl font-bold text-center text-primary-dark">Statistiques</h5>
+              <p className="mb-4 text-base text-center text-primary-dark">Visualisez des statistiques globales et détaillées sur les données et l'utilisation de la plateforme.</p>
+              <Link to="/landing" className="px-6 py-2 mt-auto text-sm font-bold text-white uppercase transition-colors rounded bg-primary-default hover:bg-primary-dark">Accéder</Link>
             </div>
           </div>
         </div>
       </section>
 
+      {/* STATISTIQUES GLOBALES AVEC COMPTEURS ANIMÉS */}
       <section className="relative mt-20 overflow-hidden bg-primary-dark" id="statSection">
         <div className="absolute z-0 w-full h-full bg-primary-dark-op backdrop-blur-sm"></div>
         <div className="container relative z-10 pb-64 mx-auto">
           <div className="flex flex-wrap justify-center">
-            
-            <h2 className="text-4xl pt-[70px] font-semibold text-center w-full text-white" id="statsTitleIdx">Statistiques Globales</h2>
-
-            <div className="w-full px-12 ml-auto mr-auto md:w-5/12 md:px-4 md:mt-32">
-              <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
-                <FaCodeBranch />
+            <h2 className="text-4xl pt-[70px] font-semibold text-center w-full text-white mb-12" id="statsTitleIdx">Statistiques Globales</h2>
+            <div className="grid w-full max-w-4xl grid-cols-1 gap-12 mx-auto md:grid-cols-3">
+              {/* Exemple de compteur animé */}
+              <div className="flex flex-col items-center p-8 shadow-xl bg-white/90 rounded-2xl">
+                <div className="inline-flex items-center justify-center w-16 h-16 mb-4 text-3xl text-white rounded-full shadow-lg bg-primary-default">
+                  <FaBuilding />
+                </div>
+                <span className="text-4xl font-extrabold text-primary-dark animate-pulse">+120</span>
+                <span className="mt-2 text-lg font-semibold text-primary-dark">Structures administratives</span>
               </div>
-              <h3 className="mb-2 text-3xl font-semibold leading-normal text-white">
-                Statistiques Globales
-              </h3>
-              <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-primary-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
-              </p>
-              <a
-                href="#"
-                className="inline-block px-6 py-4 mt-4 mb-1 mr-1 text-sm font-bold text-white uppercase rounded shadow outline-none github-star focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg"
-              >
-                Plus...
-              </a>
-            </div>
-
-            <div className="relative w-full px-4 mt-32 ml-auto mr-auto md:w-4/12">
-              <i className="absolute left-auto fab fa-github text-blueGray-700 -top-150-px -right-100 opacity-80 text-55"></i>
+              <div className="flex flex-col items-center p-8 shadow-xl bg-white/90 rounded-2xl">
+                <div className="inline-flex items-center justify-center w-16 h-16 mb-4 text-3xl text-white rounded-full shadow-lg bg-primary-default">
+                  <FaSchool />
+                </div>
+                <span className="text-4xl font-extrabold text-primary-dark animate-pulse">+300</span>
+                <span className="mt-2 text-lg font-semibold text-primary-dark">Établissements scolaires</span>
+              </div>
+              <div className="flex flex-col items-center p-8 shadow-xl bg-white/90 rounded-2xl">
+                <div className="inline-flex items-center justify-center w-16 h-16 mb-4 text-3xl text-white rounded-full shadow-lg bg-primary-default">
+                  <FaPlusSquare />
+                </div>
+                <span className="text-4xl font-extrabold text-primary-dark animate-pulse">+50</span>
+                <span className="mt-2 text-lg font-semibold text-primary-dark">Structures de santé</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
-      
+
       <section className="relative mt-10">
 
-        {/*  */}
-        <div className="container pb-20 mx-auto overflow-hidden">
-          <div className="flex flex-wrap items-center">
-            <div className="w-full px-12 mt-48 ml-auto mr-auto md:w-4/12 md:px-4">
-              <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
-                <i className="text-xl fas fa-sitemap"></i><FaSitemap className="text-xl" />
-              </div>
-              <h3 className="pt-[70px] mb-2 text-3xl font-semibold leading-normal" id="crcTitleIdx">
-                Conseil Regional du centre
-              </h3>
-              <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-blueGray-600">
-                Le conseil regionnal du centre
-              </p>
-              <div className="block pb-6">
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  Cameroun
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  Centre
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  Mfoundi
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  Services sociaux
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  Données Geospatiales
-                </span>
-              </div>
-              <a
-                href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus?ref=nr-index"
-                target="_blank"
-                className="font-bold transition-all duration-150 ease-linear text-blueGray-700 hover:text-primary-dark"
-              >
-                En Savoir Plus
-              </a>
-            </div>
-
-            <div className="w-full px-4 mt-32 ml-auto mr-auto md:w-5/12">
-              <div className="relative flex flex-col w-full min-w-0 mt-48 mb-6 md:mt-0">
-                <img
-                  alt="..."
-                  src={component_btn}
-                  className="absolute w-full align-middle rounded shadow-lg max-w-100-px z-3 left-145-px -top-29-px"
-                />
-                {/* <img
-                  alt="..."
-                  src={component_profile_card}
-                  className="absolute w-full align-middle rounded-lg shadow-lg -top-160-px left-260-px max-w-210-px"
-                /> */}
-                {/* <img
-                  alt="..."
-                  src={component_info_card}
-                  className="absolute w-full align-middle rounded-lg shadow-lg max-w-180-px -top-225-px left-40-px z-2"
-                /> */}
-                {/* <img
-                  alt="..."
-                  src={component_info_2}
-                  className="absolute w-full align-middle rounded-lg shadow-2xl max-w-200-px -left-50-px top-25-px"
-                /> */}
-                {/* <img
-                  alt="..."
-                  src={component_menu}
-                  className="absolute w-full align-middle rounded shadow-lg max-w-580-px -left-20-px top-210-px"
-                />
-                <img
-                  alt="..."
-                  src={component_btn_pink}
-                  className="absolute w-full align-middle rounded shadow-xl max-w-120-px left-195-px top-95-px"
-                /> */}
-              </div>
-            </div>
-          </div>
-
-          {/* <div className="flex flex-wrap items-center pt-32">
-            <div className="w-full px-4 mt-32 ml-auto mr-auto md:w-6/12">
-              <div className="relative flex flex-wrap justify-center">
-                <div className="w-full px-4 my-4 lg:w-6/12">
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/svelte/alerts/notus?ref=vtw-index"
-                    target="_blank"
-                  >
-                    <div className="p-8 text-center bg-red-600 rounded-lg shadow-lg">
-                      <img
-                        alt="..."
-                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
-                        src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/svelte.jpg"
-                      />
-                      <p className="mt-4 text-lg font-semibold text-white">
-                        Svelte
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus?ref=vtw-index"
-                    target="_blank"
-                  >
-                    <div className="p-8 mt-8 text-center rounded-lg shadow-lg bg-lightBlue-500">
-                      <img
-                        alt="..."
-                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
-                        src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/react.jpg"
-                      />
-                      <p className="mt-4 text-lg font-semibold text-white">
-                        ReactJS
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/alerts/notus?ref=vtw-index"
-                    target="_blank"
-                  >
-                    <div className="p-8 mt-8 text-center rounded-lg shadow-lg bg-blueGray-700">
-                      <img
-                        alt="..."
-                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
-                        src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/nextjs.jpg"
-                      />
-                      <p className="mt-4 text-lg font-semibold text-white">
-                        NextJS
-                      </p>
-                    </div>
-                  </a>
-                </div>
-                <div className="w-full px-4 my-4 lg:w-6/12 lg:mt-16">
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/js/alerts/notus?ref=vtw-index"
-                    target="_blank"
-                  >
-                    <div className="p-8 text-center bg-yellow-500 rounded-lg shadow-lg">
-                      <img
-                        alt="..."
-                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
-                        src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/js.png"
-                      />
-                      <p className="mt-4 text-lg font-semibold text-white">
-                        JavaScript
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/angular/alerts/notus?ref=vtw-index"
-                    target="_blank"
-                  >
-                    <div className="p-8 mt-8 text-center bg-red-700 rounded-lg shadow-lg">
-                      <img
-                        alt="..."
-                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
-                        src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/angular.jpg"
-                      />
-                      <p className="mt-4 text-lg font-semibold text-white">
-                        Angular
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/vue/alerts/notus?ref=vtw-index"
-                    target="_blank"
-                  >
-                    <div className="p-8 mt-8 text-center rounded-lg shadow-lg bg-emerald-500">
-                      <img
-                        alt="..."
-                        className="w-16 max-w-full p-2 mx-auto bg-white rounded-full shadow-md"
-                        src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/vue.jpg"
-                      />
-                      <p className="mt-4 text-lg font-semibold text-white">
-                        Vue.js
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full px-12 mt-48 ml-auto mr-auto md:w-4/12 md:px-4">
-              <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
-                <i className="text-xl fas fa-drafting-compass"></i>
-                <FaDraftingCompass />
-              </div>
-              <h3 className="mb-2 text-3xl font-semibold leading-normal">
-                Block 2
-              </h3>
-              <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-blueGray-600">
-                Description bloc 2
-              </p>
-              <div className="block pb-6">
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  tag 1
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  tag 2
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  tag 3
-                </span>
-                <span className="inline-block px-2 py-1 mt-2 mr-2 text-xs font-semibold uppercase bg-white rounded-full text-primary-dark last:mr-0">
-                  tag 4
-                </span>
-              </div>
-              <a
-                href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus?ref=nr-index"
-                target="_blank"
-                className="font-bold transition-all duration-150 ease-linear text-blueGray-700 hover:text-primary-dark"
-              >
-                View all{" "}
-                <i className="ml-1 leading-relaxed fa fa-angle-double-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="container px-4 pt-48 pb-32 mx-auto">
-          <div className="flex flex-wrap items-center">
-            <div className="w-full px-12 ml-auto md:w-5/12 md:px-4">
-              <div className="md:pr-12">
-                <div className="inline-flex items-center justify-center w-16 h-16 p-3 mb-6 text-center bg-white rounded-full shadow-lg text-primary-dark">
-                  <i className="text-xl fas fa-file-alt"></i>
-                </div>
-                <h3 className="text-3xl font-semibold">
-                  More description
-                </h3>
-                <p className="mt-4 text-lg leading-relaxed text-primary-dark">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
-                </p>
-                <ul className="mt-6 list-none">
-                  <li className="py-2">
-                    <div className="flex items-center">
-                      <div>
-                        <span className="inline-block px-2 py-1 mr-3 text-xs font-semibold uppercase rounded-full text-primary-dark bg-blueGray-50">
-                          <i className="fas fa-fingerprint"></i>
-                        </span>
-                      </div>
-                      <div>
-                        <h4 className="text-primary-dark">
-                          Built by Developers for Developers
-                        </h4>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="py-2">
-                    <div className="flex items-center">
-                      <div>
-                        <span className="inline-block px-2 py-1 mr-3 text-xs font-semibold uppercase rounded-full text-primary-dark bg-blueGray-50">
-                          <i className="fab fa-html5"></i>
-                        </span>
-                      </div>
-                      <div>
-                        <h4 className="text-primary-dark">
-                          Carefully crafted code for Components
-                        </h4>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="py-2">
-                    <div className="flex items-center">
-                      <div>
-                        <span className="inline-block px-2 py-1 mr-3 text-xs font-semibold uppercase rounded-full text-primary-dark bg-blueGray-50">
-                          <i className="far fa-paper-plane"></i>
-                        </span>
-                      </div>
-                      <div>
-                        <h4 className="text-primary-dark">
-                          Dynamic Javascript Components
-                        </h4>
-                      </div>
-                    </div>
-                  </li>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full px-4 pt-24 mr-auto md:w-6/12 md:pt-0">
-              <img
-                alt="..."
-                className="max-w-full rounded-lg shadow-xl"
-                style={{
-                  transform:
-                    "scale(1) perspective(1040px) rotateY(-11deg) rotateX(2deg) rotate(2deg)",
-                }}
-                src={centre_divisions}
-              />
-            </div>
-          </div>
-        </div>
-        {/*  */}
-        </div>
       </section>
 
-      <section className="relative pt-32 pb-16 bg-neutral-200">
-        
-
-        <div
-          className="absolute top-0 left-0 right-0 bottom-auto w-full h-20 -mt-20"
-          style={{ transform: "translateZ(0)" }}
-        >
-          <svg
-            className="absolute bottom-0 overflow-hidden"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-            version="1.1"
-            viewBox="0 0 2560 100"
-            x="0"
-            y="0"
-          >
-            <polygon
-              className="fill-current text-blueGray-200"
-              points="2560 0 2560 100 0 100"
-            ></polygon>
-            </svg>
-          </div>
-
-          <div className="container mx-auto">
-            <div className="relative z-10 flex flex-wrap justify-center px-12 py-16 -mt-64 bg-white rounded-lg shadow-xl">
-              <div className="w-full text-center lg:w-8/12">
-                <p className="text-4xl text-center">
-                  <span role="img" aria-label="love">
-                    😍
-                  </span>
-                </p>
-                <h3 className="text-3xl font-semibold">
-                  Do you love this Site ?
-                </h3>
-                <p className="mt-4 mb-4 text-lg leading-relaxed text-primary-dark">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque non corrupti blanditiis iure incidunt, porro, quas sit repellat dolore modi possimus aut officia, neque sint labore? Eos dolore ratione pariatur.
-                </p>
-                <div className="flex flex-col mt-10 sm:block">
-                  <a
-                    href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus?ref=nr-index"
-                    target="_blank"
-                    className="px-6 py-4 mb-2 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none get-started focus:outline-none bg-lightBlue-500 active:bg-lightBlue-600 hover:shadow-lg"
-                  >
-                    Get started
-                  </a>
-                  <a
-                    href="https://github.com/creativetimofficial/notus-react?ref=nr-index"
-                    target="_blank"
-                    className="px-6 py-4 mb-1 mr-1 text-sm font-bold text-white uppercase rounded shadow outline-none github-star sm:ml-1 focus:outline-none bg-blueGray-700 active:bg-blueGray-600 hover:shadow-lg"
-                  >
-                    <i className="mr-1 text-lg fab fa-github"></i>
-                    <span>Help With a Star</span>
-                  </a>
-                </div>
-                <div className="mt-16 text-center"></div>
-              </div>
+      {/* SECTION CONSEIL REGIONAL DU CENTRE MODERNISÉE */}
+      {/* <section className="relative mt-20 overflow-hidden bg-gradient-to-br from-primary-dark via-primary-default to-blueGray-700" id="crcSection">
+        <div className="absolute inset-0 z-0 bg-center bg-cover opacity-20 blur-sm" style={{backgroundImage: `url(${pattern_react})`}}></div>
+        <div className="container relative z-10 flex flex-wrap items-center justify-center gap-12 pb-20 mx-auto">
+          <div className="w-full px-12 mt-24 md:w-4/12 md:mt-48">
+            <div className="inline-flex items-center justify-center w-20 h-20 p-3 mb-6 text-center border-4 rounded-full shadow-2xl bg-white/90 text-primary-dark border-primary-default">
+              <FaSitemap className="text-3xl" />
             </div>
+            <h3 className="mb-2 text-3xl font-semibold leading-normal text-white" id="crcTitleIdx">
+              Conseil Régional du Centre
+            </h3>
+            <p className="mt-4 mb-4 text-lg font-light leading-relaxed text-blueGray-100">
+              Le Conseil Régional du Centre œuvre pour le développement local et la gestion des services sociaux et géospatiaux dans la région du Centre Cameroun.
+            </p>
+            <div className="flex flex-wrap gap-2 pb-6">
+              <span className="inline-block px-2 py-1 text-xs font-semibold uppercase rounded-full bg-white/80 text-primary-dark">Cameroun</span>
+              <span className="inline-block px-2 py-1 text-xs font-semibold uppercase rounded-full bg-white/80 text-primary-dark">Centre</span>
+              <span className="inline-block px-2 py-1 text-xs font-semibold uppercase rounded-full bg-white/80 text-primary-dark">Mfoundi</span>
+              <span className="inline-block px-2 py-1 text-xs font-semibold uppercase rounded-full bg-white/80 text-primary-dark">Services sociaux</span>
+              <span className="inline-block px-2 py-1 text-xs font-semibold uppercase rounded-full bg-white/80 text-primary-dark">Données Geospatiales</span>
+            </div>
+            <a
+              href="#"
+              className="font-bold underline transition-all duration-150 ease-linear text-primary-light hover:text-white"
+            >
+              En Savoir Plus
+            </a>
           </div>
-        </section>
-        <Footer />
+          <div className="flex justify-center w-full px-4 pt-24 md:w-5/12 md:pt-0">
+            <img
+              alt="Conseil régional du centre"
+              className="max-w-full border-4 shadow-2xl rounded-2xl border-primary-default bg-white/80"
+              style={{
+                transform: "scale(1) perspective(1040px) rotateY(-11deg) rotateX(2deg) rotate(2deg)",
+              }}
+              src={component_btn}
+            />
+          </div>
+        </div>
+      </section> */}
+
+      {/* FOOTER MODERNE */}
+      <Footer />
+      <style>{`
+        body { font-family: 'Inter', 'Poppins', 'Segoe UI', Arial, sans-serif; }
+        .text-primary-dark { color: #1e293b; }
+        .bg-primary-default { background-color: #2563eb; }
+        .bg-primary-dark { background-color: #1e293b; }
+        .text-primary-light { color: #60a5fa; }
+        .bg-primary-dark-op { background: rgba(30,41,59,0.85); }
+        .drop-shadow-lg { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); }
+      `}</style>
     </>
   );
 }

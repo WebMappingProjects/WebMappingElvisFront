@@ -8,10 +8,7 @@ import MapSidebar from "../../components/Sidebar/MapSidebar";
 import { useAppMainContext } from "../../context/AppProvider";
 
 export default function Maps() {
-
-  const { currentLayerName, setCurrentLayerName,
-    currentLayerAttribution, setCurrentLayerAttribution
-   } = useAppMainContext();
+  const { selectedLayers } = useAppMainContext();
 
   return (
     <>
@@ -21,20 +18,14 @@ export default function Maps() {
         {/* Header */}
         <HeaderStats />
         <div className="w-full px-0 mx-auto -m-24 md:px-10">
-        
           {/* Map Default Outlef */}
           <div className="flex flex-wrap">
             <div className="w-full px-4">
               <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded shadow-lg">
-                {/* <MapExample /> */}
-                <LeafletMap 
-                  layer={currentLayerName}
-                  attrib={currentLayerAttribution}
-                />
+                <LeafletMap selectedLayers={selectedLayers} />
               </div>
             </div>
           </div>
-          
           <FooterAdmin />
         </div>
       </div>
