@@ -18,6 +18,7 @@ const AppProvider = ({ children }) => {
     const [ currentProjectionSystem, setCurrentProjectionSystem ] = useState(4326);
 
     const [ currentEditionPoint, setCurrentEditionPoint ] = useState([]);
+    const [ selectedLayers, setSelectedLayers ] = useState([]);
 
     const value = {
         currentLayerName, setCurrentLayerName,
@@ -26,7 +27,8 @@ const AppProvider = ({ children }) => {
         dataSearch, setDataSearch,
         currentEditionPoint, setCurrentEditionPoint,
         reloadDatas, setReloadDatas,
-        currentProjectionSystem, setCurrentProjectionSystem
+        currentProjectionSystem, setCurrentProjectionSystem,
+        selectedLayers, setSelectedLayers
     };
 
   return <appMainContext.Provider value={value}>{children}</appMainContext.Provider>;

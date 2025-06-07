@@ -10,12 +10,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-const LeafletMap = ({ layer = "pharmacies_point", attrib }) => {
+const LeafletMap = ({ selectedLayers = [] }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
-  const popupRef = useRef(null); 
-  const workspaceName = "SIG_WORKSPACE"; //"SIG_WORKSPACE"; //"PostGisWorkspace";
-  const mainGeoserverRoute = "/geoserver"; // "http://localhost:8080/geoserver";
+  const popupRef = useRef(null);
+  const wmsLayersRef = useRef({});
+  const workspaceName = "SIG_WORKSPACE";
+  const mainGeoserverRoute = "/geoserver";
 
   const getWMSFeatureInfoUrl = (wmsUrl, latlng, map, layerName, options = {}) => {
     // Vérification des paramètres obligatoires
@@ -167,128 +168,112 @@ const LeafletMap = ({ layer = "pharmacies_point", attrib }) => {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Initialize map if not already initialized
+    // Initialisation de la carte si besoin
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapRef.current).setView([3.868177, 11.519596], 12);
-
-      // Couche de base OpenStreetMap
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapInstance.current);
-
-      // Configuration de la couche WMS
-      const wmsUrl = `${mainGeoserverRoute}/wms`;
-      const layerName = `${workspaceName}:${layer}`;
-
-      // Ajout d'une couche WMS depuis GeoServer
-      L.tileLayer.wms(wmsUrl, {
-        layers: layerName,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1.1',
-        attribution: attrib,
-        //styles: "poi"
-      }).addTo(mapInstance.current);
-      
-      // Variable pour suivre l'état du survol
-      let isOverFeature = false;
-      let currentFeature = null;
-
-      // Gestion du mouvement de la souris
-      mapInstance.current.on('mousemove', async (e) => {
-        try {
-          const infoUrl = await fetchWMSFeatureInfo(
-            wmsUrl,
-            e.latlng,
-            mapInstance.current,
-            layerName
-          );
-
-          const data = infoUrl;
-
-          // Vérifier s'il y a des features à cet emplacement
-          const hasFeatures = data.features && data.features.length > 0;
-          
-          // Changer le curseur si l'état a changé
-          if (hasFeatures !== isOverFeature) {
-            isOverFeature = hasFeatures;
-            currentFeature = data;
-            const container = mapInstance.current.getContainer();
-            container.style.cursor = hasFeatures ? 'pointer' : '';
-          }
-        } catch (error) {
-          console.error("Erreur lors de la vérification des features:", error);
-        }
-      });
-
-      // Réinitialiser le curseur quand la souris quitte la carte
-      mapInstance.current.on('mouseout', () => {
-        const container = mapInstance.current.getContainer();
-        container.style.cursor = '';
-        isOverFeature = false;
-        currentFeature = null;
-      });
-
-      // Gestion du clic sur la carte pour les infos WMS
-      mapInstance.current.on('click', async (e) => {
-        if (!isOverFeature) return;
-        
-        try {
-          /*const infoUrl = await fetchWMSFeatureInfo(
-            wmsUrl,
-            e.latlng,
-            mapInstance.current,
-            layerName
-          );
-
-          const data = infoUrl*/
-          const data = currentFeature;
-
-          if (data.features && data.features.length > 0) {
-            const feature = data.features[0];
-            const properties = feature.properties;
-            
-            let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3 class="font-bold text-lg mb-3 text-center text-primary-dark">Propriétés</h3><table>';
-            
-            for (const [key, value] of Object.entries(properties)) {
-              popupContent += `<tr class="border"><td class="px-3 py-2 border"><strong>${key}</strong></td><td class="px-2 py-2">${value || 'N/A'}</td></tr>`;
-            }
-            
-            popupContent += '</table></div>';
-
-            if (popupRef.current) {
-              mapInstance.current.closePopup(popupRef.current);
-            }
-
-            popupRef.current = L.popup()
-              .setLatLng(e.latlng)
-              .setContent(popupContent)
-              .openOn(mapInstance.current);
-          }
-        } catch (error) {
-          console.error("Erreur lors de la récupération des informations:", error);
-        }
-      });
     }
 
-    return () => {
-      if (mapInstance.current) {
-        mapInstance.current.remove();
-        mapInstance.current = null;
+    const map = mapInstance.current;
+    // Suppression des anciennes couches WMS non sélectionnées
+    Object.keys(wmsLayersRef.current).forEach(layerName => {
+      if (!selectedLayers.find(l => l.name === layerName)) {
+        map.removeLayer(wmsLayersRef.current[layerName]);
+        delete wmsLayersRef.current[layerName];
       }
+    });
+    // Ajout des nouvelles couches sélectionnées
+    selectedLayers.forEach(layer => {
+      if (!wmsLayersRef.current[layer.name]) {
+        const wmsUrl = `${mainGeoserverRoute}/wms`;
+        const fullLayerName = `${workspaceName}:${layer.name}`;
+        const wmsLayer = L.tileLayer.wms(wmsUrl, {
+          layers: fullLayerName,
+          format: 'image/png',
+          transparent: true,
+          version: '1.1.1',
+          attribution: layer.attrib,
+        });
+        wmsLayer.addTo(map);
+        wmsLayersRef.current[layer.name] = wmsLayer;
+      }
+    });
+
+    // Gestion du survol/clic sur la carte pour toutes les couches sélectionnées
+    let isOverFeature = false;
+    let currentFeature = null;
+    function onMouseMove(e) {
+      (async () => {
+        let found = false;
+        let foundFeature = null;
+        for (const layer of selectedLayers) {
+          const wmsUrl = `${mainGeoserverRoute}/wms`;
+          const fullLayerName = `${workspaceName}:${layer.name}`;
+          const data = await fetchWMSFeatureInfo(wmsUrl, e.latlng, map, fullLayerName);
+          if (data && data.features && data.features.length > 0) {
+            found = true;
+            foundFeature = data;
+            break;
+          }
+        }
+        if (found !== isOverFeature) {
+          isOverFeature = found;
+          currentFeature = foundFeature;
+          const container = map.getContainer();
+          container.style.cursor = found ? 'pointer' : '';
+        }
+      })();
+    }
+    function onMouseOut() {
+      const container = map.getContainer();
+      container.style.cursor = '';
+      isOverFeature = false;
+      currentFeature = null;
+    }
+    function onClick(e) {
+      if (!isOverFeature || !currentFeature) return;
+      const data = currentFeature;
+      if (data.features && data.features.length > 0) {
+        const feature = data.features[0];
+        const properties = feature.properties;
+        let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3 class="font-bold text-lg mb-3 text-center text-primary-dark">Propriétés</h3><table>';
+        for (const [key, value] of Object.entries(properties)) {
+          popupContent += `<tr class="border"><td class="px-3 py-2 border"><strong>${key}</strong></td><td class="px-2 py-2">${value || 'N/A'}</td></tr>`;
+        }
+        popupContent += '</table></div>';
+        if (popupRef.current) {
+          map.closePopup(popupRef.current);
+        }
+        popupRef.current = L.popup()
+          .setLatLng(e.latlng)
+          .setContent(popupContent)
+          .openOn(map);
+      }
+    }
+    map.off('mousemove', onMouseMove);
+    map.off('mouseout', onMouseOut);
+    map.off('click', onClick);
+    map.on('mousemove', onMouseMove);
+    map.on('mouseout', onMouseOut);
+    map.on('click', onClick);
+
+    return () => {
+      map.off('mousemove', onMouseMove);
+      map.off('mouseout', onMouseOut);
+      map.off('click', onClick);
+      // Nettoyage des couches WMS
+      Object.values(wmsLayersRef.current).forEach(layer => map.removeLayer(layer));
+      wmsLayersRef.current = {};
     };
-  }, [layer, attrib]);
+  }, [selectedLayers]);
 
   return (
     <div className="relative w-full rounded h-[600px]">
       <div className="h-full rounded" ref={mapRef} />
     </div>
   );
-}
-
-LeafletMap.propTypes = {
-  layer: PropTypes.string.isRequired,
-  attrib: PropTypes.string.isRequired,
 };
 
 export default LeafletMap;
