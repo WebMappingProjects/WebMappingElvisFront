@@ -34,14 +34,17 @@ export default function Login() {
 
         const response = await axios.post("/auth/login/", datas); // , { headers: { "Authorization" : }}
 
-        console.log("RESPONSE", response);
-
+        //console.log("RESPONSE", response);
         const token = response.data.access;
+        const userId = response.data.user_id;
+
+        const responseForUserRole = await axios.get(`/auth/users/${userId}`, { headers: { "Authorization": `Bearer ${token}`}});
+
         const authUser = {
-          "id": response.data.user_id,
+          "id": userId,
           "username": response.data.username,
           "email": response.data.email,
-          "role": response.data.role
+          "role": responseForUserRole.data.role
         };
 
         localStorage.setItem("token", token);

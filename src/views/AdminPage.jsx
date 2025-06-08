@@ -9,9 +9,10 @@ const API_URL = "/auth/users";
 export default function AdminPage() {
   const [users, setUsers] = useState([]);
   const [editUserId, setEditUserId] = useState(null);
-  const [newUser, setNewUser] = useState({ username: "", email: "", password: "" });
-  const [editUser, setEditUser] = useState({ username: "", email: "" });
+  const [newUser, setNewUser] = useState({ username: "", email: "", role: "lambda", password: "" });
+  const [editUser, setEditUser] = useState({ username: "", email: "", role: "lambda" });
   const [showAdd, setShowAdd] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -21,6 +22,7 @@ export default function AdminPage() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(API_URL, { headers: { Authorization: `Bearer ${token}` } });
+      //console.log("FETCH USERS", res);
       setUsers(res.data);
     } catch {
       setUsers([]);
@@ -29,23 +31,45 @@ export default function AdminPage() {
 
   const handleAddUser = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.post(API_URL, newUser, { headers: { Authorization: `Bearer ${token}` } });
-      setShowAdd(false);
-      setNewUser({ username: "", email: "", password: "" });
-      fetchUsers();
-    } catch {
+      if(confirmPassword == newUser.password)
+      {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(`${API_URL}/`, newUser, { headers: { Authorization: `Bearer ${token}` } });
+        //console.log("RESPONSE ADDING USER", response);
+        
+        const newUserId = response.data.id;
+  
+        // Change user role
+        if(newUser.role != "lambda")
+        {
+          await axios.post(`${API_URL}/${newUserId}/change-role/`, { "role": newUser.role }, { headers: { Authorization: `Bearer ${token}` } })
+        }
+
+        /*if(newUser.role != "admin")
+        {
+          await axios.patch(`${API_ADMIN_URL}/${newUserId}/`, { "is_superuser": true }, { headers: { Authorization: `Bearer ${token}` } })
+        }*/
+  
+        setShowAdd(false);
+        setNewUser({ username: "", email: "", role: "lambda", password: "" });
+        setConfirmPassword("");
+        fetchUsers();
+      } else alert("Les mots de passes ne correspondent pas");
+    } catch (err) {
       alert("Erreur lors de l'ajout");
+      console.log("ERROR", err);
     }
   };
 
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Supprimer cet utilisateur ?")) return;
     try {
+      //console.log("DELETE ID", id);
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchUsers();
-    } catch {
+    } catch (err) {
+      console.log("ERROR", err);
       alert("Erreur lors de la suppression");
     }
   };
@@ -58,10 +82,15 @@ export default function AdminPage() {
   const handleSaveEdit = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.patch(`${API_URL}/${id}`, editUser, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.patch(`${API_URL}/${id}/`, editUser, { headers: { Authorization: `Bearer ${token}` } });
+      const editedUserId = response.data.id;
+
+      // Change user role
+      await axios.post(`${API_URL}/${editedUserId}/change-role/`, { "role": editUser.role }, { headers: { Authorization: `Bearer ${token}` } })
       setEditUserId(null);
       fetchUsers();
-    } catch {
+    } catch (err) {
+      console.log("ERROR", err);
       alert("Erreur lors de la modification");
     }
   };
@@ -69,7 +98,7 @@ export default function AdminPage() {
   return (
     <>
       <Navbar transparent />
-      <main className="min-h-screen py-10 bg-primary-default">
+      <main className="min-h-screen px-3 py-10 bg-primary-default">
         <div className="max-w-4xl p-8 mx-auto mt-24 bg-white rounded-lg shadow-lg">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-primary-dark">Gestion des utilisateurs</h2>
@@ -105,11 +134,11 @@ export default function AdminPage() {
               <div className="flex flex-col justify-center flex-1 w-full mb-4">
                 <label className="mb-2">Type d&apos;utilisateur :</label>
 
-                <select className="w-full px-3 py-1 border rounded">
+                <select className="w-full px-3 py-1 border rounded" value={newUser.role} onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}>
                   <option value="admin">Administrateur</option>
                   <option value="technicien">Technicien</option>
                   <option value="decideur">Decideur</option>
-                  <option value="lambda" defaultChecked>Utilisateur lambda</option>
+                  <option value="lambda">Utilisateur lambda</option>
                 </select>
               </div>
 
@@ -130,13 +159,13 @@ export default function AdminPage() {
                   className="w-full px-3 py-1 border rounded"
                   placeholder="Confirmer le mot de passe"
                   type="password"
-                  //value={newUser.password}
-                  //onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
                 />
               </div>
 
               <div>
-                <button className="ml-2 text-2xl text-green-500 cursor-pointer" onClick={handleAddUser} title="Ajouter">
+                <button className="ml-2 mr-4 text-2xl text-green-500 cursor-pointer" onClick={handleAddUser} title="Ajouter">
                   <FaCheck />
                 </button>
                 <button className="ml-1 text-2xl text-red-500 cursor-pointer" onClick={() => setShowAdd(false)} title="Annuler">
@@ -147,16 +176,17 @@ export default function AdminPage() {
           )}
           <table className="w-full text-left border-t">
             <thead>
-              <tr className="text-blueGray-600">
-                <th className="py-2">Nom</th>
-                <th className="py-2">Email</th>
-                <th className="py-2 text-center">Actions</th>
+              <tr className="border-b text-primary-dark">
+                <th className="px-3 py-2">Nom</th>
+                <th className="px-3 py-2">Email</th>
+                <th className="px-3 py-2">Role</th>
+                <th className="px-3 py-2 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.id} className="border-b hover:bg-blueGray-50">
-                  <td className="py-2">
+                <tr key={user.id} className="border-b hover:bg-primary-light-op">
+                  <td className="px-3 py-2">
                     {editUserId === user.id ? (
                       <input
                         className="w-full px-2 py-1 border rounded"
@@ -167,7 +197,7 @@ export default function AdminPage() {
                       user.username
                     )}
                   </td>
-                  <td className="py-2">
+                  <td className="px-3 py-2">
                     {editUserId === user.id ? (
                       <input
                         className="w-full px-2 py-1 border rounded"
@@ -176,6 +206,21 @@ export default function AdminPage() {
                       />
                     ) : (
                       user.email
+                    )}
+                  </td>
+                  <td className="py-2">
+                    {editUserId === user.id ? (
+                      <select className="w-full px-2 py-1 border rounded" 
+                        value={editUser.role}
+                        onChange={e => setEditUser({ ...editUser, role: e.target.value })}
+                      >
+                          <option value="admin">Administrateur</option>
+                          <option value="technicien">Technicien</option>
+                          <option value="decideur">Decideur</option>
+                          <option value="lambda">Utilisateur lambda</option>
+                      </select>
+                    ) : (
+                      user.role
                     )}
                   </td>
                   <td className="flex justify-center gap-2 py-2 text-center">

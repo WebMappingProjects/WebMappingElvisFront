@@ -3,12 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 // components
 
 import IndexDropdown from "../Dropdowns/IndexDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaAlignJustify, FaArrowCircleDown, FaBars, FaChartArea, FaFacebook, FaFileAlt, FaGithub, FaHamburger, FaPersonBooth, FaPlusCircle, FaPlusSquare, FaStackExchange, FaStackOverflow, FaTimes, FaTwitter, FaUnlock, FaUser, FaUserAltSlash, FaUserFriends, FaUserShield, FaUserTimes } from "react-icons/fa";
+import { useAppMainContext } from "../../context/AppProvider";
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [ userDatas, setUserDatas ] = useState({ role: "lambda" });
 
+  useEffect(() => {
+    const loadUserDatas = () => {
+        const user = JSON.parse(window.localStorage.getItem("authUser"));
+        setUserDatas(user);
+    }
+
+    loadUserDatas();
+  }, []);
+  
   const handleLogout = (e) => {
       e.preventDefault();
 
@@ -80,14 +91,17 @@ export default function Navbar(props) {
               {/* <li className="flex items-center">
                 <IndexDropdown />
               </li> */}
-              <li className="flex items-center">
-                <a
-                  className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"
-                  href="/users-administration"
-                >
-                  <FaUserShield className="mr-3 leading-1"/> Administration
-                </a>
-              </li>
+              {userDatas.role == "admin" ? (
+                <li className="flex items-center">
+                  <a
+                    className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"
+                    href="/users-administration"
+                  >
+                    <FaUserShield className="mr-3 leading-1"/> Administration
+                  </a>
+                </li>
+              ) : null }
+              
               <li className="flex items-center">
                 <a
                   className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"

@@ -25,27 +25,27 @@ export default function Index() {
     <>
       <IndexNavbar fixed />
       {/* HERO SECTION AMÉLIORÉE */}
-      <section className="relative flex items-center h-screen pt-16 overflow-hidden header max-h-860-px bg-gradient-to-br from-primary-dark via-primary-default to-blueGray-700">
+      <section className="relative flex items-center min-h-screen pt-16 overflow-hidden header max-h-860-px bg-gradient-to-br from-primary-dark via-primary-default to-blueGray-700">
         <div className="absolute inset-0 z-0 bg-center bg-cover opacity-30 blur-sm" style={{backgroundImage: `url(${pattern_react})`}}></div>
         <div className="container z-20 flex flex-wrap items-center mx-auto">
           <div className="w-full px-4 md:w-8/12 lg:w-6/12 xl:w-6/12">
             <div className="pt-20 md:pt-32 sm:pt-0 animate-fade-in-up">
-              <h2 className="text-3xl font-extrabold text-white md:text-5xl drop-shadow-lg">
-                WEB MAPPING - <em className="text-primary-light">Plateforme de manipulation des données géospatiales du SIG.</em>
+              <h2 className="text-2xl font-extrabold text-white md:text-5xl drop-shadow-lg">
+                WEB MAPPING - <em className="text-primary-light-op">Plateforme de manipulation des données géospatiales du SIG.</em>
               </h2>
-              <p className="mt-6 text-base leading-relaxed text-justify md:text-left md:text-xl text-white/90">
+              <p className="mt-6 text-sm leading-relaxed text-justify md:text-base md:text-left text-white/90">
                 Cette plateforme s'appuie sur un ensemble de données géospatiales collectées par des experts afin de faciliter l'accès du grand public aux différents services disponibles dans le département du Mfoundi, situé dans la région du Centre Cameroun.
               </p>
-              <div className="flex gap-4 mt-12">
+              <div className="flex gap-4 mt-12 mb-4">
                 <Link
                   to="/map"
-                  className="px-8 py-4 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow-lg md:text-lg bg-primary-default hover:bg-primary-dark focus:outline-none animate-bounce-in"
+                  className="px-8 py-4 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-blue-600 rounded shadow-lg md:text-base hover:bg-primary-dark focus:outline-none"
                 >
                   Découvrir la carte
                 </Link>
                 <a
                   href="#featuresTitleIdx"
-                  className="px-8 py-4 text-sm font-bold uppercase transition-all duration-150 ease-linear bg-white border-2 rounded shadow-lg md:text-lg text-primary-default hover:bg-primary-default hover:text-white border-primary-default focus:outline-none"
+                  className="px-8 py-4 text-sm font-bold uppercase transition-all duration-150 ease-linear bg-white border-2 rounded shadow-lg md:text-base text-primary-default hover:bg-primary-default hover:text-white border-primary-default focus:outline-none"
                 >
                   En Savoir Plus
                 </a>
@@ -79,7 +79,7 @@ export default function Index() {
         </div>
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center mt-24 md:mt-0">
-            <div className="w-10/12 px-2 ml-auto mr-auto -mt-32 md:w-6/12 lg:w-4/12 md:px-4">
+            <div className="w-10/12 px-2 mt-4 ml-auto mr-auto md:w-6/12 lg:w-4/12 md:px-4">
               <div className="relative flex flex-col w-full min-w-0 mb-6 break-words rounded-lg shadow-lg bg-primary-dark">
                 <img
                   alt="..."

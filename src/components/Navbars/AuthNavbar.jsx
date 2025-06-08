@@ -1,10 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaBars, FaHome, FaUser, FaSignOutAlt, FaUserShield } from "react-icons/fa";
 
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navigate = useNavigate();
+  const [ authUser, setAuthUser ] = useState(null);
+
+  useEffect(() => {
+    setAuthUser(localStorage.getItem("authUser") || null);
+  }, []);
+
+  useEffect(() => {
+    console.log("AUTH USER", authUser);
+  }, [authUser]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -26,7 +35,9 @@ export default function Navbar() {
         >
           <FaBars />
         </button>
-        <div
+
+        {authUser != null ? (
+          <div
           className={`${
             navbarOpen ? "block" : "hidden"
           } lg:flex lg:items-center lg:gap-6 w-full lg:w-auto mt-4 lg:mt-0 bg-white/80 lg:bg-transparent rounded-lg lg:rounded-none shadow-lg lg:shadow-none px-4 py-4 lg:p-0`}
@@ -56,6 +67,7 @@ export default function Navbar() {
             <FaSignOutAlt /> Déconnexion
           </button>
         </div>
+        ) : null}
       </div>
     </nav>
   );
