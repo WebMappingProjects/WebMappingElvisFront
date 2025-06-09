@@ -235,7 +235,7 @@ export default function AdminPage() {
                       </>
                     ) : (
                       <>
-                        <button className="text-xl cursor-pointer text-primary-default" onClick={() => handleEditUser(user)} title="Modifier">
+                        <button className="px-2 py-2 mr-4 text-xl rounded-md cursor-pointer text-primary-default bg-primary-light-op" onClick={() => handleEditUser(user)} title="Modifier">
                           <FaPen />
                         </button>
                         <button className="text-xl text-red-500 cursor-pointer" onClick={() => handleDeleteUser(user.id)} title="Supprimer">
@@ -248,7 +248,7 @@ export default function AdminPage() {
               ))}
               {users.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="py-4 text-center text-blueGray-400">Aucun utilisateur</td>
+                  <td colSpan={4} className="py-4 text-lg font-bold text-center text-primary-default-op">Aucun utilisateur</td>
                 </tr>
               )}
             </tbody>
