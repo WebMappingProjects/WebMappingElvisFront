@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
+  const [ errorPopupMessage, setErrorPopupMessage ] = useState("");
   const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
   const [ confirmPopupVisible, setConfirmPopupVisible ] = useState(false);
 
@@ -58,9 +59,12 @@ export default function AdminPage() {
         setNewUser({ username: "", email: "", role: "lambda", password: "" });
         setConfirmPassword("");
         setMessagePopupVisible(true);
-      } else alert("Les mots de passes ne correspondent pas");
+      } else {
+        setErrorPopupMessage("Erreur : Les mots de passe ne correspondent pas !");
+        setErrorPopupVisible(true);
+      }
     } catch (err) {
-      //alert("Erreur lors de l'ajout");
+      setErrorPopupMessage("Erreur : Echec de l'operation");
       setErrorPopupVisible(true);
       console.log("ERROR", err);
     }
@@ -68,24 +72,20 @@ export default function AdminPage() {
 
   const handleDeleteUser = async () => {
     try {
-      //console.log("DELETE ID", id);
       setConfirmPopupVisible(false);
       const id = currentItemIndex;
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       setMessagePopupVisible(true);
-      //fetchUsers();
     } catch (err) {
       console.log("ERROR", err);
       setErrorPopupVisible(true);
-      //alert("Erreur lors de la suppression");
     }
-    //if (!window.confirm("Supprimer cet utilisateur ?")) return;
   };
 
   const handleEditUser = (user) => {
     setEditUserId(user.id);
-    setEditUser({ username: user.username, email: user.email });
+    setEditUser({ username: user.username, email: user.email, role: user.role });
   };
 
   const handleSaveEdit = async (id) => {
@@ -108,8 +108,8 @@ export default function AdminPage() {
 
   return (
     <>
-      <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); fetchUsers();; }} open={messagePopupVisible} />
-      <ErrorMessagePopup message="ERREUR : Echec de l'operation" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+      <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); fetchUsers(); }} open={messagePopupVisible} />
+      <ErrorMessagePopup message={errorPopupMessage} onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
       <ConfirmMessagePopup onConfirm={(e) => handleDeleteUser(e)} onCancel={() => setConfirmPopupVisible(false)} open={confirmPopupVisible} />
 
       <Navbar transparent />

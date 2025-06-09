@@ -62,7 +62,7 @@ export default function Index() {
           className="absolute top-0 left-0 right-0 bottom-auto w-full h-20 -mt-20"
           style={{ transform: "translateZ(0)" }}
         >
-          <svg
+          {/* <svg
             className="absolute bottom-0 overflow-hidden"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="none"
@@ -75,7 +75,7 @@ export default function Index() {
               className="fill-current text-neutral-700"
               points="2560 0 2560 100 0 100"
             ></polygon>
-          </svg>
+          </svg> */}
         </div>
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center mt-24 md:mt-0">
