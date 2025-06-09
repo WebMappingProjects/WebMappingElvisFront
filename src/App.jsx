@@ -78,6 +78,10 @@ import MairiesYaoundePointForm from "./components/Forms/MairiesYaoundePointForm"
 import MairiesYaoundePointTable from "./components/Tables/MariesYaoundePointTable";
 import ProtectedRoute from "./views/ProtectedRoute";
 import AdminPage from "./views/AdminPage";
+import IsAdminProtectedRoute from "./views/IsAdminProtectedRoute";
+import StatsPage from "./views/StatsPage";
+import IsTechnicianProtectedRoute from "./views/IsTechnicianProtectedRoute";
+import IsForbidden from "./views/IsForbidden";
 
 function App() {
 
@@ -104,7 +108,9 @@ function App() {
           {/*  Sub layouts for admin data forms */}
           <Route path="/admin/forms" element={
             <ProtectedRoute>
-              <Forms />
+              <IsTechnicianProtectedRoute>
+                <Forms />
+              </IsTechnicianProtectedRoute>
             </ProtectedRoute>
           }>
             <Route path="/admin/forms/mosquee" element={<MosqueeFontPointForm />} />
@@ -146,7 +152,9 @@ function App() {
           {/*  Sub Layouts for admin data tables */}
           <Route path="/admin/tables" element={
             <ProtectedRoute>
-              <Tables />
+              <IsTechnicianProtectedRoute>
+                <Tables />
+              </IsTechnicianProtectedRoute>
             </ProtectedRoute>
           }>
               <Route path="/admin/tables/mosquee" element={<MosqueeFontPointTable />} />
@@ -202,9 +210,9 @@ function App() {
       </Route>
 
       {/* add routes without layouts */}
-      <Route path="/landing" element={
+      <Route path="/stats" element={
         <ProtectedRoute>
-          <Landing />
+          <StatsPage />
         </ProtectedRoute>
       } />
 
@@ -216,7 +224,9 @@ function App() {
 
       <Route path="/users-administration" element={
         <ProtectedRoute>
-          <AdminPage />
+          <IsAdminProtectedRoute>
+            <AdminPage />
+          </IsAdminProtectedRoute>
         </ProtectedRoute>
       } />
 
@@ -224,6 +234,10 @@ function App() {
         <ProtectedRoute>
           <Index />
         </ProtectedRoute>
+      } />
+
+      <Route path="/403" element={
+        <IsForbidden />
       } />
 
     </Routes>
