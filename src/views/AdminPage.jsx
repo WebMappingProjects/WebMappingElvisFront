@@ -3,6 +3,9 @@ import Navbar from "../components/Navbars/AuthNavbar";
 import Footer from "../components/Footers/Footer";
 import { FaPen, FaTrash, FaPlus, FaCheck, FaTimes } from "react-icons/fa";
 import axios from "../api/axios";
+import SimpleMessagePopup from "../components/popups/SimpleMessagePopup";
+import ErrorMessagePopup from "../components/popups/ErrorMessagePopup";
+import ConfirmMessagePopup from "../components/popups/ConfirmMessagePopup";
 
 const API_URL = "/auth/users";
 
@@ -13,6 +16,12 @@ export default function AdminPage() {
   const [editUser, setEditUser] = useState({ username: "", email: "", role: "lambda" });
   const [showAdd, setShowAdd] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
+  const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
+  const [ confirmPopupVisible, setConfirmPopupVisible ] = useState(false);
+
+  const [ currentItemIndex, setCurrentItemIndex ] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -44,34 +53,34 @@ export default function AdminPage() {
         {
           await axios.post(`${API_URL}/${newUserId}/change-role/`, { "role": newUser.role }, { headers: { Authorization: `Bearer ${token}` } })
         }
-
-        /*if(newUser.role != "admin")
-        {
-          await axios.patch(`${API_ADMIN_URL}/${newUserId}/`, { "is_superuser": true }, { headers: { Authorization: `Bearer ${token}` } })
-        }*/
   
         setShowAdd(false);
         setNewUser({ username: "", email: "", role: "lambda", password: "" });
         setConfirmPassword("");
-        fetchUsers();
+        setMessagePopupVisible(true);
       } else alert("Les mots de passes ne correspondent pas");
     } catch (err) {
-      alert("Erreur lors de l'ajout");
+      //alert("Erreur lors de l'ajout");
+      setErrorPopupVisible(true);
       console.log("ERROR", err);
     }
   };
 
-  const handleDeleteUser = async (id) => {
-    if (!window.confirm("Supprimer cet utilisateur ?")) return;
+  const handleDeleteUser = async () => {
     try {
       //console.log("DELETE ID", id);
+      setConfirmPopupVisible(false);
+      const id = currentItemIndex;
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-      fetchUsers();
+      setMessagePopupVisible(true);
+      //fetchUsers();
     } catch (err) {
       console.log("ERROR", err);
-      alert("Erreur lors de la suppression");
+      setErrorPopupVisible(true);
+      //alert("Erreur lors de la suppression");
     }
+    //if (!window.confirm("Supprimer cet utilisateur ?")) return;
   };
 
   const handleEditUser = (user) => {
@@ -88,15 +97,21 @@ export default function AdminPage() {
       // Change user role
       await axios.post(`${API_URL}/${editedUserId}/change-role/`, { "role": editUser.role }, { headers: { Authorization: `Bearer ${token}` } })
       setEditUserId(null);
-      fetchUsers();
+      setMessagePopupVisible(true);
+      //fetchUsers();
     } catch (err) {
       console.log("ERROR", err);
-      alert("Erreur lors de la modification");
+      setErrorPopupVisible(true);
+      //alert("Erreur lors de la modification");
     }
   };
 
   return (
     <>
+      <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); fetchUsers();; }} open={messagePopupVisible} />
+      <ErrorMessagePopup message="ERREUR : Echec de l'operation" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
+      <ConfirmMessagePopup onConfirm={(e) => handleDeleteUser(e)} onCancel={() => setConfirmPopupVisible(false)} open={confirmPopupVisible} />
+
       <Navbar transparent />
       <main className="min-h-screen px-3 py-10 bg-primary-default">
         <div className="max-w-4xl p-8 mx-auto mt-24 bg-white rounded-lg shadow-lg">
@@ -235,10 +250,10 @@ export default function AdminPage() {
                       </>
                     ) : (
                       <>
-                        <button className="px-2 py-2 mr-4 text-xl rounded-md cursor-pointer text-primary-default bg-primary-light-op" onClick={() => handleEditUser(user)} title="Modifier">
+                        <button className="px-2 py-2 mr-4 text-xl rounded-md cursor-pointer text-primary-default bg-primary-light-op hover:bg-primary-default-op" onClick={() => handleEditUser(user)} title="Modifier">
                           <FaPen />
                         </button>
-                        <button className="text-xl text-red-500 cursor-pointer" onClick={() => handleDeleteUser(user.id)} title="Supprimer">
+                      <button className="text-xl text-red-500 cursor-pointer" onClick={() => { setConfirmPopupVisible(true); setCurrentItemIndex(user.id)}} title="Supprimer">
                           <FaTrash />
                         </button>
                       </>
