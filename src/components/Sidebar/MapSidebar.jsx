@@ -19,7 +19,6 @@ export default function MapSidebar() {
       { name: "enseignements_secondaires_final_point", label: "Enseignement Secondaire", icon: <FaSchool className="mr-2 text-sm"/>, attrib: "Enseignement Secondaire" },
       { name: "enseignement_superieur_custom_point", label: "Enseignement superieur", icon: <FaUniversity className="mr-2 text-sm"/>, attrib: "Enseignement Superieur" },
       // Sante
-      { name: "complexes_sportifs_custom_point", label: "Complexes Sportifs", icon: <FaRunning className="mr-2 text-sm"/>, attrib: "Complexes Sportifs" },
       { name: "pharmacies_point", label: "Pharmacies", icon: <FaPlus className="mr-2 text-sm"/>, attrib: "Pharmacies" },
       // Religion
       { name: "eglises_catholiques_font_point", label: "Eglises Catholiques", icon: <FaCross className="mr-2 text-sm"/>, attrib: "Eglises catholiques" },
@@ -28,12 +27,8 @@ export default function MapSidebar() {
       { name: "mosquees_font_point", label: "Mosquées", icon: <FaMosque className="mr-2 text-sm"/>, attrib: "Mosquee" },
       // Services Publiques
       { name: "nations_unies_point", label: "Nations Unies", icon: <FaServicestack className="mr-2 text-sm"/>, attrib: "Nations unies" },
-      { name: "sapeurs_pompier_point", label: "Sapeur pompier", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Sapeurs pompiers" },
-      { name: "laveries_font_point", label: "Laveries", icon: <FaCar className="mr-2 text-sm"/>, attrib: "Laveries" },
-      { name: "stations_sevices_font_point", label: "Stations Services", icon: <FaChargingStation className="mr-2 text-sm"/>, attrib: "Stations Services" },
       { name: "banques_et_microfinances_custom_point", label: "Banques et microfinances", icon: <FaMoneyBill className="mr-2 text-sm"/>, attrib: "Banques et Microfinances" },
       { name: "cites_municipales_cuy_point", label: "Cites Municipales", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Cites Municipales" },
-      { name: "agences_de_voyages_font_point", label: "Agences de Voyages", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Agences de voyages" },
       { name: "centre_special_detat_civil_font_point", label: "Centres special detat civil", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Centre detat civil" },
       { name: "mairies_yaounde_custom_point", label: "Mairies Yaounde", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Mairies yaounde" },
       { name: "prefectures_sous-prefectures_custom_point", label: "Prefectures/sous-prefectures", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Prefectures/Sous-prefectures" },
@@ -51,6 +46,11 @@ export default function MapSidebar() {
       { name: "auberges_custom_point", label: "Auberges", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Auberges custom" },
       { name: "bouches_incendies_yde_custom_point", label: "Bouches incendies", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Bouches incendies" },
       { name: "garages_custom_point", label: "Garages", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Garages" },
+      { name: "complexes_sportifs_custom_point", label: "Complexes Sportifs", icon: <FaRunning className="mr-2 text-sm"/>, attrib: "Complexes Sportifs" },
+      { name: "sapeurs_pompier_point", label: "Sapeur pompier", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Sapeurs pompiers" },
+      { name: "laveries_font_point", label: "Laveries", icon: <FaCar className="mr-2 text-sm"/>, attrib: "Laveries" },
+      { name: "stations_sevices_font_point", label: "Stations Services", icon: <FaChargingStation className="mr-2 text-sm"/>, attrib: "Stations Services" },
+      { name: "agences_de_voyages_font_point", label: "Agences de Voyages", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Agences de voyages" },
     ];
 
     // Gestion du changement de case à cocher
@@ -66,11 +66,11 @@ export default function MapSidebar() {
     // Pour chaque catégorie, filtrer les couches
     const categories = [
       { title: "Education", filter: l => ["enseignement_de_base_font_point","ecoles_mat_primaire_point","enseignements_secondaires_final_point","enseignement_superieur_custom_point"].includes(l.name) },
-      { title: "Sante", filter: l => ["complexes_sportifs_custom_point","pharmacies_point"].includes(l.name) },
+      { title: "Sante", filter: l => ["pharmacies_point"].includes(l.name) },
       { title: "Religion", filter: l => ["eglises_catholiques_font_point","eglises_presbyteriennes_font_point","eglises_protestantes_point","mosquees_font_point"].includes(l.name) },
-      { title: "Services Publiques", filter: l => ["nations_unies_point","sapeurs_pompier_point","laveries_font_point","stations_sevices_font_point","banques_et_microfinances_custom_point","cites_municipales_cuy_point","agences_de_voyages_font_point","centre_special_detat_civil_font_point","mairies_yaounde_custom_point","prefectures_sous-prefectures_custom_point","ambassades_point"].includes(l.name) },
+      { title: "Services Publiques", filter: l => ["nations_unies_point","banques_et_microfinances_custom_point","cites_municipales_cuy_point","centre_special_detat_civil_font_point","mairies_yaounde_custom_point","prefectures_sous-prefectures_custom_point","ambassades_point"].includes(l.name) },
       { title: "Securite", filter: l => ["gendarmeries_point","commissariats_yde_font_point"].includes(l.name) },
-      { title: "Autres", filter: l => ["restaurants_yaounde_font_point","boulangeries_custom_point","centres_culturels_custom_point","hotels_font_point","monuments_custom_point","lieux_remarquables_point","auberges_custom_point","bouches_incendies_yde_custom_point","garages_custom_point"].includes(l.name) },
+      { title: "Autres", filter: l => ["restaurants_yaounde_font_point","boulangeries_custom_point","centres_culturels_custom_point","hotels_font_point","monuments_custom_point","lieux_remarquables_point","auberges_custom_point","bouches_incendies_yde_custom_point","garages_custom_point","complexes_sportifs_custom_point","sapeurs_pompier_point","laveries_font_point","stations_sevices_font_point","agences_de_voyages_font_point"].includes(l.name) },
     ];
 
     return (
@@ -97,6 +97,29 @@ export default function MapSidebar() {
                 "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded " +
                 collapseShow
               }>
+                {/* Collapse header */}
+                <div className="block pb-4 mb-4 border-b border-solid md:min-w-full md:hidden border-blueGray-200">
+                  <div className="flex flex-wrap">
+                    <div className="w-6/12">
+                      <Link
+                        className="inline-block p-4 px-0 mr-0 text-sm font-bold text-left uppercase md:block md:pb-2 text-blueGray-600 whitespace-nowrap"
+                        to="/"
+                      >
+                        Services
+                      </Link>
+                    </div>
+                    <div className="flex justify-end w-6/12">
+                      <button
+                        type="button"
+                        className="px-3 py-1 text-xl leading-none text-black bg-transparent border border-transparent border-solid rounded opacity-50 cursor-pointer md:hidden"
+                        onClick={() => setCollapseShow("hidden")}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
                 {categories.map(cat => (
                   <div key={cat.title}>
                     <hr className="my-4 md:min-w-full" />

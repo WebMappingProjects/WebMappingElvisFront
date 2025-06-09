@@ -16,11 +16,14 @@ export default function Profile() {
   const [tempEmail, setTempEmail] = useState(email);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [ userId, setUserId ] = useState("");
 
   // Initialisation
   useEffect(() => {
-    const usernameDt = localStorage.getItem("username");
-    const emailDt = localStorage.getItem("email");
+    const user = JSON.parse(localStorage.getItem("authUser"));
+    setUserId(user.id);
+    const usernameDt = user.username;
+    const emailDt = user.email;
 
     setUsername(usernameDt);
     setEmail(emailDt);
@@ -42,7 +45,7 @@ export default function Profile() {
         try
         {
             const token = localStorage.getItem("token");
-            const userId = localStorage.getItem("userId");
+            //const userId = localStorage.getItem("userId");
             const response = await axios.patch(`${API_URL}/${userId}`, {
                 "username": tempUsername
             }, { headers: {
@@ -51,8 +54,8 @@ export default function Profile() {
             }});
 
             console.log("RESPONSE", response);
-            localStorage.setItem("username", tempUsername);
-            setUsername(tempUsername);
+            const user = JSON.parse(localStorage.getItem("authUser"));
+            localStorage.setItem("authUser", JSON.stringify({ ...user, username }))
             alert("Modification effectuee avec success")
           } catch (e) {
             alert("Echec de la modification")
@@ -228,7 +231,7 @@ export default function Profile() {
                         </span>
                         <button
                           onClick={() => handleEdit("email")}
-                          className="ml-2 text-xl text-primary-default"
+                          className="ml-2 text-xl cursor-pointer text-primary-default"
                           title="Modifier l'email"
                         >
                           <FaPen />

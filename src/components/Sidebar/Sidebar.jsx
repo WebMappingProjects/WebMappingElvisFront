@@ -152,15 +152,6 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
-              <li className="items-center">
-                <Link
-                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                  to="/admin/tables/complex-sportif"
-                >
-                  <FaRunning className="mr-2 text-sm"/>
-                  Complexes Sportifs
-                </Link>
-              </li>
 
               <li className="items-center">
                 <Link
@@ -264,36 +255,6 @@ export default function Sidebar() {
               <li className="items-center">
                 <Link
                   className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                  to="/admin/tables/sapeurpompier"
-                >
-                  <FaTruck className="mr-2 text-sm"/>
-                  Sapeur pompier
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                  to="/admin/tables/laveries"
-                >
-                  <FaCar className="mr-2 text-sm"/>
-                  Laveries
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                  to="/admin/tables/stations-services"
-                >
-                  <FaChargingStation className="mr-2 text-sm"/>
-                  Stations Services
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
                   to="/admin/tables/banques-microfinances"
                 >
                   <FaMoneyBill className="mr-2 text-sm"/>
@@ -311,15 +272,6 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="items-center">
-                <Link
-                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
-                  to="/admin/tables/agences-de-voyages"
-                >
-                  <FaTruck className="mr-2 text-sm"/>
-                  Agences de Voyages
-                </Link>
-              </li>
               <li className="items-center">
                 <Link
                   className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
@@ -495,7 +447,54 @@ export default function Sidebar() {
                   Garages 
                 </Link>
                 </li>
-                
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/complex-sportif"
+                >
+                  <FaRunning className="mr-2 text-sm"/>
+                  Complexes Sportifs
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/sapeurpompier"
+                >
+                  <FaTruck className="mr-2 text-sm"/>
+                  Sapeur pompier
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/laveries"
+                >
+                  <FaCar className="mr-2 text-sm"/>
+                  Laveries
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/stations-services"
+                >
+                  <FaChargingStation className="mr-2 text-sm"/>
+                  Stations Services
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className="flex flex-row py-3 pl-2 text-xs font-bold uppercase rounded text-primary-dark hover:text-white hover:bg-primary-dark"
+                  to="/admin/tables/agences-de-voyages"
+                >
+                  <FaTruck className="mr-2 text-sm"/>
+                  Agences de Voyages
+                </Link>
+              </li>
             </ul>
 
           </div>
