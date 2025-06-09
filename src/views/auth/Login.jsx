@@ -38,7 +38,7 @@ export default function Login() {
         const token = response.data.access;
         const userId = response.data.user_id;
 
-        const responseForUserRole = await axios.get(`/auth/users/${userId}`, { headers: { "Authorization": `Bearer ${token}`}});
+        const responseForUserRole = await axios.get(`/auth/users/me`, { headers: { "Authorization": `Bearer ${token}`}});
 
         const authUser = {
           "id": userId,
