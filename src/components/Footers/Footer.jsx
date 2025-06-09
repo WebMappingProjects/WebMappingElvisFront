@@ -8,7 +8,7 @@ export default function Footer() {
           className="absolute top-0 left-0 right-0 bottom-auto w-full h-20 -mt-20 overflow-hidden pointer-events-none"
           style={{ transform: "translateZ(0)" }}
         >
-          <svg
+          {/* <svg
             className="absolute bottom-0 overflow-hidden"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="none"
@@ -21,7 +21,7 @@ export default function Footer() {
               className="fill-current text-blueGray-200"
               points="2560 0 2560 100 0 100"
             ></polygon>
-          </svg>
+          </svg> */}
         </div>
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap text-center lg:text-left">
