@@ -1,8 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
-import UserDropdown from "../Dropdowns/UserDropdown";
 
-export default function AdminNavbar() {
+export default function MapNavbar() {
   const { dataSearch, setDataSearch } = useAppMainContext();
 
   return (
@@ -38,7 +37,7 @@ export default function AdminNavbar() {
           </ul> */}
         </div>
       </nav>
-      {/* End AdminNavbar */}
+      {/* End MapNavbar */}
     </>
   );
 }

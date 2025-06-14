@@ -4,6 +4,7 @@ import FooterAdmin from "../../components/Footers/FooterAdmin";
 import HeaderStats from "../../components/Headers/HeaderStats";
 import LeafletMap from "../../components/Maps/LeafletMap";
 import AdminNavbar from "../../components/Navbars/AdminNavbar";
+import MapNavbar from "../../components/Navbars/MapNavbar";
 import MapSidebar from "../../components/Sidebar/MapSidebar";
 import { useAppMainContext } from "../../context/AppProvider";
 
@@ -14,7 +15,7 @@ export default function Maps() {
     <>
       <MapSidebar />
       <div className="relative bg-neutral-100 md:ml-64">
-        <AdminNavbar />
+        <MapNavbar />
         {/* Header */}
         <HeaderStats />
         <div className="w-full px-0 mx-auto -m-24 md:px-10">

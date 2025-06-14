@@ -200,7 +200,7 @@ export default function Index() {
               </div>
               <h5 className="mb-2 text-xl font-bold text-center text-primary-dark">Statistiques</h5>
               <p className="mb-4 text-base text-center text-primary-dark">Visualisez des statistiques globales et détaillées sur les données et l'utilisation de la plateforme.</p>
-              <Link to="/landing" className="px-6 py-2 mt-auto text-sm font-bold text-white uppercase transition-colors rounded bg-primary-default hover:bg-primary-dark">Accéder</Link>
+              <Link to="/stats" className="px-6 py-2 mt-auto text-sm font-bold text-white uppercase transition-colors rounded bg-primary-default hover:bg-primary-dark">Accéder</Link>
             </div>
           </div>
         </div>
