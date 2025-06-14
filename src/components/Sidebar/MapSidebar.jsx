@@ -4,8 +4,38 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState, useEffect } from "react";
-import { FaBars, FaBreadSlice, FaBuilding, FaCar, FaChargingStation, FaCreditCard, FaCross, FaHamburger, FaHotel, FaMoneyBill, FaMosque, FaPersonBooth, FaPiggyBank, FaPlus, FaRunning, FaSchool, FaServicestack, FaTimes, FaTruck, FaUniversity, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured } from "react-icons/fa";
+import { FaBars, FaTimes, FaUser, FaCheck } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
+import pharmacieIcon from "../../assets/markers/doctors_bag_32px.png";
+import restaurantIcon from "../../assets/markers/restaurant_32px.png";
+import enseignDeBaseIcon from "../../assets/markers/students_32px.png";
+import ecolesMatPrimIcon from "../../assets/markers/children_32px.png";
+import ensSecIcon from "../../assets/markers/student_male_32px.png";
+import ensSupIcon from "../../assets/markers/graduation_cap_32px.png";
+import eglCathIcon from "../../assets/markers/cross_32px.png";
+import mosqueeIcon from "../../assets/markers/mosque_32px.png";
+import nationsUniesIcon from "../../assets/markers/united_nations_32px.png";
+import banquesIcon from "../../assets/markers/money_bag_32px.png";
+import citesMunicipalesIcon from "../../assets/markers/business_building_32px.png";
+import centreSpecialIcon from "../../assets/markers/building_32px.png";
+import mairieIcon from "../../assets/markers/parliament_32px.png";
+import prefAndSPrefIcon from "../../assets/markers/captain_skin_type_3_32px.png";
+import ambassadeIcon from "../../assets/markers/embassy_32px.png";
+import gendarmerieIcon from "../../assets/markers/soldier_man_32px.png";
+import commissariatIcon from "../../assets/markers/air_force_commander_male_32px.png";
+import boulangerieIcon from "../../assets/markers/bakery_32px.png";
+import centreCulturelIcon from "../../assets/markers/folk_32px.png";
+import hotelsIcon from "../../assets/markers/hotel_building_32px.png";
+import monumentIcon from "../../assets/markers/statue_32px.png";
+import lieuxRemIcon from "../../assets/markers/place_marker_32px.png";
+import aubergesIcon from "../../assets/markers/bedroom_32px.png";
+import bouchesIncendiesIcon from "../../assets/markers/fire_hydrant_32px.png";
+import garageIcon from "../../assets/markers/garage_32px.png";
+import sportIcon from "../../assets/markers/gym_32px.png";
+import sapeurPompierIcon from "../../assets/markers/firefighter_32px.png";
+import laverieIcon from "../../assets/markers/automatic_car_wash_32px.png";
+import stationServiceIcon from "../../assets/markers/gas_station_32px.png";
+import agenceDeVoyageIcon from "../../assets/markers/trolleybus_32px.png";
 
 export default function MapSidebar() {
     const { selectedLayers, setSelectedLayers } = useAppMainContext();
@@ -14,43 +44,43 @@ export default function MapSidebar() {
     // Définition de toutes les couches disponibles (nom, label, icône, attribution)
     const allLayers = [
       // Education
-      { name: "enseignement_de_base_font_point", label: "Enseignement de base", icon: <FaSchool className="mr-2 text-sm"/>, attrib: "Enseignement de base" },
-      { name: "ecoles_mat_primaire_point", label: "Ecoles maternelles et primaires", icon: <FaSchool className="mr-2 text-sm"/>, attrib: "Ecoles Maternelles et Primaires" },
-      { name: "enseignements_secondaires_final_point", label: "Enseignement Secondaire", icon: <FaSchool className="mr-2 text-sm"/>, attrib: "Enseignement Secondaire" },
-      { name: "enseignement_superieur_custom_point", label: "Enseignement superieur", icon: <FaUniversity className="mr-2 text-sm"/>, attrib: "Enseignement Superieur" },
+      { url: "/gis/enseignement-de-base-font", name: "enseignement_de_base_font_point", label: "Enseignement de base", icon: <img src={enseignDeBaseIcon} alt="Enseignement de base" className="mr-2 w-5 h-5 inline" />, attrib: "Enseignement de base" },
+      { url: "/gis/ecoles-mat-primaire", name: "ecoles_mat_primaire_point", label: "Ecoles maternelles et primaires", icon: <img src={ecolesMatPrimIcon} alt="Ecoles maternelles et primaires" className="mr-2 w-5 h-5 inline" />, attrib: "Ecoles Maternelles et Primaires" },
+      { url: "/gis/enseignements-secondaires-final", name: "enseignements_secondaires_final_point", label: "Enseignement Secondaire", icon: <img src={ensSecIcon} alt="Enseignement Secondaire" className="mr-2 w-5 h-5 inline" />, attrib: "Enseignement Secondaire" },
+      { url: "/gis/enseignement-superieur-custom", name: "enseignement_superieur_custom_point", label: "Enseignement superieur", icon: <img src={ensSupIcon} alt="Enseignement superieur" className="mr-2 w-5 h-5 inline" />, attrib: "Enseignement Superieur" },
       // Sante
-      { name: "pharmacies_point", label: "Pharmacies", icon: <FaPlus className="mr-2 text-sm"/>, attrib: "Pharmacies" },
+      { url: "/gis/pharmacies", name: "pharmacies_point", label: "Pharmacies", icon: <img src={pharmacieIcon} alt="Pharmacies" className="mr-2 w-5 h-5 inline" />, attrib: "Pharmacies" },
       // Religion
-      { name: "eglises_catholiques_font_point", label: "Eglises Catholiques", icon: <FaCross className="mr-2 text-sm"/>, attrib: "Eglises catholiques" },
-      { name: "eglises_presbyteriennes_font_point", label: "Eglises Presbyteriennes", icon: <FaCross className="mr-2 text-sm"/>, attrib: "Eglises presbyteriennes" },
-      { name: "eglises_protestantes_point", label: "Eglises Protestantes", icon: <FaCross className="mr-2 text-sm"/>, attrib: "Eglises protestantes" },
-      { name: "mosquees_font_point", label: "Mosquées", icon: <FaMosque className="mr-2 text-sm"/>, attrib: "Mosquee" },
+      { url: "/gis/eglises-catholiques-font", name: "eglises_catholiques_font_point", label: "Eglises Catholiques", icon: <img src={eglCathIcon} alt="Eglises Catholiques" className="mr-2 w-5 h-5 inline" />, attrib: "Eglises catholiques" },
+      { url: "/gis/eglises-presbyteriennes-font", name: "eglises_presbyteriennes_font_point", label: "Eglises Presbyteriennes", icon: <img src={eglCathIcon} alt="Eglises Presbyteriennes" className="mr-2 w-5 h-5 inline" />, attrib: "Eglises presbyteriennes" },
+      { url: "/gis/eglises-protestantes", name: "eglises_protestantes_point", label: "Eglises Protestantes", icon: <img src={eglCathIcon} alt="Eglises Protestantes" className="mr-2 w-5 h-5 inline" />, attrib: "Eglises protestantes" },
+      { url: "/gis/mosquees-font", name: "mosquees_font_point", label: "Mosquées", icon: <img src={mosqueeIcon} alt="Mosquées" className="mr-2 w-5 h-5 inline" />, attrib: "Mosquee" },
       // Services Publiques
-      { name: "nations_unies_point", label: "Nations Unies", icon: <FaServicestack className="mr-2 text-sm"/>, attrib: "Nations unies" },
-      { name: "banques_et_microfinances_custom_point", label: "Banques et microfinances", icon: <FaMoneyBill className="mr-2 text-sm"/>, attrib: "Banques et Microfinances" },
-      { name: "cites_municipales_cuy_point", label: "Cites Municipales", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Cites Municipales" },
-      { name: "centre_special_detat_civil_font_point", label: "Centres special detat civil", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Centre detat civil" },
-      { name: "mairies_yaounde_custom_point", label: "Mairies Yaounde", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Mairies yaounde" },
-      { name: "prefectures_sous-prefectures_custom_point", label: "Prefectures/sous-prefectures", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Prefectures/Sous-prefectures" },
-      { name: "ambassades_point", label: "Ambassades", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Ambassades" },
+      { url: "/gis/nations-unies", name: "nations_unies_point", label: "Nations Unies", icon: <img src={nationsUniesIcon} alt="Nations Unies" className="mr-2 w-5 h-5 inline" />, attrib: "Nations unies" },
+      { url: "/gis/banques-et-microfinances-custom", name: "banques_et_microfinances_custom_point", label: "Banques et microfinances", icon: <img src={banquesIcon} alt="Banques et microfinances" className="mr-2 w-5 h-5 inline" />, attrib: "Banques et Microfinances" },
+      { url: "/gis/cites-municipales-cuy", name: "cites_municipales_cuy_point", label: "Cites Municipales", icon: <img src={citesMunicipalesIcon} alt="Cites Municipales" className="mr-2 w-5 h-5 inline" />, attrib: "Cites Municipales" },
+      { url: "/gis/centre-special-detat-civil-font", name: "centre_special_detat_civil_font_point", label: "Centres special detat civil", icon: <img src={centreSpecialIcon} alt="Centres special detat civil" className="mr-2 w-5 h-5 inline" />, attrib: "Centre detat civil" },
+      { url: "/gis/mairies-yaounde-custom", name: "mairies_yaounde_custom_point", label: "Mairies Yaounde", icon: <img src={mairieIcon} alt="Mairies Yaounde" className="mr-2 w-5 h-5 inline" />, attrib: "Mairies yaounde" },
+      { url: "/gis/prefectures-sous-prefectures-custom", name: "prefectures_sous-prefectures_custom_point", label: "Prefectures/sous-prefectures", icon: <img src={prefAndSPrefIcon} alt="Prefectures/sous-prefectures" className="mr-2 w-5 h-5 inline" />, attrib: "Prefectures/Sous-prefectures" },
+      { url: "/gis/ambassades", name: "ambassades_point", label: "Ambassades", icon: <img src={ambassadeIcon} alt="Ambassades" className="mr-2 w-5 h-5 inline" />, attrib: "Ambassades" },
       // Securite
-      { name: "gendarmeries_point", label: "Gendarmeries", icon: <FaUser className="mr-2 text-sm"/>, attrib: "Gendarmeries" },
-      { name: "commissariats_yde_font_point", label: "Commissariats", icon: <FaUser className="mr-2 text-sm"/>, attrib: "Commissariats" },
+      { url: "/gis/gendarmeries", name: "gendarmeries_point", label: "Gendarmeries", icon: <img src={gendarmerieIcon} alt="Gendarmeries" className="mr-2 w-5 h-5 inline" />, attrib: "Gendarmeries" },
+      { url: "/gis/commissariats-yde-font", name: "commissariats_yde_font_point", label: "Commissariats", icon: <img src={commissariatIcon} alt="Commissariats" className="mr-2 w-5 h-5 inline" />, attrib: "Commissariats" },
       // Autres
-      { name: "restaurants_yaounde_font_point", label: "Restaurants", icon: <FaHamburger className="mr-2 text-sm"/>, attrib: "Restaurants" },
-      { name: "boulangeries_custom_point", label: "Boulangeries", icon: <FaBreadSlice className="mr-2 text-sm"/>, attrib: "Boulangeries" },
-      { name: "centres_culturels_custom_point", label: "Centres Culturels", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Centres Culturels" },
-      { name: "hotels_font_point", label: "Hotels", icon: <FaHotel className="mr-2 text-sm"/>, attrib: "Hotels" },
-      { name: "monuments_custom_point", label: "Monuments", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Monuments" },
-      { name: "lieux_remarquables_point", label: "Lieux remarquables", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Lieux remarquables" },
-      { name: "auberges_custom_point", label: "Auberges", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Auberges custom" },
-      { name: "bouches_incendies_yde_custom_point", label: "Bouches incendies", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Bouches incendies" },
-      { name: "garages_custom_point", label: "Garages", icon: <FaBuilding className="mr-2 text-sm"/>, attrib: "Garages" },
-      { name: "complexes_sportifs_custom_point", label: "Complexes Sportifs", icon: <FaRunning className="mr-2 text-sm"/>, attrib: "Complexes Sportifs" },
-      { name: "sapeurs_pompier_point", label: "Sapeur pompier", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Sapeurs pompiers" },
-      { name: "laveries_font_point", label: "Laveries", icon: <FaCar className="mr-2 text-sm"/>, attrib: "Laveries" },
-      { name: "stations_sevices_font_point", label: "Stations Services", icon: <FaChargingStation className="mr-2 text-sm"/>, attrib: "Stations Services" },
-      { name: "agences_de_voyages_font_point", label: "Agences de Voyages", icon: <FaTruck className="mr-2 text-sm"/>, attrib: "Agences de voyages" },
+      { url: "/gis/restaurants-yaounde-font", name: "restaurants_yaounde_font_point", label: "Restaurants", icon: <img src={restaurantIcon} alt="Restaurants" className="mr-2 w-5 h-5 inline" />, attrib: "Restaurants" },
+      { url: "/gis/boulangeries-custom", name: "boulangeries_custom_point", label: "Boulangeries", icon: <img src={boulangerieIcon} alt="Boulangeries" className="mr-2 w-5 h-5 inline" />, attrib: "Boulangeries" },
+      { url: "/gis/centres-culturels-custom", name: "centres_culturels_custom_point", label: "Centres Culturels", icon: <img src={centreCulturelIcon} alt="Centres Culturels" className="mr-2 w-5 h-5 inline" />, attrib: "Centres Culturels" },
+      { url: "/gis/hotels-font", name: "hotels_font_point", label: "Hotels", icon: <img src={hotelsIcon} alt="Hotels" className="mr-2 w-5 h-5 inline" />, attrib: "Hotels" },
+      { url: "/gis/monuments", name: "monuments_custom_point", label: "Monuments", icon: <img src={monumentIcon} alt="Monuments" className="mr-2 w-5 h-5 inline" />, attrib: "Monuments" },
+      { url: "/gis/lieux-remarquables", name: "lieux_remarquables_point", label: "Lieux remarquables", icon: <img src={lieuxRemIcon} alt="Lieux remarquables" className="mr-2 w-5 h-5 inline" />, attrib: "Lieux remarquables" },
+      { url: "/gis/auberges-custom", name: "auberges_custom_point", label: "Auberges", icon: <img src={aubergesIcon} alt="Auberges" className="mr-2 w-5 h-5 inline" />, attrib: "Auberges custom" },
+      { url: "/gis/bouches-incendies-yde-custom", name: "bouches_incendies_yde_custom_point", label: "Bouches incendies", icon: <img src={bouchesIncendiesIcon} alt="Bouches incendies" className="mr-2 w-5 h-5 inline" />, attrib: "Bouches incendies" },
+      { url: "/gis/garages-custom", name: "garages_custom_point", label: "Garages", icon: <img src={garageIcon} alt="Garages" className="mr-2 w-5 h-5 inline" />, attrib: "Garages" },
+      { url: "/gis/complexes-sportifs-custom", name: "complexes_sportifs_custom_point", label: "Complexes Sportifs", icon: <img src={sportIcon} alt="Complexes Sportifs" className="mr-2 w-5 h-5 inline" />, attrib: "Complexes Sportifs" },
+      { url: "/gis/sapeurs-pompier", name: "sapeurs_pompier_point", label: "Sapeur pompier", icon: <img src={sapeurPompierIcon} alt="Sapeur pompier" className="mr-2 w-5 h-5 inline" />, attrib: "Sapeurs pompiers" },
+      { url: "/gis/laveries-font", name: "laveries_font_point", label: "Laveries", icon: <img src={laverieIcon} alt="Laveries" className="mr-2 w-5 h-5 inline" />, attrib: "Laveries" },
+      { url: "/gis/stations-sevices-font", name: "stations_sevices_font_point", label: "Stations Services", icon: <img src={stationServiceIcon} alt="Stations Services" className="mr-2 w-5 h-5 inline" />, attrib: "Stations Services" },
+      { url: "/gis/agences-de-voyages-font", name: "agences_de_voyages_font_point", label: "Agences de Voyages", icon: <img src={agenceDeVoyageIcon} alt="Agences de Voyages" className="mr-2 w-5 h-5 inline" />, attrib: "Agences de voyages" },
     ];
 
     // Gestion du changement de case à cocher
@@ -125,20 +155,31 @@ export default function MapSidebar() {
                     <hr className="my-4 md:min-w-full" />
                     <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">{cat.title}</h6>
                     <ul className="flex flex-col list-none md:flex-col md:min-w-full md:mb-4">
-                      {allLayers.filter(cat.filter).map(layer => (
-                        <li className="items-center" key={layer.name}>
-                          <label className="flex flex-row items-center py-3 pl-2 text-xs font-bold uppercase rounded cursor-pointer text-primary-dark hover:text-white hover:bg-primary-dark">
-                            <input
-                              type="checkbox"
-                              className="mr-2"
-                              checked={!!selectedLayers.find(l => l.name === layer.name)}
-                              onChange={() => handleCheckboxChange(layer)}
-                            />
-                            {layer.icon}
-                            {layer.label}
-                          </label>
-                        </li>
-                      ))}
+                      {allLayers.filter(cat.filter).map(layer => {
+                        const isChecked = !!selectedLayers.find(l => l.name === layer.name);
+                        return (
+                          <li className="items-center" key={layer.name}>
+                            <label
+                              className={
+                                `flex flex-row items-center py-3 pl-2 text-xs font-bold uppercase rounded cursor-pointer text-primary-dark hover:text-white hover:bg-primary-dark transition-colors duration-150 ` +
+                                (isChecked ? 'bg-green-100 text-green-700' : '')
+                              }
+                            >
+                              <input
+                                type="checkbox"
+                                className="sr-only"
+                                checked={isChecked}
+                                onChange={() => handleCheckboxChange(layer)}
+                              />
+                              <span className="flex items-center justify-center w-5 h-5 mr-2 border-2 border-green-500 rounded">
+                                {isChecked && <FaCheck className="text-green-600 text-base" />}
+                              </span>
+                              {layer.icon}
+                              {layer.label}
+                            </label>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}

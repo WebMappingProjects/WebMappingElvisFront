@@ -13,6 +13,7 @@ const AppProvider = ({ children }) => {
     const [ authUser, setAuthUser ] = useState(null);
 
     const [ dataSearch, setDataSearch ] = useState("");
+    const [ dataOnMapSearch, setDataOnMapSearch ] = useState("");
 
     const [ reloadDatas, setReloadDatas ] = useState(false);
     const [ currentProjectionSystem, setCurrentProjectionSystem ] = useState(4326);
@@ -25,6 +26,7 @@ const AppProvider = ({ children }) => {
         currentLayerAttribution, setCurrentLayerAttribution,
         authUser, setAuthUser,
         dataSearch, setDataSearch,
+        dataOnMapSearch, setDataOnMapSearch,
         currentEditionPoint, setCurrentEditionPoint,
         reloadDatas, setReloadDatas,
         currentProjectionSystem, setCurrentProjectionSystem,

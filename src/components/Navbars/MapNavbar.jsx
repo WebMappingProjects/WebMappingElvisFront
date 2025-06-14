@@ -2,7 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
 
 export default function MapNavbar() {
-  const { dataSearch, setDataSearch } = useAppMainContext();
+  const { dataOnMapSearch, setDataOnMapSearch } = useAppMainContext();
 
   return (
     <>
@@ -14,7 +14,7 @@ export default function MapNavbar() {
             className="hidden text-sm font-semibold text-white uppercase md:inline-block"
             href="/"
           >
-            Données du SIG
+            Portail Geospatial
           </a>
           {/* Form */}
           <form className="flex-row flex-wrap items-center w-full mr-3 md:w-2/3 lg:w-1/4 md:flex lg:ml-auto">
@@ -26,8 +26,8 @@ export default function MapNavbar() {
                 type="text"
                 placeholder="Rechercher ici..."
                 className="relative w-full px-3 py-3 pl-10 text-sm bg-white border-0 rounded shadow outline-none placeholder:text-primary-light text-primary-default focus:outline-none focus:ring-0"
-                value={dataSearch}
-                onChange={(e) => setDataSearch(e.target.value)}
+                value={dataOnMapSearch}
+                onChange={(e) => setDataOnMapSearch(e.target.value)}
               />
             </div>
           </form>
