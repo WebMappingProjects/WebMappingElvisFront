@@ -31,17 +31,200 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [16, 32],
       popupAnchor: [0, -32],
     }),
-    // Ajoute d'autres couches/icônes ici
+    enseignement_de_base_font_point: L.icon({
+      iconUrl: enseignDeBaseIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    ecoles_mat_primaire_point: L.icon({
+      iconUrl: ecolesMatPrimIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    enseignements_secondaires_final_point: L.icon({
+      iconUrl: ensSecIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    enseignement_superieur_custom_point: L.icon({
+      iconUrl: ensSupIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    eglises_catholiques_font_point: L.icon({
+      iconUrl: eglCathIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    eglises_presbyteriennes_font_point: L.icon({
+      iconUrl: eglCathIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    eglises_protestantes_point: L.icon({
+      iconUrl: eglCathIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    mosquees_font_point: L.icon({
+      iconUrl: mosqueeIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    nations_unies_point: L.icon({
+      iconUrl: nationsUniesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    banques_et_microfinances_custom_point: L.icon({
+      iconUrl: banquesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    cites_municipales_cuy_point: L.icon({
+      iconUrl: citesMunicipalesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    centre_special_detat_civil_font_point: L.icon({
+      iconUrl: centreSpecialIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    mairies_yaounde_custom_point: L.icon({
+      iconUrl: mairieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    "prefectures_sous-prefectures_custom_point": L.icon({
+      iconUrl: prefAndSPrefIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    ambassades_point: L.icon({
+      iconUrl: ambassadeIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    gendarmeries_point: L.icon({
+      iconUrl: gendarmerieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    commissariats_yde_font_point: L.icon({
+      iconUrl: commissariatIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    boulangeries_custom_point: L.icon({
+      iconUrl: boulangerieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    centres_culturels_custom_point: L.icon({
+      iconUrl: centreCulturelIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    hotels_font_point: L.icon({
+      iconUrl: hotelsIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    monuments_custom_point: L.icon({
+      iconUrl: monumentIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    lieux_remarquables_point: L.icon({
+      iconUrl: lieuxRemIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 20],
+      popupAnchor: [0, -32],
+    }),
+    auberges_custom_point: L.icon({
+      iconUrl: aubergesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    bouches_incendies_yde_custom_point: L.icon({
+      iconUrl: bouchesIncendiesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    garages_custom_point: L.icon({
+      iconUrl: garageIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    complexes_sportifs_custom_point: L.icon({
+      iconUrl: sportIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    sapeurs_pompier_point: L.icon({
+      iconUrl: sapeurPompierIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    laveries_font_point: L.icon({
+      iconUrl: laverieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    stations_sevices_font_point: L.icon({
+      iconUrl: stationServiceIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    agences_de_voyages_font_point: L.icon({
+      iconUrl: agenceDeVoyageIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
   };
 
-  // Fonction pour charger les entités WFS (GeoJSON) d'une couche
-  const fetchWFSGeoJSON = async (layerName) => {
-    // const wfsUrl = `${mainGeoserverRoute}/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=${workspaceName}:${layerName}&outputFormat=application/json`;
-    const wfsUrl = `${mainGeoserverRoute}/wfs?service=WFS&version=1.1.0&request=GetFeatureInfo&layers=${workspaceName}:${layerName}&query_layers=${workspaceName}:${layerName}&info_format=application/json`;
-    const response = await fetch(wfsUrl);
-    console.log("RESPONSE WFS", response);
-    if (!response.ok) throw new Error('Erreur WFS');
-    return response.json();
+  const fetchPointsFromDB = async (layerName) => {
+    if (!layerName) throw new Error("Layer name is required");
+    const layer = selectedLayers.find(l => l.name === layerName);
+    if (!layer || !layer.url) throw new Error("Layer URL not found in selectedLayers");
+
+    const token = localStorage.getItem("token");
+    //const response = await axios.get(layer.url, { headers: { Authorization: `Bearer ${token}` }});
+    const finalUrl = dataOnMapSearch != "" ? `${layer.url}?search=${dataOnMapSearch}` : layer.url;
+    const response = await axios.get(`${layer.url}?search=${dataOnMapSearch}`, { headers: { Authorization: `Bearer ${token}` }});
+    //console.log("RESPONSE", response);
+    if (response.status !== 200) throw new Error("Erreur API");
+    return convertGeoJSONTo4326(response.data);
   };
 
   useEffect(() => {
