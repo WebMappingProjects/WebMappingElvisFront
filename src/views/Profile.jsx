@@ -62,49 +62,9 @@ export default function Profile() {
             console.error("ERROR", e);
         }
     }
-    if (editField === "email"){
-      try
-      {
-          const token = localStorage.getItem("token");
-          const userId = localStorage.getItem("userId");
-          const response = await axios.patch(`${API_URL}/${userId}`, {
-              "email": tempEmail
-          }, { headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-          }});
-
-          console.log("RESPONSE", response);
-          localStorage.setItem("email", tempEmail);
-          setEmail(tempEmail);
-          alert("Modification effectuee avec success")
-        } catch (e) {
-          alert("Echec de la modification")
-          console.error("ERROR", e);
-      }
-    }
+    if (editField === "email") setEmail(tempEmail);
     if (editField === "password") {
-      if(password === confirmPassword)
-      {
-        /*try
-        {
-            const token = localStorage.getItem("token");
-            const userId = localStorage.getItem("userId");
-            const response = await axios.patch(`${API_URL}/${userId}`, {
-                "password": password
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
-  
-            console.log("RESPONSE", response);
-            alert("Modification effectuee avec success")
-        } catch (e) {
-            alert("Echec de la modification")
-            console.error("ERROR", e);
-        }*/
-      
-      } else alert("Les mots de passe ne correspondent pas");
+      // Ici, vous pouvez ajouter la logique de validation et d'envoi du mot de passe
     }
     setEditField(null);
   };
