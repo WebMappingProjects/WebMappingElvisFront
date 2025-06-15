@@ -2,6 +2,45 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import PropTypes from "prop-types";
+import axios from "../../api/axios";
+import convertGeoJSONTo4326 from "../../utils/convertGeoJSONTo4326";
+
+import 'leaflet.markercluster/dist/leaflet.markercluster'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+
+import pharmacieIcon from "../../assets/markers/doctors_bag_32px.png";
+import restaurantIcon from "../../assets/markers/restaurant_32px.png";
+import enseignDeBaseIcon from "../../assets/markers/students_32px.png";
+import ecolesMatPrimIcon from "../../assets/markers/children_32px.png";
+import ensSecIcon from "../../assets/markers/student_male_32px.png";
+import ensSupIcon from "../../assets/markers/graduation_cap_32px.png";
+import eglCathIcon from "../../assets/markers/cross_32px.png";
+import mosqueeIcon from "../../assets/markers/mosque_32px.png";
+import nationsUniesIcon from "../../assets/markers/united_nations_32px.png";
+import banquesIcon from "../../assets/markers/money_bag_32px.png";
+import citesMunicipalesIcon from "../../assets/markers/business_building_32px.png";
+import centreSpecialIcon from "../../assets/markers/building_32px.png";
+import mairieIcon from "../../assets/markers/parliament_32px.png";
+import prefAndSPrefIcon from "../../assets/markers/captain_skin_type_3_32px.png";
+import ambassadeIcon from "../../assets/markers/embassy_32px.png";
+import gendarmerieIcon from "../../assets/markers/soldier_man_32px.png";
+import commissariatIcon from "../../assets/markers/air_force_commander_male_32px.png";
+import boulangerieIcon from "../../assets/markers/bakery_32px.png";
+import centreCulturelIcon from "../../assets/markers/folk_32px.png";
+import hotelsIcon from "../../assets/markers/hotel_building_32px.png";
+import monumentIcon from "../../assets/markers/statue_32px.png";
+import lieuxRemIcon from "../../assets/markers/place_marker_32px.png";
+import aubergesIcon from "../../assets/markers/bedroom_32px.png";
+import bouchesIncendiesIcon from "../../assets/markers/fire_hydrant_32px.png";
+import garageIcon from "../../assets/markers/garage_32px.png";
+import sportIcon from "../../assets/markers/gym_32px.png";
+import sapeurPompierIcon from "../../assets/markers/firefighter_32px.png";
+import laverieIcon from "../../assets/markers/automatic_car_wash_32px.png";
+import stationServiceIcon from "../../assets/markers/gas_station_32px.png";
+import agenceDeVoyageIcon from "../../assets/markers/trolleybus_32px.png";
+import { useAppMainContext } from "../../context/AppProvider";
+
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -14,157 +53,218 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const popupRef = useRef(null);
-  const wmsLayersRef = useRef({});
-  const workspaceName = "SIG_WORKSPACE";
-  const mainGeoserverRoute = "/geoserver";
+  const { dataOnMapSearch } = useAppMainContext();
 
-  const getWMSFeatureInfoUrl = (wmsUrl, latlng, map, layerName, options = {}) => {
-    // Vérification des paramètres obligatoires
-    if (!wmsUrl || !latlng || !map || !layerName) {
-      console.error('Paramètres manquants pour getWMSFeatureInfoUrl');
-      return null;
-    }
-  
-    // Conversion du point de géolocalisation en coordonnées de pixel sur la carte
-    const point = map.latLngToContainerPoint(latlng, map.getZoom());
-    const size = map.getSize();
-    
-    // Calcul de la bbox (bounding box) - ESSENTIEL pour GetFeatureInfo
-    const bounds = map.getBounds();
-    const sw = bounds.getSouthWest();
-    const ne = bounds.getNorthEast();
-    // Format de la bbox dépend de la version WMS
-    const bbox = options.version === '1.3.0' && options.crs === 'EPSG:4326' 
-      ? `${sw.lat},${sw.lng},${ne.lat},${ne.lng}` // lat,lng pour WMS 1.3.0 avec EPSG:4326
-      : `${sw.lng},${sw.lat},${ne.lng},${ne.lat}`; // lng,lat pour WMS 1.1.1
-    
-    // Paramètres par défaut qui peuvent être personnalisés via le paramètre options
-    const params = {
-      request: 'GetFeatureInfo',
-      service: 'WMS',
-      // Pour GeoServer 2.28, on utilise CRS au lieu de SRS pour la version 1.3.0
-      [options.version === '1.3.0' ? 'crs' : 'srs']: 'EPSG:4326',
-      version: options.version || '1.1.1', // Version 1.1.1 par défaut (plus stable avec GeoServer)
-      format: 'image/png',
-      transparent: true,
-      layers: layerName,
-      query_layers: layerName,
-      info_format: 'application/json', // S'assurer que ce format est bien supporté
-      width: size.x,
-      height: size.y,
-      // Pour 1.3.0, on utilise i/j au lieu de x/y
-      ...(options.version === '1.3.0' ? {
-        i: Math.round(point.x),
-        j: Math.round(point.y)
-      } : {
-        x: Math.round(point.x),
-        y: Math.round(point.y)
-      }),
-      bbox: bbox, // IMPORTANT: Ajout de la bbox obligatoire pour GetFeatureInfo
-      feature_count: 10,
-      buffer: 5,
-      ...options
-    };
-    
-    // Construire et retourner l'URL
-    try {
-      return wmsUrl + L.Util.getParamString(params, wmsUrl, true);
-    } catch (error) {
-      console.error('Erreur lors de la génération de l\'URL:', error);
-      return null;
-    }
+  // Correspondance couche -> icône personnalisée (URL PNG/SVG ou L.divIcon)
+  const layerIcons = {
+    restaurants_yaounde_font_point: L.icon({
+      iconUrl: restaurantIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    pharmacies_point: L.icon({
+      iconUrl: pharmacieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    enseignement_de_base_font_point: L.icon({
+      iconUrl: enseignDeBaseIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    ecoles_mat_primaire_point: L.icon({
+      iconUrl: ecolesMatPrimIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    enseignements_secondaires_final_point: L.icon({
+      iconUrl: ensSecIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    enseignement_superieur_custom_point: L.icon({
+      iconUrl: ensSupIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    eglises_catholiques_font_point: L.icon({
+      iconUrl: eglCathIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    eglises_presbyteriennes_font_point: L.icon({
+      iconUrl: eglCathIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    eglises_protestantes_point: L.icon({
+      iconUrl: eglCathIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    mosquees_font_point: L.icon({
+      iconUrl: mosqueeIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    nations_unies_point: L.icon({
+      iconUrl: nationsUniesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    banques_et_microfinances_custom_point: L.icon({
+      iconUrl: banquesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    cites_municipales_cuy_point: L.icon({
+      iconUrl: citesMunicipalesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    centre_special_detat_civil_font_point: L.icon({
+      iconUrl: centreSpecialIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    mairies_yaounde_custom_point: L.icon({
+      iconUrl: mairieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    "prefectures_sous-prefectures_custom_point": L.icon({
+      iconUrl: prefAndSPrefIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    ambassades_point: L.icon({
+      iconUrl: ambassadeIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    gendarmeries_point: L.icon({
+      iconUrl: gendarmerieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    commissariats_yde_font_point: L.icon({
+      iconUrl: commissariatIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    boulangeries_custom_point: L.icon({
+      iconUrl: boulangerieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    centres_culturels_custom_point: L.icon({
+      iconUrl: centreCulturelIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    hotels_font_point: L.icon({
+      iconUrl: hotelsIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    monuments_custom_point: L.icon({
+      iconUrl: monumentIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    lieux_remarquables_point: L.icon({
+      iconUrl: lieuxRemIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 20],
+      popupAnchor: [0, -32],
+    }),
+    auberges_custom_point: L.icon({
+      iconUrl: aubergesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    bouches_incendies_yde_custom_point: L.icon({
+      iconUrl: bouchesIncendiesIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    garages_custom_point: L.icon({
+      iconUrl: garageIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    complexes_sportifs_custom_point: L.icon({
+      iconUrl: sportIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    sapeurs_pompier_point: L.icon({
+      iconUrl: sapeurPompierIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    laveries_font_point: L.icon({
+      iconUrl: laverieIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    stations_sevices_font_point: L.icon({
+      iconUrl: stationServiceIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
+    agences_de_voyages_font_point: L.icon({
+      iconUrl: agenceDeVoyageIcon,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -32],
+    }),
   };
-  
-  // Fonction pour gérer la requête GetFeatureInfo avec gestion des formats
-  const fetchWMSFeatureInfo = async (wmsUrl, latlng, map, layerName, options = {}) => {
-    try {
-      // Générer l'URL pour la requête GetFeatureInfo
-      const url = getWMSFeatureInfoUrl(wmsUrl, latlng, map, layerName, options);
-      
-      if (!url) return null;
-      
-      //console.log('URL GetFeatureInfo générée:', url);
-      
-      // Faire la requête HTTP
-      const response = await fetch(url);
-      
-      // Vérifier le statut HTTP
-      if (!response.ok) {
-        console.error(`Erreur HTTP: ${response.status} ${response.statusText}`);
-        return { 
-          error: `Erreur HTTP: ${response.status} ${response.statusText}`,
-          url: url
-        };
-      }
-      
-      // Vérifier le content-type de la réponse
-      const contentType = response.headers.get('content-type');
-      //console.log('Content-Type reçu:', contentType);
-      
-      // Traiter la réponse selon son format
-      if (contentType && contentType.includes('application/json')) {
-        const jsonData = await response.json();
-        //console.log('Données JSON reçues:', jsonData);
-        return jsonData;
-      } else if (contentType && (contentType.includes('application/xml') || contentType.includes('text/xml'))) {
-        // Si XML reçu au lieu de JSON, le convertir en texte
-        const xmlText = await response.text();
-        console.warn('Reçu XML au lieu de JSON:', xmlText.substring(0, 200) + '...');
-        
-        return { 
-          error: "Format XML reçu au lieu de JSON", 
-          rawData: xmlText,
-          url: url 
-        };
-      } else {
-        // Pour tout autre type de contenu (y compris text/plain)
-        const text = await response.text();
-        console.log(`Contenu reçu (${contentType}):`, text.substring(0, 200) + (text.length > 200 ? '...' : ''));
-        
-        // Si c'est du text/plain qui contient des données formatées, on essaie de les traiter
-        if (contentType && contentType.includes('text/plain') && text.includes('Feature')) {
-          // On a probablement des données de feature en format texte
-          console.log('Données de feature détectées en format texte');
-          
-          // Tentative basique de conversion en objet structuré
-          try {
-            const features = text.split('\n\n')
-              .filter(block => block.trim().length > 0)
-              .map(block => {
-                const lines = block.split('\n');
-                const featureId = lines[0].includes('Feature') ? lines[0].trim() : null;
-                const properties = {};
-                
-                lines.slice(1).forEach(line => {
-                  const parts = line.split('=');
-                  if (parts.length === 2) {
-                    const key = parts[0].trim();
-                    const value = parts[1].trim();
-                    properties[key] = value;
-                  }
-                });
-                
-                return { id: featureId, properties };
-              });
-            
-            return { features };
-          } catch (parseError) {
-            console.warn('Erreur lors du parsing du texte:', parseError);
-          }
-        }
-        
-        return { 
-          format: contentType,
-          rawData: text,
-          url: url
-        };
-      }
-    } catch (error) {
-      console.error('Erreur lors de la récupération des informations:', error);
-      return { error: error.message };
-    }
+
+  const fetchPointsFromDB = async (layerName) => {
+    if (!layerName) throw new Error("Layer name is required");
+    const layer = selectedLayers.find(l => l.name === layerName);
+    if (!layer || !layer.url) throw new Error("Layer URL not found in selectedLayers");
+
+    const token = localStorage.getItem("token");
+    //const response = await axios.get(layer.url, { headers: { Authorization: `Bearer ${token}` }});
+    const finalUrl = dataOnMapSearch != "" ? `${layer.url}?search=${dataOnMapSearch}` : layer.url;
+    const response = await axios.get(`${layer.url}?search=${dataOnMapSearch}`, { headers: { Authorization: `Bearer ${token}` }});
+    //console.log("RESPONSE", response);
+    if (response.status !== 200) throw new Error("Erreur API");
+    return convertGeoJSONTo4326(response.data);
   };
-  
+
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -175,99 +275,72 @@ const LeafletMap = ({ selectedLayers = [] }) => {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapInstance.current);
     }
-
     const map = mapInstance.current;
-    // Suppression des anciennes couches WMS non sélectionnées
-    Object.keys(wmsLayersRef.current).forEach(layerName => {
+
+    // Nettoyage des anciennes couches vectorielles
+    if (!map._customGeoJsonLayers) map._customGeoJsonLayers = {};
+    Object.keys(map._customGeoJsonLayers).forEach(layerName => {
       if (!selectedLayers.find(l => l.name === layerName)) {
-        map.removeLayer(wmsLayersRef.current[layerName]);
-        delete wmsLayersRef.current[layerName];
-      }
-    });
-    // Ajout des nouvelles couches sélectionnées
-    selectedLayers.forEach(layer => {
-      if (!wmsLayersRef.current[layer.name]) {
-        const wmsUrl = `${mainGeoserverRoute}/wms`;
-        const fullLayerName = `${workspaceName}:${layer.name}`;
-        const wmsLayer = L.tileLayer.wms(wmsUrl, {
-          layers: fullLayerName,
-          format: 'image/png',
-          transparent: true,
-          version: '1.1.1',
-          attribution: layer.attrib,
-        });
-        wmsLayer.addTo(map);
-        wmsLayersRef.current[layer.name] = wmsLayer;
+        map.removeLayer(map._customGeoJsonLayers[layerName]);
+        delete map._customGeoJsonLayers[layerName];
       }
     });
 
-    // Gestion du survol/clic sur la carte pour toutes les couches sélectionnées
-    let isOverFeature = false;
-    let currentFeature = null;
-    function onMouseMove(e) {
-      (async () => {
-        let found = false;
-        let foundFeature = null;
-        for (const layer of selectedLayers) {
-          const wmsUrl = `${mainGeoserverRoute}/wms`;
-          const fullLayerName = `${workspaceName}:${layer.name}`;
-          const data = await fetchWMSFeatureInfo(wmsUrl, e.latlng, map, fullLayerName);
-          if (data && data.features && data.features.length > 0) {
-            found = true;
-            foundFeature = data;
-            break;
-          }
-        }
-        if (found !== isOverFeature) {
-          isOverFeature = found;
-          currentFeature = foundFeature;
-          const container = map.getContainer();
-          container.style.cursor = found ? 'pointer' : '';
-        }
-      })();
-    }
-    function onMouseOut() {
-      const container = map.getContainer();
-      container.style.cursor = '';
-      isOverFeature = false;
-      currentFeature = null;
-    }
-    function onClick(e) {
-      if (!isOverFeature || !currentFeature) return;
-      const data = currentFeature;
-      if (data.features && data.features.length > 0) {
-        const feature = data.features[0];
-        const properties = feature.properties;
-        let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3 class="font-bold text-lg mb-3 text-center text-primary-dark">Propriétés</h3><table>';
-        for (const [key, value] of Object.entries(properties)) {
-          popupContent += `<tr class="border"><td class="px-3 py-2 border"><strong>${key}</strong></td><td class="px-2 py-2">${value || 'N/A'}</td></tr>`;
-        }
-        popupContent += '</table></div>';
-        if (popupRef.current) {
-          map.closePopup(popupRef.current);
-        }
-        popupRef.current = L.popup()
-          .setLatLng(e.latlng)
-          .setContent(popupContent)
-          .openOn(map);
-      }
-    }
-    map.off('mousemove', onMouseMove);
-    map.off('mouseout', onMouseOut);
-    map.off('click', onClick);
-    map.on('mousemove', onMouseMove);
-    map.on('mouseout', onMouseOut);
-    map.on('click', onClick);
+    // Ajout des nouvelles couches vectorielles avec clustering
+    selectedLayers.forEach(async (layer) => {
+      if (!map._customGeoJsonLayers[layer.name]) {
+        try {
+          const geojson = await fetchPointsFromDB(layer.name);
+          const icon = layerIcons[layer.name] || L.Icon.Default.prototype;
 
+          // Création du cluster group
+          const markers = L.markerClusterGroup({
+            iconCreateFunction: function(cluster) {
+              const count = cluster.getChildCount();
+              return L.divIcon({
+                html: `<div style='position:relative;'><span style='position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:#fffa;padding:1px 5px;border-radius:8px;font-size:13px;font-weight:bold;color:#333;border:1px solid #bbb;'>${count}</span><img src='${icon.options.iconUrl || L.Icon.Default.prototype.options.iconUrl}' style='width:32px;height:32px;display:block;'/></div>`,
+                className: 'custom-cluster-icon',
+                iconSize: [24, 40],
+                iconAnchor: [12, 20],
+                popupAnchor: [0, -32],
+              });
+            }
+          });
+
+          const geoJsonLayer = L.geoJSON(geojson, {
+            pointToLayer: (feature, latlng) => L.marker(latlng, { icon }),
+            onEachFeature: (feature, lyr) => {
+              lyr.on('click', (e) => {
+                const properties = feature.properties;
+                let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3 class="font-bold text-lg mb-3 text-center text-primary-dark">Propriétés</h3><table>';
+                for (const [key, value] of Object.entries(properties)) {
+                  popupContent += `<tr class="border"><td class="px-3 py-2 border"><strong>${key}</strong></td><td class="px-2 py-2">${value || 'N/A'}</td></tr>`;
+                }
+                popupContent += '</table></div>';
+                if (popupRef.current) map.closePopup(popupRef.current);
+                popupRef.current = L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map);
+              });
+            }
+          });
+          markers.addLayer(geoJsonLayer);
+          markers.addTo(map);
+          map._customGeoJsonLayers[layer.name] = markers;
+        } catch (err) {
+          console.error('Erreur chargement des donnees depuis l\'API', layer.name, err);
+        }
+      }
+    });
+
+    // Nettoyage à la désactivation
     return () => {
-      map.off('mousemove', onMouseMove);
-      map.off('mouseout', onMouseOut);
-      map.off('click', onClick);
-      // Nettoyage des couches WMS
-      Object.values(wmsLayersRef.current).forEach(layer => map.removeLayer(layer));
-      wmsLayersRef.current = {};
+      if (map._customGeoJsonLayers) {
+        Object.values(map._customGeoJsonLayers).forEach(l => map.removeLayer(l));
+        map._customGeoJsonLayers = {};
+      }
     };
-  }, [selectedLayers]);
+  }, [selectedLayers, layerIcons, dataOnMapSearch]);
+  // Pour le warning React Hook, layerIcons est une constante statique, on peut l'ignorer avec un commentaire ESLint
+  // eslint
 
   return (
     <div className="relative w-full rounded h-[600px]">
