@@ -257,10 +257,8 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     if (!layer || !layer.url) throw new Error("Layer URL not found in selectedLayers");
 
     const token = localStorage.getItem("token");
-    //const response = await axios.get(layer.url, { headers: { Authorization: `Bearer ${token}` }});
     const finalUrl = dataOnMapSearch != "" ? `${layer.url}?search=${dataOnMapSearch}` : layer.url;
     const response = await axios.get(`${layer.url}?search=${dataOnMapSearch}`, { headers: { Authorization: `Bearer ${token}` }});
-    //console.log("RESPONSE", response);
     if (response.status !== 200) throw new Error("Erreur API");
     return convertGeoJSONTo4326(response.data);
   };
