@@ -20,6 +20,7 @@ const AppProvider = ({ children }) => {
 
     const [ currentEditionPoint, setCurrentEditionPoint ] = useState([]);
     const [ selectedLayers, setSelectedLayers ] = useState([]);
+    const [ statsSelectedLayers, setStatsSelectedLayers ] = useState([]);
 
     const value = {
         currentLayerName, setCurrentLayerName,
@@ -30,7 +31,8 @@ const AppProvider = ({ children }) => {
         currentEditionPoint, setCurrentEditionPoint,
         reloadDatas, setReloadDatas,
         currentProjectionSystem, setCurrentProjectionSystem,
-        selectedLayers, setSelectedLayers
+        selectedLayers, setSelectedLayers,
+        statsSelectedLayers, setStatsSelectedLayers
     };
 
   return <appMainContext.Provider value={value}>{children}</appMainContext.Provider>;
