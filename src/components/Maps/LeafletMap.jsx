@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import PropTypes from "prop-types";
@@ -54,6 +54,10 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   const mapInstance = useRef(null);
   const popupRef = useRef(null);
   const { dataOnMapSearch } = useAppMainContext();
+  const [routeLayer, setRouteLayer] = useState(null);
+  const [userPosition, setUserPosition] = useState(null);
+  const [selectingService, setSelectingService] = useState(false);
+  const [distanceToService, setDistanceToService] = useState(null);
 
   // Correspondance couche -> icône personnalisée (URL PNG/SVG ou L.divIcon)
   const layerIcons = {
@@ -340,8 +344,126 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   // Pour le warning React Hook, layerIcons est une constante statique, on peut l'ignorer avec un commentaire ESLint
   // eslint
 
+  // Fonction pour obtenir la position de l'utilisateur
+  const locateUser = () => {
+    if (!navigator.geolocation) {
+      alert("La géolocalisation n'est pas supportée par ce navigateur.");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserPosition([latitude, longitude]);
+        mapInstance.current.setView([latitude, longitude], 15);
+        L.marker([latitude, longitude], { icon: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png', iconSize: [32, 32], iconAnchor: [16, 32] }) }).addTo(mapInstance.current);
+      },
+      () => alert("Impossible de récupérer la position."),
+      { enableHighAccuracy: true }
+    );
+  };
+
+  // Fonction pour calculer la distance (Haversine)
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3;
+    const φ1 = lat1 * Math.PI/180, φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  // Fonction pour trouver le service le plus proche
+  const findClosestService = () => {
+    if (!userPosition) return null;
+    let minDist = Infinity, closest = null;
+    Object.values(mapInstance.current._customGeoJsonLayers || {}).forEach(cluster => {
+      cluster.getLayers().forEach(marker => {
+        const { lat, lng } = marker.getLatLng();
+        const dist = getDistance(userPosition[0], userPosition[1], lat, lng);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = marker;
+        }
+      });
+    });
+    return closest;
+  };
+
+  // Fonction pour tracer l'itinéraire voiture (OSRM)
+  const drawRoute = async (from, to) => {
+    if (routeLayer) {
+      mapInstance.current.removeLayer(routeLayer);
+      setRouteLayer(null);
+    }
+    // Utilisation de OSRM public API
+    const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!data.routes || !data.routes[0]) throw new Error('Aucun itinéraire trouvé');
+      const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+      const polyline = L.polyline(coords, { color: "blue", weight: 5 }).addTo(mapInstance.current);
+      setRouteLayer(polyline);
+      mapInstance.current.fitBounds(polyline.getBounds());
+    } catch (e) {
+      alert("Erreur lors du calcul de l'itinéraire");
+    }
+  };
+
+  // Bouton 1 : Localiser et tracer vers le plus proche
+  const handleLocateAndRoute = async () => {
+    locateUser();
+    setTimeout(async () => {
+      const closest = findClosestService();
+      if (closest && userPosition) {
+        await drawRoute(userPosition, [closest.getLatLng().lat, closest.getLatLng().lng]);
+        setDistanceToService(getDistance(userPosition[0], userPosition[1], closest.getLatLng().lat, closest.getLatLng().lng));
+      }
+    }, 1500);
+  };
+
+  // Bouton 2 : Annuler et choisir un autre service
+  const handleCancelAndSelect = () => {
+    if (routeLayer) {
+      mapInstance.current.removeLayer(routeLayer);
+      setRouteLayer(null);
+    }
+    setSelectingService(true);
+    setDistanceToService(null);
+    alert("Cliquez sur un service de la carte pour calculer l'itinéraire.");
+  };
+
+  // Gestion du clic sur un marker pour sélection manuelle
+  useEffect(() => {
+    if (!selectingService) return;
+    const map = mapInstance.current;
+    const onMarkerClick = async (e) => {
+      if (userPosition) {
+        await drawRoute(userPosition, [e.latlng.lat, e.latlng.lng]);
+        setDistanceToService(getDistance(userPosition[0], userPosition[1], e.latlng.lat, e.latlng.lng));
+        setSelectingService(false);
+      } else {
+        alert("Veuillez d'abord localiser votre position.");
+      }
+    };
+    Object.values(map._customGeoJsonLayers || {}).forEach(cluster => {
+      cluster.getLayers().forEach(marker => marker.on('click', onMarkerClick));
+    });
+    return () => {
+      Object.values(map._customGeoJsonLayers || {}).forEach(cluster => {
+        cluster.getLayers().forEach(marker => marker.off('click', onMarkerClick));
+      });
+    };
+  }, [selectingService, userPosition]);
+
   return (
     <div className="relative w-full rounded h-[600px]">
+      <div className="absolute top-20 left-2 z-[1000] flex flex-col gap-2">
+        <button onClick={handleLocateAndRoute} className="px-3 py-1 text-white bg-blue-600 rounded shadow">Itinéraire vers le plus proche</button>
+        {/* <button onClick={handleCancelAndSelect} className="px-3 py-1 text-white bg-red-600 rounded shadow">Choisir un autre service</button> */}
+        {distanceToService && <div className="p-2 text-black bg-white rounded shadow">Distance : {(distanceToService/1000).toFixed(2)} km</div>}
+      </div>
       <div className="h-full rounded" ref={mapRef} />
     </div>
   );

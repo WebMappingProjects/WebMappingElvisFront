@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "../api/axios";
 import { useAppMainContext } from "../context/AppProvider";
 import PieChart from "../components/PieChart";
+import PolygonChart from "../components/PolygonChart";
 
 // Liste des services dynamiquement récupérée depuis la sidebar
 const allLayers = [
@@ -206,7 +207,7 @@ const StatsDashboard = () => {
       {
         setSelectedService(statsSelectedLayers[0]);
       }
-    } else { setTotalAllServices(0); }
+    } else { setTotalAllServices(0); setDistanceDatas(null); setSelectedService(null); setGroupedData([]); }
   }, [statsSelectedLayers]);
 
   useEffect(() => {
@@ -247,8 +248,8 @@ const StatsDashboard = () => {
       const modelName = transformToUpperCamelCase(selectedService.name);
       axios
         .get(`/gis/distance?model=${modelName}`, { headers : { "Authorization" : `Bearer ${token}` } })
-        .then((res) => { setDistanceDatas(res.data); })
-        .catch((error) => { console.log("DISTANCE DATAS ERROR", error); setDistanceDatas(null)});
+        .then((res) => { console.log("DISTANCE DATAS", res); setDistanceDatas(res.data); })
+        .catch((error) => { setDistanceDatas(null)});
     }
   }, [selectedService]);
 
@@ -262,8 +263,8 @@ const StatsDashboard = () => {
   return (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-bold">Statistiques globales</h2>
-      {/* Diagramme circulaire */}
-      <div className="flex justify-center mb-8">
+      {/* Diagramme circulaire + polygonal */}
+      <div className="flex flex-wrap justify-center gap-8 mb-8">
         <PieChart
           data={pieChartData}
           labels={pieChartLabels}
@@ -273,6 +274,11 @@ const StatsDashboard = () => {
             "#FCD34D", "#6EE7B7", "#818CF8", "#FCA5A5", "#A7F3D0", "#FBCFE8", "#FDE68A", "#C7D2FE",
             "#FECACA", "#F3F4F6", "#D1FAE5", "#F1F5F9", "#F9FAFB", "#E0E7FF", "#F3E8FF", "#FDE68A"
           ]}
+        />
+        <PolygonChart
+          data={pieChartData}
+          labels={pieChartLabels}
+          colors={["rgba(79,70,229,0.2)", "#4F46E5", "#4F46E5"]}
         />
       </div>
       <div className="flex flex-wrap gap-4 mb-8">
@@ -413,9 +419,33 @@ const StatsDashboard = () => {
       </div>
       <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
         <div>
+          <div className="text-lg font-semibold">Distance maximale (en metres)</div>
+          <div className="text-xl font-bold text-right text-primary-dark-op">
+            {distanceDatas === null ? "..." : `${distanceDatas.distance_maximale_metres} m`}
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
+        <div>
           <div className="text-lg font-semibold">Distance mediane (en metres)</div>
           <div className="text-xl font-bold text-right text-primary-dark-op">
             {distanceDatas === null ? "..." : `${distanceDatas.distance_mediane_metres} m`}
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
+        <div>
+          <div className="text-lg font-semibold">Nombre de points analyses</div>
+          <div className="text-xl font-bold text-right text-primary-dark-op">
+            {distanceDatas === null ? "..." : `${distanceDatas.nombre_points_analysés}`}
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
+        <div>
+          <div className="text-lg font-semibold">Nombre de paires</div>
+          <div className="text-xl font-bold text-right text-primary-dark-op">
+            {distanceDatas === null ? "..." : `${distanceDatas.nombre_paires}`}
           </div>
         </div>
       </div>
