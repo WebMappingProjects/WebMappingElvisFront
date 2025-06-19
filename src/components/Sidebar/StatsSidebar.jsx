@@ -39,7 +39,7 @@ export default function StatsSidebar() {
       // Autres
       { name: "restaurants_yaounde_font_point", label: "Restaurants", icon: <FaHamburger className="mr-2 text-sm"/>, dtName: "Restaurants" },
       { name: "boulangeries_custom_point", label: "Boulangeries", icon: <FaBreadSlice className="mr-2 text-sm"/>, dtName: "Boulangeries" },
-      { name: "centres_culturels_custom_point", label: "Centres Culturels", icon: <FaBuilding className="mr-2 text-sm"/>, dtName: "Centres Culturels" },
+      { name: "centres_culturels_custom_point", label: "Centres Culturels", icon: <FaBuilding className="mr-2 text-sm"/>, dtName: "Centres culturels" },
       { name: "hotels_font_point", label: "Hotels", icon: <FaHotel className="mr-2 text-sm"/>, dtName: "Hôtels" },
       { name: "monuments_custom_point", label: "Monuments", icon: <FaBuilding className="mr-2 text-sm"/>, dtName: "" },
       { name: "lieux_remarquables_point", label: "Lieux remarquables", icon: <FaBuilding className="mr-2 text-sm"/>, dtName: "Lieux remarquables" },
