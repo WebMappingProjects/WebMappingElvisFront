@@ -82,6 +82,7 @@ import IsAdminProtectedRoute from "./views/IsAdminProtectedRoute";
 import StatsPage from "./views/StatsPage";
 import IsTechnicianProtectedRoute from "./views/IsTechnicianProtectedRoute";
 import IsForbidden from "./views/IsForbidden";
+import IsDeciderProtectedRoute from "./views/IsDeciderProtectedRoute";
 
 function App() {
 
@@ -212,7 +213,9 @@ function App() {
       {/* add routes without layouts */}
       <Route path="/stats" element={
         <ProtectedRoute>
-          <StatsPage />
+          <IsDeciderProtectedRoute>
+            <StatsPage />
+          </IsDeciderProtectedRoute>
         </ProtectedRoute>
       } />
 
