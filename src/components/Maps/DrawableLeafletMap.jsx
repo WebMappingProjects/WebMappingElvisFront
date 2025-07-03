@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
-import "leaflet-draw"; // Assurez-vous que leaflet-draw est installé
+import "leaflet-draw";
 import PropTypes from "prop-types";
 import { useAppMainContext } from "../../context/AppProvider";
 
@@ -14,7 +14,6 @@ L.Icon.Default.mergeOptions({
 });
 
 const DrawableLeafletMap = () => {
-
   const { currentEditionPoint, setCurrentEditionPoint } = useAppMainContext();
 
   const mapRef = useRef(null);
@@ -29,6 +28,224 @@ const DrawableLeafletMap = () => {
       ? { lat: currentEditionPoint[0], lng: currentEditionPoint[1] }
       : { lat: 3.868177, lng: 11.519596 }
   );
+
+  // Fonction pour créer un marqueur de sommet
+  const createVertexMarker = (latlng, parentLayer, index) => {
+    const marker = L.circleMarker(latlng, { 
+      radius: 6, 
+      color: '#3B82F6', 
+      fillColor: '#3B82F6',
+      fillOpacity: 0.8,
+      weight: 2,
+      draggable: false // On gère le drag manuellement
+    }).addTo(mapInstance.current);
+    
+    marker.originalLatLng = latlng;
+    marker.parentLayer = parentLayer;
+    marker.vertexIndex = index;
+    vertexMarkersRef.current.push(marker);
+    
+    // Gestion du clic sur le marqueur
+    marker.on('click', (e) => {
+      if (e.originalEvent) {
+        e.originalEvent.stopPropagation();
+      }
+      selectMarker(marker);
+    });
+
+    // Gestion du drag and drop
+    let isDragging = false;
+    let dragStartPos = null;
+
+    marker.on('mousedown', (e) => {
+      if (e.originalEvent) {
+        e.originalEvent.preventDefault();
+        e.originalEvent.stopPropagation();
+      }
+      
+      isDragging = false;
+      dragStartPos = { x: e.originalEvent.clientX, y: e.originalEvent.clientY };
+      
+      // Désactiver le déplacement de la carte
+      mapInstance.current.dragging.disable();
+      mapInstance.current.touchZoom.disable();
+      mapInstance.current.doubleClickZoom.disable();
+      mapInstance.current.scrollWheelZoom.disable();
+      mapInstance.current.boxZoom.disable();
+      mapInstance.current.keyboard.disable();
+      
+      const onMouseMove = (moveEvent) => {
+        moveEvent.preventDefault();
+        moveEvent.stopPropagation();
+        
+        if (!isDragging) {
+          const dx = moveEvent.clientX - dragStartPos.x;
+          const dy = moveEvent.clientY - dragStartPos.y;
+          if (Math.sqrt(dx * dx + dy * dy) > 5) {
+            isDragging = true;
+            selectMarker(marker);
+          }
+        }
+        
+        if (isDragging) {
+          const containerPoint = mapInstance.current.mouseEventToContainerPoint(moveEvent);
+          const newLatLng = mapInstance.current.containerPointToLatLng(containerPoint);
+          
+          // Mettre à jour la position du marqueur
+          marker.setLatLng(newLatLng);
+          
+          // Mettre à jour la géométrie parent
+          updateParentGeometry(marker, newLatLng);
+          
+          // Mettre à jour les coordonnées dans l'interface
+          setMarkerPos({ lat: newLatLng.lat, lng: newLatLng.lng });
+          setCurrentEditionPoint([newLatLng.lat, newLatLng.lng]);
+        }
+      };
+
+      const onMouseUp = (upEvent) => {
+        upEvent.preventDefault();
+        upEvent.stopPropagation();
+        
+        // Réactiver le déplacement de la carte
+        mapInstance.current.dragging.enable();
+        mapInstance.current.touchZoom.enable();
+        mapInstance.current.doubleClickZoom.enable();
+        mapInstance.current.scrollWheelZoom.enable();
+        mapInstance.current.boxZoom.enable();
+        mapInstance.current.keyboard.enable();
+        
+        if (isDragging) {
+          isDragging = false;
+          marker.originalLatLng = marker.getLatLng();
+        }
+        
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+
+    return marker;
+  };
+
+  // Fonction pour sélectionner un marqueur
+  const selectMarker = (marker) => {
+    // Réinitialiser le style de l'ancien marqueur sélectionné
+    if (selectedMarkerRef.current) {
+      selectedMarkerRef.current.setStyle({
+        radius: 6,
+        color: '#3B82F6',
+        fillColor: '#3B82F6',
+        fillOpacity: 0.8,
+        weight: 2
+      });
+    }
+    
+    // Mettre à jour le style du nouveau marqueur sélectionné
+    marker.setStyle({
+      radius: 8,
+      color: '#EF4444',
+      fillColor: '#FCA5A5',
+      fillOpacity: 1,
+      weight: 3
+    });
+    
+    selectedMarkerRef.current = marker;
+    const latlng = marker.getLatLng();
+    setMarkerPos({ lat: latlng.lat, lng: latlng.lng });
+    setCurrentEditionPoint([latlng.lat, latlng.lng]);
+  };
+
+  // Fonction pour mettre à jour la géométrie parent
+  const updateParentGeometry = (marker, newLatLng) => {
+    const parentLayer = marker.parentLayer;
+    if (parentLayer) {
+      const latlngs = parentLayer.getLatLngs();
+      const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+      
+      points[marker.vertexIndex] = newLatLng;
+      parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
+    }
+  };
+
+  // Fonction pour recréer tous les marqueurs de sommet
+  const recreateVertexMarkers = (parentLayer) => {
+    // Supprimer les anciens marqueurs de cette couche
+    vertexMarkersRef.current = vertexMarkersRef.current.filter(marker => {
+      if (marker.parentLayer === parentLayer) {
+        marker.remove();
+        return false;
+      }
+      return true;
+    });
+
+    // Créer de nouveaux marqueurs
+    const latlngs = parentLayer.getLatLngs();
+    const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+    points.forEach((latlng, index) => {
+      createVertexMarker(latlng, parentLayer, index);
+    });
+  };
+
+  // Fonction pour ajouter un point sur un segment
+  const addPointOnSegment = (parentLayer, insertIndex, newPoint) => {
+    const latlngs = parentLayer.getLatLngs();
+    const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+    
+    // Insérer le nouveau point
+    points.splice(insertIndex, 0, newPoint);
+    
+    // Mettre à jour la géométrie
+    parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
+    
+    // Recréer tous les marqueurs avec les nouveaux indices
+    recreateVertexMarkers(parentLayer);
+    
+    // Sélectionner automatiquement le nouveau point
+    setTimeout(() => {
+      const newMarker = vertexMarkersRef.current.find(marker => 
+        marker.parentLayer === parentLayer && marker.vertexIndex === insertIndex
+      );
+      if (newMarker) {
+        selectMarker(newMarker);
+      }
+    }, 100);
+  };
+
+  // Fonction pour supprimer le point actif
+  const handleDeleteActivePoint = () => {
+    if (selectedMarkerRef.current) {
+      const marker = selectedMarkerRef.current;
+      const parentLayer = marker.parentLayer;
+      
+      if (parentLayer) {
+        const latlngs = parentLayer.getLatLngs();
+        const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+        
+        // Vérifier qu'il reste au moins 2 points pour une ligne ou 3 pour un polygone
+        const minPoints = parentLayer instanceof L.Polygon ? 3 : 2;
+        if (points.length <= minPoints) {
+          alert(`Impossible de supprimer ce point. Il faut au moins ${minPoints} points.`);
+          return;
+        }
+        
+        // Supprimer le point
+        points.splice(marker.vertexIndex, 1);
+        parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
+        
+        // Recréer tous les marqueurs
+        recreateVertexMarkers(parentLayer);
+        
+        // Désélectionner le marqueur
+        selectedMarkerRef.current = null;
+        setMarkerPos({ lat: 3.868177, lng: 11.519596 });
+        setCurrentEditionPoint(null);
+      }
+    }
+  };
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -51,49 +268,102 @@ const DrawableLeafletMap = () => {
         const layer = e.layer;
         layer.addTo(mapInstance.current);
 
-        // Si c'est une ligne ou un polygone, on ajoute un gestionnaire de clic sur chaque point
+        // Si c'est une ligne ou un polygone, on ajoute les marqueurs de sommet
         if (layer instanceof L.Polyline || layer instanceof L.Polygon) {
           const latlngs = layer.getLatLngs();
           const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+          
           points.forEach((latlng, index) => {
-            const marker = L.circleMarker(latlng, { 
-              radius: 6, 
-              color: '#3B82F6', 
-              fillColor: '#3B82F6',
-              fillOpacity: 0.8,
-              weight: 2
-            }).addTo(mapInstance.current);
+            createVertexMarker(latlng, layer, index);
+          });
+
+          // Ajouter un gestionnaire de clic sur la ligne/polygone pour ajouter des points
+          layer.on('click', function(e) {
+            // Vérifier si le clic provient d'un marqueur de sommet
+            const clickedOnVertex = vertexMarkersRef.current.some(marker => {
+              const markerLatLng = marker.getLatLng();
+              const clickLatLng = e.latlng;
+              const distance = Math.sqrt(
+                Math.pow(markerLatLng.lat - clickLatLng.lat, 2) + 
+                Math.pow(markerLatLng.lng - clickLatLng.lng, 2)
+              );
+              return distance < 0.001; // Seuil de tolérance
+            });
             
-            // Stocker la référence au marker avec ses coordonnées originales
-            marker.originalLatLng = latlng;
-            marker.parentLayer = layer;
-            vertexMarkersRef.current.push(marker);
+            // Si le clic est sur un marqueur de sommet, ne pas ajouter de point
+            if (clickedOnVertex) {
+              return;
+            }
             
-            marker.on('click', () => {
-              // Réinitialiser le style de l'ancien marqueur sélectionné
-              if (selectedMarkerRef.current) {
-                selectedMarkerRef.current.setStyle({
-                  radius: 6,
-                  color: '#3B82F6',
-                  fillColor: '#3B82F6',
-                  fillOpacity: 0.8,
-                  weight: 2
-                });
+            if (e.originalEvent) {
+              e.originalEvent.stopPropagation();
+            }
+            
+            const clickedPoint = e.latlng;
+            const currentPoints = layer.getLatLngs();
+            const points = Array.isArray(currentPoints[0]) ? currentPoints[0] : currentPoints;
+            
+            // Trouver le segment le plus proche du clic
+            let minDistance = Infinity;
+            let insertIndex = 1;
+            let closestPointOnSegment = null;
+            
+            for (let i = 0; i < points.length; i++) {
+              const nextIndex = (i + 1) % points.length;
+              
+              // Pour les lignes, ne pas considérer le segment de fermeture
+              if (layer instanceof L.Polyline && nextIndex === 0) continue;
+              
+              const segmentStart = points[i];
+              const segmentEnd = points[nextIndex];
+              
+              // Calculer le point le plus proche sur le segment
+              const segmentVector = {
+                lat: segmentEnd.lat - segmentStart.lat,
+                lng: segmentEnd.lng - segmentStart.lng
+              };
+              
+              const clickVector = {
+                lat: clickedPoint.lat - segmentStart.lat,
+                lng: clickedPoint.lng - segmentStart.lng
+              };
+              
+              const segmentLengthSquared = segmentVector.lat * segmentVector.lat + segmentVector.lng * segmentVector.lng;
+              
+              if (segmentLengthSquared === 0) {
+                // Le segment est un point
+                const distance = Math.sqrt(clickVector.lat * clickVector.lat + clickVector.lng * clickVector.lng);
+                if (distance < minDistance) {
+                  minDistance = distance;
+                  insertIndex = nextIndex;
+                  closestPointOnSegment = segmentStart;
+                }
+                continue;
               }
               
-              // Mettre à jour le style du nouveau marqueur sélectionné
-              marker.setStyle({
-                radius: 8,
-                color: '#EF4444',
-                fillColor: '#FCA5A5',
-                fillOpacity: 1,
-                weight: 3
-              });
+              const t = Math.max(0, Math.min(1, (clickVector.lat * segmentVector.lat + clickVector.lng * segmentVector.lng) / segmentLengthSquared));
               
-              selectedMarkerRef.current = marker;
-              setMarkerPos({ lat: latlng.lat, lng: latlng.lng });
-              setCurrentEditionPoint([latlng.lat, latlng.lng]);
-            });
+              const closestPoint = {
+                lat: segmentStart.lat + t * segmentVector.lat,
+                lng: segmentStart.lng + t * segmentVector.lng
+              };
+              
+              const distance = Math.sqrt(
+                Math.pow(clickedPoint.lat - closestPoint.lat, 2) + 
+                Math.pow(clickedPoint.lng - closestPoint.lng, 2)
+              );
+              
+              if (distance < minDistance) {
+                minDistance = distance;
+                insertIndex = nextIndex;
+                closestPointOnSegment = closestPoint;
+              }
+            }
+            
+            // Ajouter le point sur le segment (utiliser le point projeté sur le segment)
+            if (closestPointOnSegment) {
+              addPointOnSegment(layer, insertIndex, L.latLng(closestPointOnSegment.lat, closestPointOnSegment.lng));
+            }
           });
         }
       });
@@ -107,6 +377,39 @@ const DrawableLeafletMap = () => {
     };
     // eslint-disable-next-line
   }, []);
+
+  // Fonction pour calculer la distance d'un point à un segment (fallback si L.GeometryUtil n'est pas disponible)
+  const calculateDistanceToSegment = (point, segmentStart, segmentEnd) => {
+    const A = point.lat - segmentStart.lat;
+    const B = point.lng - segmentStart.lng;
+    const C = segmentEnd.lat - segmentStart.lat;
+    const D = segmentEnd.lng - segmentStart.lng;
+
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    
+    if (lenSq === 0) {
+      return Math.sqrt(A * A + B * B);
+    }
+    
+    const param = dot / lenSq;
+    let xx, yy;
+    
+    if (param < 0) {
+      xx = segmentStart.lat;
+      yy = segmentStart.lng;
+    } else if (param > 1) {
+      xx = segmentEnd.lat;
+      yy = segmentEnd.lng;
+    } else {
+      xx = segmentStart.lat + param * C;
+      yy = segmentStart.lng + param * D;
+    }
+    
+    const dx = point.lat - xx;
+    const dy = point.lng - yy;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
 
   // Effet séparé pour mettre à jour la position du marqueur sans recréer la carte
   useEffect(() => {
@@ -137,25 +440,11 @@ const DrawableLeafletMap = () => {
       // Mettre à jour la position du marker sélectionné
       selectedMarkerRef.current.setLatLng(newLatLng);
       
-      // Mettre à jour les coordonnées dans la géométrie parent
-      const parentLayer = selectedMarkerRef.current.parentLayer;
-      if (parentLayer) {
-        const latlngs = parentLayer.getLatLngs();
-        const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
-        
-        // Trouver l'index du point à mettre à jour
-        const originalLatLng = selectedMarkerRef.current.originalLatLng;
-        const pointIndex = points.findIndex(point => 
-          Math.abs(point.lat - originalLatLng.lat) < 0.000001 && 
-          Math.abs(point.lng - originalLatLng.lng) < 0.000001
-        );
-        
-        if (pointIndex !== -1) {
-          points[pointIndex] = newLatLng;
-          parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
-          selectedMarkerRef.current.originalLatLng = newLatLng;
-        }
-      }
+      // Mettre à jour la géométrie parent
+      updateParentGeometry(selectedMarkerRef.current, newLatLng);
+      
+      // Mettre à jour les coordonnées originales
+      selectedMarkerRef.current.originalLatLng = newLatLng;
       
       // Centrer la carte sur le nouveau point
       mapInstance.current.setView([markerPos.lat, markerPos.lng], mapInstance.current.getZoom());
@@ -168,23 +457,22 @@ const DrawableLeafletMap = () => {
       new L.Draw.Polyline(mapInstance.current).enable();
     }
   };
+
   const handleDrawPolygon = () => {
     if (mapInstance.current) {
       new L.Draw.Polygon(mapInstance.current).enable();
     }
   };
 
-  // Fonction pour vider la carte (supprimer toutes les couches sauf la tuile de base)
+  // Fonction pour vider la carte
   const handleClearMap = () => {
     if (mapInstance.current) {
-      // On garde la couche de tuiles de base (première couche ajoutée)
       const baseLayerId = Object.keys(mapInstance.current._layers)[0];
       mapInstance.current.eachLayer((layer) => {
         if (layer._leaflet_id !== parseInt(baseLayerId)) {
           if (layer.remove && typeof layer.remove === "function") layer.remove();
         }
       });
-      // Réinitialiser les refs des markers
       vertexMarkersRef.current = [];
       selectedMarkerRef.current = null;
     }
@@ -246,6 +534,23 @@ const DrawableLeafletMap = () => {
               Repositionner
             </button>
           </div>
+          <div className="flex flex-col justify-end">
+            <button
+              type="button"
+              onClick={handleDeleteActivePoint}
+              disabled={!selectedMarkerRef.current}
+              className={`cursor-pointer px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-2 ${
+                selectedMarkerRef.current
+                  ? 'bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Supprimer
+            </button>
+          </div>
         </div>
       </div>
 
@@ -291,6 +596,17 @@ const DrawableLeafletMap = () => {
           </div>
           <div className="absolute inset-0 transition-opacity duration-200 rounded-lg opacity-0 bg-gradient-to-r from-red-600 to-red-700 group-hover:opacity-100"></div>
         </button>
+      </div>
+
+      {/* Instructions d'utilisation */}
+      <div className="p-3 mt-4 border border-gray-200 rounded-lg bg-gray-50">
+        <h4 className="mb-2 font-medium text-gray-800">Instructions d'utilisation :</h4>
+        <ul className="space-y-1 text-sm text-gray-600">
+          <li>• <strong>Cliquez</strong> sur un point pour le sélectionner</li>
+          <li>• <strong>Glissez</strong> un point sélectionné pour le déplacer</li>
+          <li>• <strong>Cliquez sur un segment</strong> pour ajouter un nouveau point</li>
+          <li>• <strong>Utilisez le bouton &quot;Supprimer&quot;</strong> pour retirer le point actif</li>
+        </ul>
       </div>
     </>
   );
