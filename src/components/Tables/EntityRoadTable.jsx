@@ -71,7 +71,7 @@ const EntityRoadTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/routes"
+                mainRoute="/admin/forms/entities/routes"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Routes"

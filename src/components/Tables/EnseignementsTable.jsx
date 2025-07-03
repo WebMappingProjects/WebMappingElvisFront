@@ -70,7 +70,7 @@ const EnseignementsTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/enseignement"
+                mainRoute="/admin/forms/services/enseignement"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Enseignement"

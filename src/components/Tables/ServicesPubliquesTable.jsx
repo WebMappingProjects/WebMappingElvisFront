@@ -70,7 +70,7 @@ const ServicesPubliquesTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/services-publiques"
+                mainRoute="/admin/forms/services/services-publiques"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Services publiques"

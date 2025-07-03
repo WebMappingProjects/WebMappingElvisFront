@@ -70,7 +70,7 @@ const PharmaciesTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/pharmacies"
+                mainRoute="/admin/forms/services/pharmacies"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Pharmacies"

@@ -70,7 +70,7 @@ const CentresDeSanteTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/centre-sante"
+                mainRoute="/admin/forms/services/centre-sante"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Centres de Sante/Hopitaux"

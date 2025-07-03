@@ -94,7 +94,7 @@ export default function Sidebar() {
 
             <div>
               <hr className="my-4 md:min-w-full" />
-              <h6 className="flex flex-row items-center justify-center pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
+              <h6 className="flex flex-row items-center justify-center pt-1 pb-4 text-xs font-bold text-green-700 no-underline uppercase md:min-w-full">
                 <FaCog className="mr-2 text-sm" />
                 Services disponibles
               </h6>
@@ -118,7 +118,7 @@ export default function Sidebar() {
             
             <div>
               <hr className="my-4 md:min-w-full" />
-              <h6 className="flex flex-row items-center justify-center pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-blueGray-500">
+              <h6 className="flex flex-row items-center justify-center pt-1 pb-4 text-xs font-bold text-green-700 no-underline uppercase md:min-w-full">
                 <FaCog className="mr-2 text-sm" />
                 Gestion des entités
               </h6>

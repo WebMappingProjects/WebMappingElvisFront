@@ -70,7 +70,7 @@ const SecuritesTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/securite"
+                mainRoute="/admin/forms/services/securite"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Securité"

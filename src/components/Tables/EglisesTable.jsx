@@ -69,7 +69,7 @@ const EglisesTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/eglises"
+                mainRoute="/admin/forms/services/eglises"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Eglises"

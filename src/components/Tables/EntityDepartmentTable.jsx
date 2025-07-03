@@ -71,7 +71,7 @@ const EntityDepartmentTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/departements"
+                mainRoute="/admin/forms/entities/departements"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Departements"

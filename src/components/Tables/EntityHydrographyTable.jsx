@@ -71,7 +71,7 @@ const EntityHydrographyTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/hydrographie"
+                mainRoute="/admin/forms/entities/hydrographie"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Hydrographie"

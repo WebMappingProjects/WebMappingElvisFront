@@ -70,7 +70,7 @@ const HebergementsTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/hebergement"
+                mainRoute="/admin/forms/services/hebergement"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Hébergements"

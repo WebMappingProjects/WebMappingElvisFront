@@ -71,7 +71,7 @@ const EntityCommuneTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/communes"
+                mainRoute="/admin/forms/entities/communes"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Communes"

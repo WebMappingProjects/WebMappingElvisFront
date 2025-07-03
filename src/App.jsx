@@ -32,7 +32,6 @@ import SecuritesTable from "./components/Tables/SecuritesTable";
 import ServicesPubliquesTable from "./components/Tables/ServicesPubliquesTable";
 import Maps from "./views/admin/Maps";
 import Login from "./views/auth/Login";
-import Register from "./views/auth/Register";
 import EntityCommuneTable from "./components/Tables/EntityCommuneTable";
 import EntityDepartmentTable from "./components/Tables/EntityDepartmentTable";
 import EntityRegionTable from "./components/Tables/EntityRegionTable";
@@ -47,6 +46,8 @@ import EntityRoadTable from "./components/Tables/EntityRoadTable";
 import EntityProjectTable from "./components/Tables/EntityProjectTable";
 import EntityConseillerTable from "./components/Tables/EntityConseillerTable";
 import EntityConseillerForm from "./components/Forms/EntityConseillerForm";
+import ServiceForm from "./views/admin/ServiceForm";
+import EntityForm from "./views/admin/EntityForm";
 
 function App() {
 
@@ -78,23 +79,31 @@ function App() {
               </IsTechnicianProtectedRoute>
             </ProtectedRoute>*/
           }>
-            <Route path="/admin/forms/centre-sante" element={<CentresDeSanteForm />} />
-            <Route path="/admin/forms/eglises" element={<EglisesForm />} />
-            <Route path="/admin/forms/enseignement" element={<EnseignementsForm />} />
-            <Route path="/admin/forms/hebergement" element={<HebergementsForm />} />
-            <Route path="/admin/forms/pharmacies" element={<PharmaciesForm />} />
-            <Route path="/admin/forms/securite" element={<SecuritesForm />} />
-            <Route path="/admin/forms/services-publiques" element={<ServicesPubliquesForm />} />
+            <Route path="/admin/forms/services" element={<ServiceForm />} >
+              <Route path="/admin/forms/services/centre-sante" element={<CentresDeSanteForm />} />
+              <Route path="/admin/forms/services/eglises" element={<EglisesForm />} />
+              <Route path="/admin/forms/services/enseignement" element={<EnseignementsForm />} />
+              <Route path="/admin/forms/services/hebergement" element={<HebergementsForm />} />
+              <Route path="/admin/forms/services/pharmacies" element={<PharmaciesForm />} />
+              <Route path="/admin/forms/services/securite" element={<SecuritesForm />} />
+              <Route path="/admin/forms/services/services-publiques" element={<ServicesPubliquesForm />} />
+              
+              <Route path="/admin/forms/services" element={<Navigate  to="/admin/forms/services/centre-sante" />} />
+            </Route>
             
-            <Route path="/admin/forms/communes" element={<EntityCommuneForm />} />
-            <Route path="/admin/forms/departements" element={<EntityDepartmentForm />} />
-            <Route path="/admin/forms/regions" element={<EntityRegionForm />} />
-            <Route path="/admin/forms/hydrographie" element={<EntityHydrographyForm />} />
-            <Route path="/admin/forms/routes" element={<EntityRoadForm />} />
-            <Route path="/admin/forms/projets" element={<EntityProjectForm />} />
-            <Route path="/admin/forms/conseillers" element={<EntityConseillerForm />} />
+            <Route path="/admin/forms/entities" element={<EntityForm />} >
+              <Route path="/admin/forms/entities/communes" element={<EntityCommuneForm />} />
+              <Route path="/admin/forms/entities/departements" element={<EntityDepartmentForm />} />
+              <Route path="/admin/forms/entities/regions" element={<EntityRegionForm />} />
+              <Route path="/admin/forms/entities/hydrographie" element={<EntityHydrographyForm />} />
+              <Route path="/admin/forms/entities/routes" element={<EntityRoadForm />} />
+              <Route path="/admin/forms/entities/projets" element={<EntityProjectForm />} />
+              <Route path="/admin/forms/entities/conseillers" element={<EntityConseillerForm />} />
+              
+              <Route path="/admin/forms/entities" element={<Navigate  to="/admin/forms/entities/communes" />} />
+            </Route>
 
-            <Route path="/admin/forms" element={<Navigate  to="/admin/forms/centre-sante" />} />
+            <Route path="/admin/forms" element={<Navigate  to="/admin/forms/services" />} />
           </Route>
 
           {/*  Sub Layouts for admin data tables */}

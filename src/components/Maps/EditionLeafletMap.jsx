@@ -110,33 +110,46 @@ const EditionLeafletMap = () => {
 
   return (
     <>
-      <div className="relative w-full rounded h-[300px]">
-        <div className="h-full rounded" ref={mapRef} />
+      <div className="relative w-full rounded-lg shadow-lg overflow-hidden h-[300px]">
+        <div className="h-full rounded-lg" ref={mapRef} />
       </div>
-      <form className="flex flex-wrap items-center gap-4 mt-4">
-        <label>
-          Lat:
-          <input
-            type="number"
-            step="any"
-            name="lat"
-            value={markerPos.lat}
-            onChange={handleInputChange}
-            className="px-2 py-1 ml-2 border rounded"
-          />
-        </label>
-        <label>
-          Long:
-          <input
-            type="number"
-            step="any"
-            name="lng"
-            value={markerPos.lng}
-            onChange={handleInputChange}
-            className="px-2 py-1 ml-2 border rounded"
-          />
-        </label>
-      </form>
+      {/* Formulaire avec design amélioré */}
+      <div className="p-4 mt-4 border border-blue-200 rounded-lg shadow-md bg-gradient-to-r from-blue-50 to-indigo-50">
+        <h3 className="flex items-center mb-3 text-lg font-semibold text-gray-800">
+          <span className="w-2 h-2 mr-2 bg-blue-500 rounded-full"></span>
+          Coordonnées du point
+        </h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col">
+            <label className="mb-1 text-sm font-medium text-gray-700">
+              Latitude
+            </label>
+            <input
+              type="number"
+              step="any"
+              name="lat"
+              value={markerPos.lat}
+              onChange={handleInputChange}
+              className="w-32 px-3 py-2 transition-all duration-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Latitude"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-1 text-sm font-medium text-gray-700">
+              Longitude
+            </label>
+            <input
+              type="number"
+              step="any"
+              name="lng"
+              value={markerPos.lng}
+              onChange={handleInputChange}
+              className="w-32 px-3 py-2 transition-all duration-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Longitude"
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 }
