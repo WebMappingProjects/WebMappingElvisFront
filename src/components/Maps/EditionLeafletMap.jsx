@@ -30,7 +30,7 @@ const EditionLeafletMap = () => {
     if (!mapRef.current) return;
 
     if (!mapInstance.current) {
-      mapInstance.current = L.map(mapRef.current).setView([markerPos.lat, markerPos.lng], 12);
+      mapInstance.current = L.map(mapRef.current).setView([[ markerPos.lat == 0 ? 3.868177 : markerPos.lat, markerPos.lng == 0 ? 11.519596 : markerPos.lng ]], 12);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

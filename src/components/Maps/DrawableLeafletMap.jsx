@@ -5,6 +5,8 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet-draw";
 import PropTypes from "prop-types";
 import { useAppMainContext } from "../../context/AppProvider";
+import SimpleMessagePopup from "../popups/SimpleMessagePopup";
+import ConfirmMessagePopup from "../popups/ConfirmMessagePopup";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -21,6 +23,12 @@ const DrawableLeafletMap = () => {
   const drawControlRef = useRef(null);
   const selectedMarkerRef = useRef(null);
   const vertexMarkersRef = useRef([]);
+
+  // Ajout d'état pour la popup de confirmation et le message à afficher
+  const [confirmPopupVisible, setConfirmPopupVisible] = useState(false);
+  const [messagePopupVisible, setMessagePopupVisible] = useState(false);
+  const [confirmPopupMessage, setConfirmPopupMessage] = useState("");
+  const [entityToDelete, setEntityToDelete] = useState(null);
 
   // State for marker position
   const [markerPos, setMarkerPos] = useState(
@@ -215,30 +223,59 @@ const DrawableLeafletMap = () => {
     }, 100);
   };
 
+  // Fonction pour supprimer une entité (ligne ou polygone) entière
+  const handleDeleteEntity = () => {
+    if (entityToDelete && mapInstance.current) {
+      // Supprimer la couche de la carte
+      mapInstance.current.removeLayer(entityToDelete);
+      // Supprimer tous les marqueurs associés à cette couche
+      vertexMarkersRef.current = vertexMarkersRef.current.filter(marker => {
+        if (marker.parentLayer === entityToDelete) {
+          marker.remove();
+          return false;
+        }
+        return true;
+      });
+      selectedMarkerRef.current = null;
+      setEntityToDelete(null);
+      setConfirmPopupVisible(false);
+      setCurrentEditionPoint(null);
+      setMessagePopupVisible(true);
+    }
+  };
+
   // Fonction pour supprimer le point actif
   const handleDeleteActivePoint = () => {
     if (selectedMarkerRef.current) {
       const marker = selectedMarkerRef.current;
       const parentLayer = marker.parentLayer;
-      
+
       if (parentLayer) {
         const latlngs = parentLayer.getLatLngs();
         const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
-        
+
         // Vérifier qu'il reste au moins 2 points pour une ligne ou 3 pour un polygone
-        const minPoints = parentLayer instanceof L.Polygon ? 3 : 2;
+        const isPolygon = parentLayer instanceof L.Polygon;
+        const minPoints = isPolygon ? 3 : 2;
         if (points.length <= minPoints) {
-          alert(`Impossible de supprimer ce point. Il faut au moins ${minPoints} points.`);
+          // Afficher la popup de confirmation pour supprimer toute la géométrie
+          setEntityToDelete(parentLayer);
+          setConfirmPopupMessage(
+            isPolygon
+              ? "Un polygone doit avoir au moins 3 points. Voulez-vous supprimer tout le polygone ?"
+              : "Une ligne doit avoir au moins 2 points. Voulez-vous supprimer toute la ligne ?"
+          );
+          setConfirmPopupVisible(true);
           return;
         }
-        
+
         // Supprimer le point
         points.splice(marker.vertexIndex, 1);
         parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
-        
+
         // Recréer tous les marqueurs
         recreateVertexMarkers(parentLayer);
-        
+
         // Désélectionner le marqueur
         selectedMarkerRef.current = null;
         setMarkerPos({ lat: 3.868177, lng: 11.519596 });
@@ -252,7 +289,7 @@ const DrawableLeafletMap = () => {
 
     // Initialiser la carte seulement une fois
     if (!mapInstance.current) {
-      mapInstance.current = L.map(mapRef.current).setView([markerPos.lat, markerPos.lng], 12);
+      mapInstance.current = L.map(mapRef.current).setView([ markerPos.lat == 0 ? 3.868177 : markerPos.lat, markerPos.lng == 0 ? 11.519596 : markerPos.lng ], 12);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -499,21 +536,29 @@ const DrawableLeafletMap = () => {
       mapInstance.current.keyboard.enable();
     }
     setCurrentEditionPoint(null);
+    setMarkerPos({ lat: 0, lng: 0 });
   };
 
   return (
     <>
+      {/* Popups personnalisées */}
+      <SimpleMessagePopup
+        message="Suppression effectuée avec succès"
+        onClose={() => setMessagePopupVisible(false)}
+        open={messagePopupVisible}
+      />
+      <ConfirmMessagePopup
+        message={confirmPopupMessage}
+        onConfirm={handleDeleteEntity}
+        onCancel={() => {
+          setConfirmPopupVisible(false);
+          setEntityToDelete(null);
+        }}
+        open={confirmPopupVisible}
+      />
+
       <div className="relative w-full rounded-lg shadow-lg overflow-hidden h-[300px]">
-        <div className="h-full rounded-lg" ref={mapRef} />
-        {/* Bouton pour désélectionner tous les points actifs */}
-        <button
-          type="button"
-          title="Désélectionner le point actif"
-          className="absolute top-2 right-2 z-[1000] px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded shadow text-xs font-semibold"
-          onClick={unselectMarker}
-        >
-          Désélectionner
-        </button>
+        <div className="h-full rounded-lg" ref={mapRef} style={{ minHeight: 300, minWidth: 300 }} />
       </div>
       
       {/* Formulaire avec design amélioré */}
@@ -581,6 +626,24 @@ const DrawableLeafletMap = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
               Supprimer
+            </button>
+          </div>
+          <div className="flex flex-col justify-end">
+            <button
+              type="button"
+              onClick={unselectMarker}
+              disabled={!selectedMarkerRef.current}
+              className={`cursor-pointer px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-2 ${
+                selectedMarkerRef.current
+                  ? 'bg-gray-400 hover:bg-gray-500 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h8" />
+              </svg>
+              Désélectionner
             </button>
           </div>
         </div>
