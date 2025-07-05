@@ -26,7 +26,7 @@ const DrawableLeafletMap = () => {
   const [markerPos, setMarkerPos] = useState(
     currentEditionPoint && Array.isArray(currentEditionPoint) && currentEditionPoint.length === 2
       ? { lat: currentEditionPoint[0], lng: currentEditionPoint[1] }
-      : { lat: 3.868177, lng: 11.519596 }
+      : { lat: 0, lng: 0 }
   );
 
   // Fonction pour créer un marqueur de sommet
