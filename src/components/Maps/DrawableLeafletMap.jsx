@@ -478,10 +478,42 @@ const DrawableLeafletMap = () => {
     }
   };
 
+  // Fonction pour désélectionner le point actif et réactiver la navigation
+  const unselectMarker = () => {
+    if (selectedMarkerRef.current) {
+      selectedMarkerRef.current.setStyle({
+        radius: 6,
+        color: '#3B82F6',
+        fillColor: '#3B82F6',
+        fillOpacity: 0.8,
+        weight: 2
+      });
+    }
+    selectedMarkerRef.current = null;
+    if (mapInstance.current) {
+      mapInstance.current.dragging.enable();
+      mapInstance.current.touchZoom.enable();
+      mapInstance.current.doubleClickZoom.enable();
+      mapInstance.current.scrollWheelZoom.enable();
+      mapInstance.current.boxZoom.enable();
+      mapInstance.current.keyboard.enable();
+    }
+    setCurrentEditionPoint(null);
+  };
+
   return (
     <>
       <div className="relative w-full rounded-lg shadow-lg overflow-hidden h-[300px]">
         <div className="h-full rounded-lg" ref={mapRef} />
+        {/* Bouton pour désélectionner tous les points actifs */}
+        <button
+          type="button"
+          title="Désélectionner le point actif"
+          className="absolute top-2 right-2 z-[1000] px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded shadow text-xs font-semibold"
+          onClick={unselectMarker}
+        >
+          Désélectionner
+        </button>
       </div>
       
       {/* Formulaire avec design amélioré */}

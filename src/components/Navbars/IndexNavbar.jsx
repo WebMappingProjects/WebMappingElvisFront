@@ -91,7 +91,7 @@ export default function Navbar(props) {
               {/* <li className="flex items-center">
                 <IndexDropdown />
               </li> */}
-              {userDatas.role == "admin" ? (
+              {userDatas?.role == "admin" ? (
                 <li className="flex items-center">
                   <a
                     className="flex items-center w-full px-3 py-4 text-xs font-bold uppercase cursor-pointer hover:text-primary-default lg:py-2 active:bg-primary-light"
