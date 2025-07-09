@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
+import { getCorrectId } from "../../utils/tools";
 
 const API_URL = "/gis/routes";
 
@@ -9,7 +10,7 @@ const EntityRoadTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
 
-    const headRow = [ "N°", "Nom", "Superficie", "Type route", "Région" ];
+    const headRow = [ "N°", "Nom", "Longueur (m)", "Type route", "Région" ];
 
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -38,23 +39,19 @@ const EntityRoadTable = () => {
                     let data = datas.features[i];
                     
                     let tb = [
-                        data.id,
+                        getCorrectId(data.properties.id, data.id),
                         data.properties.nom,
-                        data.properties.quartier,
-                        data.properties.arrondisse
+                        data.properties.longueur,
+                        data.properties.type,
+                        [ data.properties.region_nom, data.properties.region ]
                     ];
                     
-                    let c = null;
                     if(data.geometry != null && data.geometry != undefined)
                     {
-                        c = [
-                            data.geometry.coordinates[1],
-                            data.geometry.coordinates[0]
-                        ]
+                        cDatasRows.push(data.geometry);
                     }
 
                     returnDatas.push(tb);
-                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
@@ -75,6 +72,7 @@ const EntityRoadTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Routes"
+                geomType="LineString"
                 coordsRows={coordsRows}
                 apiRoute={`${API_URL}/`}
                 originalEpsg={4326}

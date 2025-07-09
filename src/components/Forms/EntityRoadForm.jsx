@@ -2,12 +2,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
-import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import axios, { API_REGIONS_URL } from "../../api/axios";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/routes/`;
+
+const typeRoute = [
+    [ "NATIONALE", "nationale" ],
+    [ "REGIONALE", "regionale" ],
+    [ "DEPARTEMENTALE", "departementale" ],
+    [ "COMMUNALE", "communale" ],
+    [ "PISTE RURALE" , "piste" ]
+];
 
 const EntityRoadForm = ()  => {
 
@@ -17,28 +25,43 @@ const EntityRoadForm = ()  => {
 
     const [ name, setName ] = useState("");
     const [ distance, setDistance ] = useState(0);
-    const [ type, setType ] = useState(0);
+    const [ type, setType ] = useState(typeRoute[0][1]);
+    const [ reg, setReg ] = useState(0);
 
-    const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
+    const { currentEditionPoint, currentProjectionSystem,
+        currentEditionFig
+     } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
+    
+    const [ regions, setRegions ] = useState([]);
 
-    const typeRoute = [
-        "NATIONALE",
-        "REGIONALE",
-        "DEPARTEMENTALE",
-        "COMMUNALE",
-        "PISTE RURALE"
-    ];
-
+    const token = localStorage.getItem("token");
+    
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setDistance(datas[2]);
-            setType(datas[3]);
+            setName(getValueFromIdx(datas, 1));
+            setDistance(getValueFromIdx(datas, 2));
+            setType(getValueFromIdx(datas, 3));
+            setReg(getValueFromIdx(datas, 4));
         }
+    }, []);
+
+    useEffect(() => {
+        const loadRegions = async () => {
+            const response = await axios.get(API_REGIONS_URL, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            setRegions(response?.data);
+        }
+
+        loadRegions();
     }, []);
 
     const handleSave = async (e) => {
@@ -47,23 +70,22 @@ const EntityRoadForm = ()  => {
         try
         {
             const token = localStorage.getItem("token");
-
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            // Convertir LineString en MultiLineString pour correspondre au modèle Django
+            let geometry = currentEditionFig;
+            
+            if (currentEditionFig && currentEditionFig.type === "LineString") {
+                geometry = {
+                    type: "MultiLineString",
+                    coordinates: [currentEditionFig.coordinates]
+                };
             }
-            : null;
 
             const response = await axios.post(API_URL, {
                 "nom": name,
+                "longueur": distance,
+                "type": type,
+                "region": reg,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -85,22 +107,36 @@ const EntityRoadForm = ()  => {
         {
             const token = localStorage.getItem("token");
 
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
+            let geometry = currentEditionFig;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            if (currentEditionFig && currentProjectionSystem !== 4326) {
+                // Conversion des coordonnées si nécessaire
+                geometry = {
+                    ...currentEditionFig,
+                    coordinates: currentEditionFig.type === "LineString" 
+                        ? [currentEditionFig.coordinates[0].map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )]
+                        : currentEditionFig.coordinates.map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )
+                };
             }
-            : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
+            // Convertir Polygon en MultiLineString
+            if (geometry && geometry.type === "LineString") {
+                geometry = {
+                    type: "MultiLineString",
+                    coordinates: [geometry.coordinates]
+                };
+            }
+
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+                "geom": geometry,
+                "nom": name,
+                "longueur": distance,
+                "type": type,
+                "region": reg
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -148,7 +184,7 @@ const EntityRoadForm = ()  => {
                             className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
                             htmlFor="distance"
                         >
-                            Longueur
+                            Longueur (m)
                         </label>
                         <input
                             type="number"
@@ -175,7 +211,27 @@ const EntityRoadForm = ()  => {
                         >
                             <option value="">Sélectionner un type de route</option>
                             {typeRoute.map((s) => (
-                                <option key={s} value={s}>{s}</option>
+                                <option key={s[1]} value={s[1]}>{s[0]}</option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="region"
+                        >
+                            Région
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="region"
+                            value={reg}
+                            onChange={(e) => setReg(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UNE REGION ---</option>
+                            {regions?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
                             ))}
                         </select>
                     </div>

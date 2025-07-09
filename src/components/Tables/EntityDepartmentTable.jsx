@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
+import { getCorrectId } from "../../utils/tools";
 
 const API_URL = "/gis/departements";
 
@@ -39,7 +40,7 @@ const EntityDepartmentTable = () => {
                     let data = datas.features[i];
                     
                     let tb = [
-                        data.id,
+                        getCorrectId(data.properties.id, data.id),
                         data.properties.nom,
                         data.properties.superficie,
                         [ data.properties.region_nom, data.properties.region ]
