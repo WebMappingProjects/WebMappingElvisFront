@@ -3,11 +3,39 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+import Selections from "../Forms_blocks/Selections";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/enseignement/`;
+
+
+const typeEtablissement = [
+    [ "PUBLIC", "public" ],
+    [ "PRIVEE LAIC", "prive_laic" ],
+    [ "PRIVEE CONFESSIONNELLE", "prive_confessionnel" ] 
+];
+
+const typeFormation = [
+    [ "ACADEMIQUE", "academique" ],
+    [ "PROFESSIONNELLE", "professionnelle" ]
+];
+
+const typeEnseignement = [
+    [ "BASE", "base" ],
+    [ "SECONDAIRE", "secondaire" ],
+    [ "SUPERIEUR", "superieur" ]
+];
+
+const typeReligion = [
+    [ "CATHOLIQUE", "catholique" ],
+    [ "PROTESTANTE", "protestante" ],
+    [ "PRESBYTERIENNE", "adventiste" ],
+    [ "ADVENTISTE", "musulmane" ],
+    [ "MUSULMANE", "presbyterienne" ],
+    [ "AUCUNE", "aucune" ]
+];
 
 const EnseignementsForm = ()  => {
 
@@ -18,53 +46,38 @@ const EnseignementsForm = ()  => {
     const [ name, setName ] = useState("");
     const [ respName, setRespName ] = useState("");
     const [ effectif, setEffectif ] = useState("");
-    const [ etsType, setEtsType ] = useState("");
-    const [ religion, setReligion ] = useState("");
-    const [ ensType, setEnsType ] = useState("");
-    const [ formationType, setFormationType ] = useState("");
+    const [ etsType, setEtsType ] = useState(typeEtablissement[0][1]);
+    const [ religion, setReligion ] = useState(typeReligion[0][1]);
+    const [ ensType, setEnsType ] = useState(typeEnseignement[0][1]);
+    const [ formationType, setFormationType ] = useState(typeFormation[0][1]);
     const [ bestGraduation, setBestGraduation ] = useState("");
+
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
 
-    const typeEtablissement = [
-        "PUBLIQUE",
-        "PRIVEE_LAIC",
-        "PRIVEE_CONFESSIONNELLE"
-    ];
-    const typeFormation = [
-        "ACADEMIQUE",
-        "PROFESSIONNELLE"
-    ];
-
-    const typeEnseignement = [
-        "BASE",
-        "SECONDAIRE",
-        "SUPERIEUR"
-    ];
-
-    const typeReligion = [
-        "CATHOLIQUE",
-        "PROTESTANTE",
-        "PRESBYTERIENNE",
-        "ADVENTISTE",
-        "MUSULMANE",
-        "AUCUNE"
-    ];
-
+    useEffect(() => {
+        console.log("ETS TYPE CHANGED", etsType);
+    }, [etsType]);
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setRespName(datas[2]);
-            setEffectif(datas[3]);
-            setEtsType(datas[4]);
-            setReligion(datas[5]);
-            setEnsType(datas[6]);
-            setFormationType(datas[7]);
-            setBestGraduation(datas[8]);
+            setName(getValueFromIdx(datas, 1));
+            setRespName(getValueFromIdx(datas, 2));
+            setEffectif(getValueFromIdx(datas, 3));
+            setEtsType(getValueFromIdx(datas, 4));
+            setReligion(getValueFromIdx(datas, 5));
+            setEnsType(getValueFromIdx(datas, 6));
+            setFormationType(getValueFromIdx(datas, 7));
+            setBestGraduation(getValueFromIdx(datas, 8));
+            setCom(getValueFromIdx(datas, 9));
+            setDept(getValueFromIdx(datas, 10));
+            setReg(getValueFromIdx(datas, 11));
         }
     }, []);
 
@@ -89,9 +102,18 @@ const EnseignementsForm = ()  => {
             }
             : null;
 
+            console.log("ETS TYPE", etsType);
             const response = await axios.post(API_URL, {
+                "geom": geometry,
                 "nom": name,
-                "geom": geometry
+                "nom_responsable" : respName,
+                "effectif" : effectif,
+                "type" : etsType,
+                "religion" : religion,
+                "enseignement" : ensType,
+                "formation" : formationType,
+                "meilleur_diplome" : bestGraduation,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -126,8 +148,17 @@ const EnseignementsForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+                "geom": geometry,
+                "nom": name,
+                "nom_responsable" : respName,
+                "effectif" : effectif,
+                "type" : etsType,
+                "religion" : religion,
+                "enseignement" : ensType,
+                "formation" : formationType,
+                "meilleur_diplome" : bestGraduation,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -218,7 +249,7 @@ const EnseignementsForm = ()  => {
                             onChange={(e) => setEtsType(e.target.value)}
                         >
                             {typeEtablissement.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
@@ -237,7 +268,7 @@ const EnseignementsForm = ()  => {
                             onChange={(e) => setReligion(e.target.value)}
                         >
                             {typeReligion.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
@@ -256,7 +287,7 @@ const EnseignementsForm = ()  => {
                             onChange={(e) => setEnsType(e.target.value)}
                         >
                             {typeEnseignement.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
@@ -275,7 +306,7 @@ const EnseignementsForm = ()  => {
                             onChange={(e) => setFormationType(e.target.value)}
                         >
                             {typeFormation.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
@@ -297,6 +328,15 @@ const EnseignementsForm = ()  => {
                         />
                     </div>
 
+                    <Selections 
+                        reg={reg}
+                        setReg={setReg}
+                        dept={dept}
+                        setDept={setDept}
+                        com={com}
+                        setCom={setCom}
+                    />
+                    
                     <Actions 
                         handleSave={handleSave}
                         handleEdit={handleEdit}

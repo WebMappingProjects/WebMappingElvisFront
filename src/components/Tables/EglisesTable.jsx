@@ -89,6 +89,7 @@ const EglisesTable = () => {
                 datasRows={datasRows}
                 title="Eglises"
                 coordsRows={coordsRows}
+                geomType="point"
                 apiRoute={`${API_URL}/`}
                 originalEpsg={4326}
             />

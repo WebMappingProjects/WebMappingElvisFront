@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
-import axios from "../../api/axios";
+import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/enseignements"
+const API_URL = "/gis/enseignement"
 const EnseignementsTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
@@ -36,11 +36,28 @@ const EnseignementsTable = () => {
                     {
                         let data = datas.features[i];
                         
+                        const response2 = await axios.get(`${API_COMMUNE_URL}/${data.properties.commune}`, {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            }
+                        });
+    
+                        const centerName = data.properties.nom;
+    
                         let tb = [
-                            data.id,
-                            data.properties.nom,
-                            data.properties.quartier,
-                            data.properties.arrondisse
+                            data.properties.id,
+                            centerName,
+                            data.properties.nom_responsable,
+                            data.properties.effectif,
+                            data.properties.type,
+                            data.properties.religion,
+                            data.properties.enseignement,
+                            data.properties.formation,
+                            data.properties.meilleur_diplome,
+                            [ data.properties.commune_nom, data.properties.commune ],
+                            [ response2?.data.properties.departement.properties.nom, response2?.data.properties.departement.id ],
+                            [ response2?.data.properties.departement.properties.region_nom, response2?.data.properties.departement.properties.region ],
                         ];
                         
                         let c = null;
@@ -75,6 +92,7 @@ const EnseignementsTable = () => {
                 datasRows={datasRows}
                 title="Enseignement"
                 coordsRows={coordsRows}
+                geomType="point"
                 apiRoute={`${API_URL}/`}
                 originalEpsg={4326}
             />
