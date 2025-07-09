@@ -3,11 +3,26 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+import Selections from "../Forms_blocks/Selections";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/hebergements/`;
+
+const typeHebergement = [
+    [ "HOTEL", "hotel" ],
+    [ "AUBERGE", "auberge" ]
+];
+
+const standingsVals = [
+    { option: "Pas d'étoile", nb: 0, val: "" },
+    { option: "1 étoile", nb: 1, val: "*" },
+    { option: "2 étoiles", nb: 2, val: "**" },
+    { option: "3 étoiles", nb: 3, val: "***" },
+    { option: "4 étoiles", nb: 4, val: "****" },
+    { option: "5 étoiles", nb: 5, val: "*****" },
+];
 
 const HebergementsForm = ()  => {
 
@@ -17,35 +32,28 @@ const HebergementsForm = ()  => {
 
     const [ name, setName ] = useState("");
     const [ rooms, setRooms ] = useState("");
-    const [ type, setType ] = useState("");
+    const [ type, setType ] = useState(typeHebergement[0][1]);
     const [ standing, setStanding ] = useState("");
+
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
 
-    const typeHebergement = [
-        "HOTEL",
-        "AUBERGE"
-    ];
-
-    const standingsVals = [
-        { option: "Pas d'étoile", nb: 0, val: "" },
-        { option: "1 étoile", nb: 1, val: "*" },
-        { option: "2 étoiles", nb: 2, val: "**" },
-        { option: "3 étoiles", nb: 3, val: "***" },
-        { option: "4 étoiles", nb: 4, val: "****" },
-        { option: "5 étoiles", nb: 5, val: "*****" },
-    ];
-
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setRooms(datas[2]);
-            setType(datas[3]);
-            setStanding(datas[4]);
+            setName(getValueFromIdx(datas, 1));
+            setRooms(getValueFromIdx(datas, 2));
+            setType(getValueFromIdx(datas, 3));
+            setStanding(getValueFromIdx(datas, 4));
+            setCom(getValueFromIdx(datas, 5));
+            setDept(getValueFromIdx(datas, 6));
+            setReg(getValueFromIdx(datas, 7));
         }
     }, []);
 
@@ -72,10 +80,11 @@ const HebergementsForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
-                "chambres": rooms,
+                "nb_chambres": rooms,
                 "type": type,
                 "standing": standing,
-                "geom": geometry
+                "geom": geometry,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -110,12 +119,13 @@ const HebergementsForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
                 "nom": name,
-                "chambres": rooms,
+                "nb_chambres": rooms,
                 "type": type,
                 "standing": standing,
-                "geom": geometry
+                "geom": geometry,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -190,7 +200,7 @@ const HebergementsForm = ()  => {
                             onChange={(e) => setType(e.target.value)}
                         >
                             {typeHebergement.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
@@ -214,6 +224,14 @@ const HebergementsForm = ()  => {
                         </select>
                     </div>
 
+                    <Selections
+                        reg={reg}
+                        setReg={setReg}
+                        dept={dept}
+                        setDept={setDept}
+                        com={com}
+                        setCom={setCom}
+                    />
 
                     <Actions 
                         handleSave={handleSave}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
-import axios from "../../api/axios";
+import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
 const API_URL = "/gis/hebergements"
@@ -36,13 +36,26 @@ const HebergementsTable = () => {
                     {
                         let data = datas.features[i];
                         
+                        const response2 = await axios.get(`${API_COMMUNE_URL}/${data.properties.commune}`, {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            }
+                        });
+    
+                        const centerName = data.properties.nom;
+    
                         let tb = [
-                            data.id,
-                            data.properties.nom,
-                            data.properties.quartier,
-                            data.properties.arrondisse
+                            data.properties.id,
+                            centerName,
+                            data.properties.nb_chambres,
+                            data.properties.type,
+                            data.properties.standing,
+                            [ data.properties.commune_nom, data.properties.commune ],
+                            [ response2?.data.properties.departement.properties.nom, response2?.data.properties.departement.id ],
+                            [ response2?.data.properties.departement.properties.region_nom, response2?.data.properties.departement.properties.region ],
                         ];
-                        
+
                         let c = null;
                         if(data.geometry != null && data.geometry != undefined)
                         {
