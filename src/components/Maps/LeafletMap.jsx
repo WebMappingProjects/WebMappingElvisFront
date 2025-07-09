@@ -67,7 +67,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [12, 12],
       popupAnchor: [0, -32],
     }),
-    pharmacies_point: L.icon({
+    centre_sante: L.icon({
       iconUrl: pharmacieIcon,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
@@ -85,7 +85,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [12, 12],
       popupAnchor: [0, -32],
     }),
-    enseignements_secondaires_final_point: L.icon({
+    enseignement: L.icon({
       iconUrl: ensSecIcon,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
@@ -97,7 +97,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [12, 12],
       popupAnchor: [0, -32],
     }),
-    eglises_catholiques_font_point: L.icon({
+    eglises: L.icon({
       iconUrl: eglCathIcon,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
@@ -169,7 +169,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [12, 12],
       popupAnchor: [0, -32],
     }),
-    commissariats_yde_font_point: L.icon({
+    securite: L.icon({
       iconUrl: commissariatIcon,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
@@ -187,7 +187,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [12, 12],
       popupAnchor: [0, -32],
     }),
-    hotels_font_point: L.icon({
+    hebergements: L.icon({
       iconUrl: hotelsIcon,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
@@ -241,7 +241,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       iconAnchor: [12, 12],
       popupAnchor: [0, -32],
     }),
-    stations_sevices_font_point: L.icon({
+    services_publiques: L.icon({
       iconUrl: stationServiceIcon,
       iconSize: [24, 24],
       iconAnchor: [12, 12],
