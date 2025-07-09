@@ -97,3 +97,7 @@ export function ensureEPSG4326(coords) {
 export const getValueFromIdx = (incomingDatas, idx) => {
     return Array.isArray(incomingDatas[idx]) ? incomingDatas[idx][1] : incomingDatas[idx]; 
 }
+
+export const getCorrectId = (main, alternate) => {
+    return main == undefined || main == null ? alternate : main;
+}

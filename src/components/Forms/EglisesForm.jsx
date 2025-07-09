@@ -33,8 +33,8 @@ const EglisesForm = ()  => {
     const typeEglise = [
         [ "CATHOLIQUE" , "catholique" ],
         [ "PROTESTANTE" , "protestant" ],
-        [ "PRESBYTERIENNE" , "musulman" ],
-        [ "MUSULMANE" , "presbyterienne"],
+        [ "PRESBYTERIENNE" , "presbyterienne" ],
+        [ "MUSULMANE" , "musulman"],
         [ "ADVENTISTE" , "adventiste"]
     ];
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
+import { getCorrectId } from "../../utils/tools";
 
 const API_URL = "/gis/eglises"
 const EglisesTable = () => {
@@ -44,9 +45,8 @@ const EglisesTable = () => {
 
                     const centerName = data.properties.nom;
 
-                    console.log("response2?.data.properties.departement.properties", response2?.data.properties.departement.properties)
                     let tb = [
-                        data.properties.id,
+                        getCorrectId(data.properties.id, data.id),
                         centerName,
                         data.properties.capacite,
                         data.properties.type,

@@ -3,11 +3,20 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+import Selections from "../Forms_blocks/Selections";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/securite/`;
+
+
+const typeSecurite = [
+    [ "GENDARMERIE", "gendarmerie" ],
+    [ "COMMISSARIAT", "commissariat" ],
+    [ "CASERNE_POMPIER", "pompier" ],
+    [ "POSTE_POLICE", "poste_police" ]
+];
 
 const SecuritesForm = ()  => {
 
@@ -17,26 +26,27 @@ const SecuritesForm = ()  => {
 
     const [ name, setName ] = useState("");
     const [ agents, setAgents ] = useState("");
-    const [ type, setType ] = useState("");
+    const [ type, setType ] = useState(typeSecurite[0][1]);
+
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
 
-    const typeSecurite = [
-        "GENDARMERIE",
-        "COMMISSARIAT",
-        "CASERNE_POMPIER",
-        "POSTE_POLICE"
-    ];
-
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setAgents(datas[2]);
-            setType(datas[3]);
+            setName(getValueFromIdx(datas, 1));
+            setAgents(getValueFromIdx(datas, 2));
+            setType(getValueFromIdx(datas, 3));
+
+            setCom(getValueFromIdx(datas, 4));
+            setDept(getValueFromIdx(datas, 5));
+            setReg(getValueFromIdx(datas, 6));
         }
     }, []);
 
@@ -63,6 +73,9 @@ const SecuritesForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
+                "nombre_agent": agents,
+                "type": type,
+                "commune": com,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -98,7 +111,11 @@ const SecuritesForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+                "nom": name,
+                "nombre_agent": agents,
+                "type": type,
+                "commune": com,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -174,10 +191,19 @@ const SecuritesForm = ()  => {
                             onChange={(e) => setType(e.target.value)}
                         >
                             {typeSecurite.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
+
+                    <Selections
+                        reg={reg}
+                        setReg={setReg}
+                        dept={dept}
+                        setDept={setDept}
+                        com={com}
+                        setCom={setCom}
+                    />
 
 
                     <Actions 

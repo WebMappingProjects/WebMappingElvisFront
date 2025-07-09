@@ -46,7 +46,7 @@ const EntityCommuneTable = () => {
                     });
 
                     let tb = [
-                        data.id,
+                        data.properties.id || data.id,
                         data.properties.nom,
                         data.properties.superficie,
                         data.properties.maire,

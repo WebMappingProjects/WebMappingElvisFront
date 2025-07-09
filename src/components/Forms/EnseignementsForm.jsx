@@ -31,9 +31,9 @@ const typeEnseignement = [
 const typeReligion = [
     [ "CATHOLIQUE", "catholique" ],
     [ "PROTESTANTE", "protestante" ],
-    [ "PRESBYTERIENNE", "adventiste" ],
-    [ "ADVENTISTE", "musulmane" ],
-    [ "MUSULMANE", "presbyterienne" ],
+    [ "PRESBYTERIENNE", "presbyterienne" ],
+    [ "ADVENTISTE", "adventiste" ],
+    [ "MUSULMANE", "musulmane" ],
     [ "AUCUNE", "aucune" ]
 ];
 
