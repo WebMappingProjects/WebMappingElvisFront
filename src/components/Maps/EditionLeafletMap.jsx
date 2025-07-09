@@ -26,11 +26,24 @@ const EditionLeafletMap = () => {
       : { lat: 0, lng: 0 }
   );
 
+
   useEffect(() => {
     if (!mapRef.current) return;
 
+    // Fix: Remove any existing map instance from the container before creating a new one
+    if (mapRef.current._leaflet_id) {
+      // This container already has a map, so we need to reset it
+      console.log("MAP REF", mapRef);
+      mapRef.current._leaflet_id = null;
+      mapRef.current.innerHTML = "";
+    }
+
     if (!mapInstance.current) {
-      mapInstance.current = L.map(mapRef.current).setView([[ markerPos.lat == 0 ? 3.868177 : markerPos.lat, markerPos.lng == 0 ? 11.519596 : markerPos.lng ]], 12);
+      console.log("MAP CURRENT", mapInstance);
+      console.log("MARKER POS", markerPos, "MAP INSTANCE", mapInstance);
+      mapInstance.current = L.map(mapRef.current).setView(
+        [markerPos?.lat == 0 ? 3.868177 : markerPos?.lat, markerPos?.lng == 0 ? 11.519596 : markerPos?.lng]
+      , 12);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
-import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import axios, { API_COMMUNE_URL, API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import { useAppMainContext } from "../../context/AppProvider";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/agences-de-voyages-font/`;
+const API_URL = `/gis/centres-sante/`;
 
 const CentresDeSanteForm = ()  => {
 
@@ -17,33 +17,94 @@ const CentresDeSanteForm = ()  => {
 
     const [ name, setName ] = useState("");
     const [ type, setType ] = useState("");
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
+
+    const [ regions, setRegions ] = useState([]);
+    const [ departements, setDepartements ] = useState([]);
+    const [ communes, setCommunes ] = useState([]);
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
     
+    const token = localStorage.getItem("token");
+
     const typeCentre = [
-        "CLINIQUE",
-        "HOPITAL_D_ARRONDISSEMENT",
-        "HOPITAL_REGIONAL",
-        "HOPITAL_DE_DISTRICT"
+        [ "clinique", "clinique"],
+        [ "Hopital d'arrondissement", "hopital_arrondissement"],
+        [ "Hopital regional", "hopital_regional"],
+        [ "Hopital de district", "hopital_district"]
     ];
 
+
     useEffect(() => {
+        console.log("DATASSSSSSSSSSSSSSSSSSSSSSSSSS", datas);
         if(datas != null)
         {
-            setName(datas[1]);
-            setType(datas[3]);
+            setName(getValueFromIdx(datas, 1));
+            setType(getValueFromIdx(datas, 2));
+            setCom(getValueFromIdx(datas, 3));
+            setDept(getValueFromIdx(datas, 4));
+            setReg(getValueFromIdx(datas, 5));
         }
     }, []);
+
+    useEffect(() => {
+        const loadRegions = async () => {
+            const response = await axios.get(API_REGIONS_URL, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            setRegions(response?.data);
+        }
+
+        loadRegions();
+    }, []);
+    
+    useEffect(() => {
+        const loadDepartments = async () => {
+            console.log("REGION", reg);
+            if(reg != 0)
+            {
+                const response = await axios.get(`${API_DEPARTEMENTS_URL}?region=${reg}`, { 
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                
+
+                setDepartements(response?.data);
+            }
+        }
+
+        loadDepartments();
+    }, [reg]);
+
+    useEffect(() => {
+        const loadCommunes = async () => {
+            const response = await axios.get(`${API_COMMUNE_URL}?departement=${dept}`, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+            }});
+
+            setCommunes(response?.data);
+        }
+
+        loadCommunes();
+    }, [dept])
 
     const handleSave = async (e) =>  {
         e.preventDefault();
 
         try {
-            const token = localStorage.getItem("token");
-
+            console.log("CURRENT EDITION BTN", currentEditionPoint);
             const returnToOriginalCoordSys = currentEditionPoint ? 
                 (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
                     : null;
@@ -58,8 +119,13 @@ const CentresDeSanteForm = ()  => {
             }
             : null;
 
+            console.log("GEOM", geometry);
+            
             const response = await axios.post(API_URL, {
-                "geom": geometry
+                "geom": geometry,
+                "nom": name,
+                "type": type,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -93,8 +159,11 @@ const CentresDeSanteForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+                "geom": geometry,
+                "nom": name,
+                "type": type,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -151,7 +220,67 @@ const CentresDeSanteForm = ()  => {
                         >
                             <option value="">Sélectionner un type</option>
                             {typeCentre.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="region"
+                        >
+                            Région
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="region"
+                            value={reg}
+                            onChange={(e) => setReg(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UNE REGION ---</option>
+                            {regions?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="dept"
+                        >
+                            Département
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="dept"
+                            value={dept}
+                            onChange={(e) => setDept(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UN DEPARTEMENT ---</option>
+                            {departements?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="commune"
+                        >
+                            Commune
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="commune"
+                            value={com}
+                            onChange={(e) => setCom(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UNE COMMUNE ---</option>
+                            {communes?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
                             ))}
                         </select>
                     </div>
