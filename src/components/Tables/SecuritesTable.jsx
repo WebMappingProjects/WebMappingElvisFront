@@ -46,7 +46,6 @@ const SecuritesTable = () => {
     
                         const centerName = data.properties.nom;
                         
-                        console.log("PROPERTIES ID", data.properties.id, "DATA ID", data.id);
                         let tb = [
                             getCorrectId(data.properties.id, data.id),
                             centerName,
@@ -88,6 +87,7 @@ const SecuritesTable = () => {
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Securité"
+                geomType="point"
                 coordsRows={coordsRows}
                 apiRoute={`${API_URL}/`}
                 originalEpsg={4326}

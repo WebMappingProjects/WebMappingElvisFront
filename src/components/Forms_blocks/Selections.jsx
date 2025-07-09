@@ -1,4 +1,3 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import axios, { API_COMMUNE_URL, API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
@@ -28,7 +27,6 @@ const Selections = ({ reg, setReg, dept, setDept, com, setCom }) => {
     
     useEffect(() => {
         const loadDepartments = async () => {
-            console.log("REGION", reg);
             if(reg != 0)
             {
                 const response = await axios.get(`${API_DEPARTEMENTS_URL}?region=${reg}`, { 

@@ -2,13 +2,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
-import axios from "../../api/axios";
+import axios, { API_REGIONS_URL } from "../../api/axios";
 import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
 const API_URL = `/gis/departements/`;
-const API_REGIONS_URL = `/gis/regions`;
 
 const EntityDepartmentForm = ()  => {
 

@@ -3,11 +3,22 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+import Selections from "../Forms_blocks/Selections";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/services-publiques/`;
+
+const typeService = [
+    [ "BANQUE", "banque" ],
+    [ "BOULANGERIE", "boulangerie" ],
+    [ "BOUTIQUE", "boutique" ],
+    [ "CENTRE_CULTUREL", "centre_culturel" ],
+    [ "RESTAURANT", "restaurant" ],
+    //[ "STATION_SERVICE", "" ],
+    [ "AUTRE", "autres" ]
+];
 
 const ServicesPubliquesForm = ()  => {
 
@@ -16,28 +27,25 @@ const ServicesPubliquesForm = ()  => {
     const navigate = useNavigate();
 
     const [ name, setName ] = useState("");
-    const [ type, setType ] = useState("");
+    const [ type, setType ] = useState(typeService[0][1]);
+
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
 
-    const typeService = [
-        "BANQUE",
-        "BOULANGERIE",
-        "BOUTIQUE",
-        "CENTRE_CULTUREL",
-        "RESTAURANT",
-        "STATION_SERVICE",
-        "AUTRE"
-    ];
-
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setType(datas[2]);
+            setName(getValueFromIdx(datas, 1));
+            setType(getValueFromIdx(datas, 2));
+            setCom(getValueFromIdx(datas, 3));
+            setDept(getValueFromIdx(datas, 4));
+            setReg(getValueFromIdx(datas, 5));
         }
     }, []);
 
@@ -64,6 +72,8 @@ const ServicesPubliquesForm = ()  => {
 
             const response = await axios.post(API_URL, {
                 "nom": name,
+                "type": type,
+                "commune": com,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -99,8 +109,11 @@ const ServicesPubliquesForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+                "geom": geometry,
+                "nom": name,
+                "type": type,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -158,11 +171,19 @@ const ServicesPubliquesForm = ()  => {
                             onChange={(e) => setType(e.target.value)}
                         >
                             {typeService.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
 
+                    <Selections
+                        reg={reg}
+                        setReg={setReg}
+                        dept={dept}
+                        setDept={setDept}
+                        com={com}
+                        setCom={setCom}
+                    />
 
                     <Actions 
                         handleSave={handleSave}
