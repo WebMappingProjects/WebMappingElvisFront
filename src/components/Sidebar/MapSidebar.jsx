@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState, useEffect } from "react";
-import { FaBars, FaTimes, FaUser, FaCheck } from "react-icons/fa";
+import { FaBars, FaTimes, FaUser, FaCheck, FaBuilding, FaUniversity, FaMap, FaWater, FaRoad } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
 import pharmacieIcon from "../../assets/markers/doctors_bag_32px.png";
 import restaurantIcon from "../../assets/markers/restaurant_32px.png";
@@ -50,11 +50,11 @@ export default function MapSidebar() {
       { url: "/gis/securite", name: "securite", label: "Securite", icon: <img src={commissariatIcon} alt="Securite" className="inline w-5 h-5 mr-2" />, attrib: "Securite" },
       { url: "/gis/services-publiques", name: "services_publiques", label: "services publiques", icon: <img src={stationServiceIcon} alt="Service Publique" className="inline w-5 h-5 mr-2" />, attrib: "Service Publique" },
       
-      { url: "/gis/communes", name: "communes", label: "Communes", icon: null, attrib: "Communes" },
-      { url: "/gis/departements", name: "departements", label: "Departements", icon: null, attrib: "Departements" },
-      { url: "/gis/regions", name: "regions", label: "Regions", icon: null, attrib: "Regions" },
-      { url: "/gis/hydrographie", name: "hydrographie", label: "Hydrographie", icon: null, attrib: "Hydrographie" },
-      { url: "/gis/routes", name: "routes", label: "Routes", icon: null, attrib: "Routes" },
+      { url: "/gis/communes", name: "communes", label: "Communes", icon: <FaBuilding className="mr-2 text-sm" />, attrib: "Communes" },
+      { url: "/gis/departements", name: "departements", label: "Departements", icon: <FaUniversity className="mr-2 text-sm" />, attrib: "Departements" },
+      { url: "/gis/regions", name: "regions", label: "Regions", icon: <FaMap className="mr-2 text-sm" />, attrib: "Regions" },
+      { url: "/gis/hydrographie", name: "hydrographie", label: "Hydrographie", icon: <FaWater className="mr-2 text-sm" />, attrib: "Hydrographie" },
+      { url: "/gis/routes", name: "routes", label: "Routes", icon: <FaRoad className="mr-2 text-sm" />, attrib: "Routes" },
     ];
 
     // Gestion du changement de case à cocher

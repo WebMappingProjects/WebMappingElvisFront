@@ -59,200 +59,48 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   const [selectingService, setSelectingService] = useState(false);
   const [distanceToService, setDistanceToService] = useState(null);
 
-  // Correspondance couche -> icône personnalisée (URL PNG/SVG ou L.divIcon)
+  // Correspondance couche -> icône personnalisée (chaque icône dans un cercle blanc)
+  const makeCircleIcon = (iconUrl) => L.divIcon({
+    html: `<div style="background:#fff;border-radius:50%;box-shadow:0 2px 8px #0002;border:2px solid #fff;width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><img src='${iconUrl}' style='width:22px;height:22px;display:block;'/></div>`,
+    className: '',
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -18],
+  });
+
   const layerIcons = {
-    restaurants_yaounde_font_point: L.icon({
-      iconUrl: restaurantIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    centre_sante: L.icon({
-      iconUrl: pharmacieIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    enseignement_de_base_font_point: L.icon({
-      iconUrl: enseignDeBaseIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    ecoles_mat_primaire_point: L.icon({
-      iconUrl: ecolesMatPrimIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    enseignement: L.icon({
-      iconUrl: ensSecIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    enseignement_superieur_custom_point: L.icon({
-      iconUrl: ensSupIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    eglises: L.icon({
-      iconUrl: eglCathIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    eglises_presbyteriennes_font_point: L.icon({
-      iconUrl: eglCathIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    eglises_protestantes_point: L.icon({
-      iconUrl: eglCathIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    mosquees_font_point: L.icon({
-      iconUrl: mosqueeIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    nations_unies_point: L.icon({
-      iconUrl: nationsUniesIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    banques_et_microfinances_custom_point: L.icon({
-      iconUrl: banquesIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    cites_municipales_cuy_point: L.icon({
-      iconUrl: citesMunicipalesIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    centre_special_detat_civil_font_point: L.icon({
-      iconUrl: centreSpecialIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    mairies_yaounde_custom_point: L.icon({
-      iconUrl: mairieIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    "prefectures_sous-prefectures_custom_point": L.icon({
-      iconUrl: prefAndSPrefIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    ambassades_point: L.icon({
-      iconUrl: ambassadeIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    gendarmeries_point: L.icon({
-      iconUrl: gendarmerieIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    securite: L.icon({
-      iconUrl: commissariatIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    boulangeries_custom_point: L.icon({
-      iconUrl: boulangerieIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    centres_culturels_custom_point: L.icon({
-      iconUrl: centreCulturelIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    hebergements: L.icon({
-      iconUrl: hotelsIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    monuments_custom_point: L.icon({
-      iconUrl: monumentIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    lieux_remarquables_point: L.icon({
-      iconUrl: lieuxRemIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 20],
-      popupAnchor: [0, -32],
-    }),
-    auberges_custom_point: L.icon({
-      iconUrl: aubergesIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    bouches_incendies_yde_custom_point: L.icon({
-      iconUrl: bouchesIncendiesIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    garages_custom_point: L.icon({
-      iconUrl: garageIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    complexes_sportifs_custom_point: L.icon({
-      iconUrl: sportIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    sapeurs_pompier_point: L.icon({
-      iconUrl: sapeurPompierIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    laveries_font_point: L.icon({
-      iconUrl: laverieIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    services_publiques: L.icon({
-      iconUrl: stationServiceIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
-    agences_de_voyages_font_point: L.icon({
-      iconUrl: agenceDeVoyageIcon,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -32],
-    }),
+    restaurants_yaounde_font_point: makeCircleIcon(restaurantIcon),
+    centre_sante: makeCircleIcon(pharmacieIcon),
+    enseignement_de_base_font_point: makeCircleIcon(enseignDeBaseIcon),
+    ecoles_mat_primaire_point: makeCircleIcon(ecolesMatPrimIcon),
+    enseignement: makeCircleIcon(ensSecIcon),
+    enseignement_superieur_custom_point: makeCircleIcon(ensSupIcon),
+    eglises: makeCircleIcon(eglCathIcon),
+    eglises_presbyteriennes_font_point: makeCircleIcon(eglCathIcon),
+    eglises_protestantes_point: makeCircleIcon(eglCathIcon),
+    mosquees_font_point: makeCircleIcon(mosqueeIcon),
+    nations_unies_point: makeCircleIcon(nationsUniesIcon),
+    banques_et_microfinances_custom_point: makeCircleIcon(banquesIcon),
+    cites_municipales_cuy_point: makeCircleIcon(citesMunicipalesIcon),
+    centre_special_detat_civil_font_point: makeCircleIcon(centreSpecialIcon),
+    mairies_yaounde_custom_point: makeCircleIcon(mairieIcon),
+    "prefectures_sous-prefectures_custom_point": makeCircleIcon(prefAndSPrefIcon),
+    ambassades_point: makeCircleIcon(ambassadeIcon),
+    gendarmeries_point: makeCircleIcon(gendarmerieIcon),
+    securite: makeCircleIcon(commissariatIcon),
+    boulangeries_custom_point: makeCircleIcon(boulangerieIcon),
+    centres_culturels_custom_point: makeCircleIcon(centreCulturelIcon),
+    hebergements: makeCircleIcon(hotelsIcon),
+    monuments_custom_point: makeCircleIcon(monumentIcon),
+    lieux_remarquables_point: makeCircleIcon(lieuxRemIcon),
+    auberges_custom_point: makeCircleIcon(aubergesIcon),
+    bouches_incendies_yde_custom_point: makeCircleIcon(bouchesIncendiesIcon),
+    garages_custom_point: makeCircleIcon(garageIcon),
+    complexes_sportifs_custom_point: makeCircleIcon(sportIcon),
+    sapeurs_pompier_point: makeCircleIcon(sapeurPompierIcon),
+    laveries_font_point: makeCircleIcon(laverieIcon),
+    services_publiques: makeCircleIcon(stationServiceIcon),
+    agences_de_voyages_font_point: makeCircleIcon(agenceDeVoyageIcon),
   };
 
   const fetchPointsFromDB = async (layerName) => {
@@ -293,6 +141,42 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       if (!map._customGeoJsonLayers[layer.name]) {
         try {
           const geojson = await fetchPointsFromDB(layer.name);
+          // Récupérer l'URL de l'icône d'origine pour le cluster
+          const iconUrlMap = {
+            restaurants_yaounde_font_point: restaurantIcon,
+            centre_sante: pharmacieIcon,
+            enseignement_de_base_font_point: enseignDeBaseIcon,
+            ecoles_mat_primaire_point: ecolesMatPrimIcon,
+            enseignement: ensSecIcon,
+            enseignement_superieur_custom_point: ensSupIcon,
+            eglises: eglCathIcon,
+            eglises_presbyteriennes_font_point: eglCathIcon,
+            eglises_protestantes_point: eglCathIcon,
+            mosquees_font_point: mosqueeIcon,
+            nations_unies_point: nationsUniesIcon,
+            banques_et_microfinances_custom_point: banquesIcon,
+            cites_municipales_cuy_point: citesMunicipalesIcon,
+            centre_special_detat_civil_font_point: centreSpecialIcon,
+            mairies_yaounde_custom_point: mairieIcon,
+            "prefectures_sous-prefectures_custom_point": prefAndSPrefIcon,
+            ambassades_point: ambassadeIcon,
+            gendarmeries_point: gendarmerieIcon,
+            securite: commissariatIcon,
+            boulangeries_custom_point: boulangerieIcon,
+            centres_culturels_custom_point: centreCulturelIcon,
+            hebergements: hotelsIcon,
+            monuments_custom_point: monumentIcon,
+            lieux_remarquables_point: lieuxRemIcon,
+            auberges_custom_point: aubergesIcon,
+            bouches_incendies_yde_custom_point: bouchesIncendiesIcon,
+            garages_custom_point: garageIcon,
+            complexes_sportifs_custom_point: sportIcon,
+            sapeurs_pompier_point: sapeurPompierIcon,
+            laveries_font_point: laverieIcon,
+            services_publiques: stationServiceIcon,
+            agences_de_voyages_font_point: agenceDeVoyageIcon,
+          };
+          const iconUrl = iconUrlMap[layer.name] || L.Icon.Default.prototype.options.iconUrl;
           const icon = layerIcons[layer.name] || L.Icon.Default.prototype;
 
           // Création du cluster group
@@ -300,11 +184,11 @@ const LeafletMap = ({ selectedLayers = [] }) => {
             iconCreateFunction: function(cluster) {
               const count = cluster.getChildCount();
               return L.divIcon({
-                html: `<div style='position:relative;'><span style='position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:#fffa;padding:1px 5px;border-radius:8px;font-size:13px;font-weight:bold;color:#333;border:1px solid #bbb;'>${count}</span><img src='${icon.options.iconUrl || L.Icon.Default.prototype.options.iconUrl}' style='width:32px;height:32px;display:block;'/></div>`,
+                html: `<div style='position:relative;'><span style='position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:#fffa;padding:1px 5px;border-radius:8px;font-size:13px;font-weight:bold;color:#333;border:1px solid #bbb;'>${count}</span><div style="background:#fff;border-radius:50%;box-shadow:0 2px 8px #0002;border:2px solid #fff;width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><img src='${iconUrl}' style='width:22px;height:22px;display:block;'/></div></div>`,
                 className: 'custom-cluster-icon',
-                iconSize: [24, 40],
-                iconAnchor: [12, 20],
-                popupAnchor: [0, -32],
+                iconSize: [36, 54],
+                iconAnchor: [18, 27],
+                popupAnchor: [0, -27],
               });
             }
           });
@@ -365,10 +249,10 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   // Fonction pour calculer la distance (Haversine)
   function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
-    const φ1 = lat1 * Math.PI/180, φ2 = lat2 * Math.PI/180;
-    const Δφ = (lat2-lat1) * Math.PI/180;
-    const Δλ = (lon2-lon1) * Math.PI/180;
-    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const tetta1 = lat1 * Math.PI/180, tetta2 = lat2 * Math.PI/180;
+    const deltaTetta = (lat2-lat1) * Math.PI/180;
+    const deltaLambda = (lon2-lon1) * Math.PI/180;
+    const a = Math.sin(deltaTetta/2) * Math.sin(deltaTetta/2) + Math.cos(tetta1) * Math.cos(tetta2) * Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
   }
