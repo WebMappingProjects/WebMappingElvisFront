@@ -3,11 +3,12 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/departements/`;
+const API_REGIONS_URL = `/gis/regions`;
 
 const EntityDepartmentForm = ()  => {
 
@@ -17,48 +18,70 @@ const EntityDepartmentForm = ()  => {
 
     const [ name, setName ] = useState("");
     const [ area, setArea ] = useState(0);
+    const [ reg, setReg ] = useState(0);
 
-    const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
+    const { currentEditionPoint, currentProjectionSystem,
+        currentEditionFig
+     } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
+    
+    const [ regions, setRegions ] = useState([]);
+
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setArea(datas[2]);
+            setName(getValueFromIdx(datas, 1));
+            setArea(getValueFromIdx(datas, 2));
+            setReg(getValueFromIdx(datas, 3))
         }
     }, []);
 
+    useEffect(() => {
+        const loadRegions = async () => {
+            const response = await axios.get(API_REGIONS_URL, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            setRegions(response?.data);
+        }
+
+        loadRegions();
+    }, []);
+    
     const handleSave = async (e) => {
         e.preventDefault();
 
-        try
-        {
+        try {
             const token = localStorage.getItem("token");
-
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            // Convertir Polygon en MultiPolygon pour correspondre au modèle Django
+            let geometry = currentEditionFig;
+            
+            if (currentEditionFig && currentEditionFig.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [currentEditionFig.coordinates]
+                };
             }
-            : null;
-
+            console.log("REG", reg);
             const response = await axios.post(API_URL, {
+                "geom": geometry,
                 "nom": name,
-                "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+                "superficie": area,
+                "region": reg
+            }, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -71,30 +94,44 @@ const EntityDepartmentForm = ()  => {
     const handleEdit = async (e) => {
         e.preventDefault();
 
-        try
-        {
+        try {
             const token = localStorage.getItem("token");
 
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
+            let geometry = currentEditionFig;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            if (currentEditionFig && currentProjectionSystem !== 4326) {
+                // Conversion des coordonnées si nécessaire
+                geometry = {
+                    ...currentEditionFig,
+                    coordinates: currentEditionFig.type === "Polygon" 
+                        ? [currentEditionFig.coordinates[0].map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )]
+                        : currentEditionFig.coordinates.map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )
+                };
             }
-            : null;
+
+            // Convertir Polygon en MultiPolygon
+            if (geometry && geometry.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [geometry.coordinates]
+                };
+            }
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+                "geom": geometry,
+                "nom": name,
+                "superficie": area,
+                "region": reg
+            }, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -138,16 +175,36 @@ const EntityDepartmentForm = ()  => {
                             className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
                             htmlFor="area"
                         >
-                            Superficie
+                            Superficie  (m²)
                         </label>
                         <input
                             type="number"
                             className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                            placeholder="Superficie"
+                            placeholder="Superficie (m²)"
                             id="area"
                             value={area}
                             onChange={(e) => setArea(e.target.value)}
                         />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="region"
+                        >
+                            Région
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="region"
+                            value={reg}
+                            onChange={(e) => setReg(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UNE REGION ---</option>
+                            {regions?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <Actions 

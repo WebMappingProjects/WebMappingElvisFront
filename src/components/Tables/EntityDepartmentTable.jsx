@@ -3,13 +3,13 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/agences-de-voyages-font";
+const API_URL = "/gis/departements";
 
 const EntityDepartmentTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
 
-    const headRow = [ "N°", "Nom", "Superficie", "Région" ];
+    const headRow = [ "N°", "Nom", "Superficie (m²)", "Région" ];
 
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -33,6 +33,7 @@ const EntityDepartmentTable = () => {
 
                 let returnDatas = [];
                 let cDatasRows = [];
+
                 for(let i = 0; i < datas.features.length; i++)
                 {
                     let data = datas.features[i];
@@ -40,21 +41,16 @@ const EntityDepartmentTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.quartier,
-                        data.properties.arrondisse
+                        data.properties.superficie,
+                        [ data.properties.region_nom, data.properties.region ]
                     ];
                     
-                    let c = null;
                     if(data.geometry != null && data.geometry != undefined)
                     {
-                        c = [
-                            data.geometry.coordinates[1],
-                            data.geometry.coordinates[0]
-                        ]
+                        cDatasRows.push(data.geometry);
                     }
 
                     returnDatas.push(tb);
-                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
@@ -76,6 +72,7 @@ const EntityDepartmentTable = () => {
                 datasRows={datasRows}
                 title="Departements"
                 coordsRows={coordsRows}
+                geomType="polygon"
                 apiRoute={`${API_URL}/`}
                 originalEpsg={4326}
             />

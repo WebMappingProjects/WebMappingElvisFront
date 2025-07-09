@@ -16,7 +16,9 @@ L.Icon.Default.mergeOptions({
 });
 
 const DrawableLeafletMap = () => {
-  const { currentEditionPoint, setCurrentEditionPoint } = useAppMainContext();
+  const { currentEditionPoint, setCurrentEditionPoint,
+    currentEditionFig, setCurrentEditionFig
+   } = useAppMainContext();
 
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -167,6 +169,26 @@ const DrawableLeafletMap = () => {
     setCurrentEditionPoint([latlng.lat, latlng.lng]);
   };
 
+  // Fonction pour mettre à jour currentEditionPoint après modification
+  const updateCurrentEditionPoint = (layer) => {
+    const latlngs = layer.getLatLngs();
+    const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+    const coordinates = points.map(point => [point.lng, point.lat]);
+    
+    if (layer instanceof L.Polygon) {
+      coordinates.push(coordinates[0]); // Fermer le polygone
+      setCurrentEditionFig({
+        type: "MultiPolygon",
+        coordinates: [coordinates]
+      });
+    } else {
+      setCurrentEditionFig({
+        type: "LineString",
+        coordinates: coordinates
+      });
+    }
+  };
+
   // Fonction pour mettre à jour la géométrie parent
   const updateParentGeometry = (marker, newLatLng) => {
     const parentLayer = marker.parentLayer;
@@ -176,6 +198,8 @@ const DrawableLeafletMap = () => {
       
       points[marker.vertexIndex] = newLatLng;
       parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
+      
+      updateCurrentEditionPoint(parentLayer);
     }
   };
 
@@ -209,6 +233,8 @@ const DrawableLeafletMap = () => {
     // Mettre à jour la géométrie
     parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
     
+    updateCurrentEditionPoint(parentLayer);
+    
     // Recréer tous les marqueurs avec les nouveaux indices
     recreateVertexMarkers(parentLayer);
     
@@ -240,6 +266,7 @@ const DrawableLeafletMap = () => {
       setEntityToDelete(null);
       setConfirmPopupVisible(false);
       setCurrentEditionPoint(null);
+      setCurrentEditionFig(null);
       setMessagePopupVisible(true);
     }
   };
@@ -273,6 +300,8 @@ const DrawableLeafletMap = () => {
         points.splice(marker.vertexIndex, 1);
         parentLayer.setLatLngs(Array.isArray(latlngs[0]) ? [points] : points);
 
+        updateCurrentEditionPoint(parentLayer);
+        
         // Recréer tous les marqueurs
         recreateVertexMarkers(parentLayer);
 
@@ -309,6 +338,24 @@ const DrawableLeafletMap = () => {
         if (layer instanceof L.Polyline || layer instanceof L.Polygon) {
           const latlngs = layer.getLatLngs();
           const points = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+          
+          // Convertir en format GeoJSON
+          const coordinates = points.map(point => [point.lng, point.lat]);
+          
+          if (layer instanceof L.Polygon) {
+            // Pour un polygone, fermer la géométrie
+            coordinates.push(coordinates[0]);
+            setCurrentEditionFig({
+              type: "Polygon",
+              coordinates: [coordinates]
+            });
+          } else {
+            // Pour une ligne
+            setCurrentEditionFig({
+              type: "LineString",
+              coordinates: coordinates
+            });
+          }
           
           points.forEach((latlng, index) => {
             createVertexMarker(latlng, layer, index);

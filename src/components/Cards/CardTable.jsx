@@ -11,7 +11,7 @@ import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ConfirmMessagePopup from "../popups/ConfirmMessagePopup";
 import { ensureEPSG4326 } from "../../utils/tools";
 
-export default function CardTable({ color, mainRoute, title, headRow, datasRows, coordsRows = null, apiRoute, originalEpsg }) {
+export default function CardTable({ color, mainRoute, title, headRow, datasRows, geomType, coordsRows = null, apiRoute, originalEpsg }) {
 
   const { reloadDatas, setReloadDatas } = useAppMainContext();
 
@@ -20,7 +20,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
 
   const [ currentItemIndex, setCurrentItemIndex ] = useState(null);
 
-  const { dataSearch, setCurrentEditionPoint, setCurrentProjectionSystem } = useAppMainContext();
+  const { dataSearch, setCurrentEditionPoint, setCurrentEditionFig, setCurrentProjectionSystem } = useAppMainContext();
 
   const navigate = useNavigate();
 
@@ -58,12 +58,16 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
   const handleEdition = (e, index) => {
     e.preventDefault();
     const globalIndex = (currentPage - 1) * rowsPerPage + index;
-    const ensureTool = ensureEPSG4326([ coordsRows[globalIndex][1], coordsRows[globalIndex][0] ]);
-    const epsg4326Coords = ensureTool.coords;
-    setCurrentProjectionSystem(originalEpsg);
     
-    setCurrentEditionPoint([ epsg4326Coords[1], epsg4326Coords[0] ]);
-    //setCurrentEditionPoint([ coordsRows[globalIndex][0], coordsRows[globalIndex][1] ]);
+    if(geomType == "point") {
+      const ensureTool = ensureEPSG4326([ coordsRows[globalIndex][1], coordsRows[globalIndex][0] ]);
+      const epsg4326Coords = ensureTool.coords;
+      setCurrentProjectionSystem(originalEpsg);
+      
+      setCurrentEditionPoint([ epsg4326Coords[1], epsg4326Coords[0] ]);
+    } else {
+      setCurrentEditionFig(coordsRows[globalIndex]);
+    }
 
     navigate(mainRoute, {
       state: {
@@ -178,7 +182,7 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
                         (dataIndex == 0 ? "text-center border-b border-primary-light-op" : "")
                       }
                     >
-                      { dataIndex == 0 ? ((currentPage - 1) * rowsPerPage + itemIndex + 1) : data }
+                      { dataIndex == 0 ? ((currentPage - 1) * rowsPerPage + itemIndex + 1) : Array.isArray(data) ? data[0] : data }
                     </td>
                   ))}
                   <td className={"flex flex-row px-4 text-xs text-right align-middle border-b whitespace-nowrap" + 

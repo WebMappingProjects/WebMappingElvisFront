@@ -3,13 +3,13 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/agences-de-voyages-font";
+const API_URL = "/gis/regions";
 
 const EntityRegionTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
 
-    const headRow = [ "N°", "Nom", "Superficie" ];
+    const headRow = [ "N°", "Nom", "Superficie (m²)" ];
 
 
     const [ datasRows, setDatasRows ] = useState([]);
@@ -40,21 +40,15 @@ const EntityRegionTable = () => {
                     let tb = [
                         data.id,
                         data.properties.nom,
-                        data.properties.quartier,
-                        data.properties.arrondisse
+                        data.properties.superficie
                     ];
                     
-                    let c = null;
                     if(data.geometry != null && data.geometry != undefined)
                     {
-                        c = [
-                            data.geometry.coordinates[1],
-                            data.geometry.coordinates[0]
-                        ]
+                        cDatasRows.push(data.geometry);
                     }
 
                     returnDatas.push(tb);
-                    cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
@@ -76,6 +70,7 @@ const EntityRegionTable = () => {
                 datasRows={datasRows}
                 title="Region"
                 coordsRows={coordsRows}
+                geomType="polygon"
                 apiRoute={`${API_URL}/`}
                 originalEpsg={4326}
             />

@@ -19,6 +19,7 @@ const AppProvider = ({ children }) => {
     const [ currentProjectionSystem, setCurrentProjectionSystem ] = useState(4326);
 
     const [ currentEditionPoint, setCurrentEditionPoint ] = useState([]);
+    const [ currentEditionFig, setCurrentEditionFig ] = useState([]);
     const [ selectedLayers, setSelectedLayers ] = useState([]);
     const [ statsSelectedLayers, setStatsSelectedLayers ] = useState([]);
 
@@ -32,7 +33,8 @@ const AppProvider = ({ children }) => {
         reloadDatas, setReloadDatas,
         currentProjectionSystem, setCurrentProjectionSystem,
         selectedLayers, setSelectedLayers,
-        statsSelectedLayers, setStatsSelectedLayers
+        statsSelectedLayers, setStatsSelectedLayers,
+        currentEditionFig, setCurrentEditionFig
     };
 
   return <appMainContext.Provider value={value}>{children}</appMainContext.Provider>;

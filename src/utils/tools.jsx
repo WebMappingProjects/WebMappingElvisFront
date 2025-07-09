@@ -93,3 +93,7 @@ export function ensureEPSG4326(coords) {
         return { coords: coords, epsg: 4326 };
     }
 }
+
+export const getValueFromIdx = (incomingDatas, idx) => {
+    return Array.isArray(incomingDatas[idx]) ? incomingDatas[idx][1] : incomingDatas[idx]; 
+}

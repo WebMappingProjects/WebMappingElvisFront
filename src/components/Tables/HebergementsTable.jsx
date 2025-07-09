@@ -3,7 +3,7 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/agences-de-voyages-font"
+const API_URL = "/gis/hebergements"
 const HebergementsTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();

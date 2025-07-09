@@ -3,11 +3,13 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/communes/`;
+const API_REGIONS_URL = `/gis/regions`;
+const API_DEPARTEMENTS_URL = `/gis/departements`;
 
 const EntityCommuneForm = ()  => {
 
@@ -18,49 +20,94 @@ const EntityCommuneForm = ()  => {
     const [ name, setName ] = useState("");
     const [ area, setArea ] = useState(0);
     const [ maire, setMaire ] = useState("");
+    const [ reg, setReg ] = useState(0);
+    const [ dept, setDept ] = useState("");
 
-    const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
-
+    const { currentEditionPoint, currentProjectionSystem,
+        currentEditionFig
+     } = useAppMainContext();
+     
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
+
+    const [ regions, setRegions ] = useState([]);
+    const [ departements, setDepartements ] = useState([]);
+
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setArea(datas[2]);
-            setMaire(datas[3]);
+            setName(getValueFromIdx(datas, 1));
+            setArea(getValueFromIdx(datas, 2));
+            setMaire(getValueFromIdx(datas, 3));
+            setDept(getValueFromIdx(datas, 4));
+            setReg(getValueFromIdx(datas, 5));
         }
     }, []);
 
+    useEffect(() => {
+        const loadRegions = async () => {
+            const response = await axios.get(API_REGIONS_URL, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            setRegions(response?.data);
+        }
+
+        loadRegions();
+    }, []);
+
+    useEffect(() => {
+        const loadDepartments = async () => {
+            if(reg != 0)
+            {
+                const response = await axios.get(`${API_DEPARTEMENTS_URL}?region=${reg}`, { 
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                
+
+                setDepartements(response?.data);
+            }
+        }
+
+        loadDepartments();
+    }, [reg]);
+    /**/
     const handleSave = async (e) => {
         e.preventDefault();
 
-        try
-        {
+        try {
             const token = localStorage.getItem("token");
-
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            // Convertir Polygon en MultiPolygon pour correspondre au modèle Django
+            let geometry = currentEditionFig;
+            
+            if (currentEditionFig && currentEditionFig.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [currentEditionFig.coordinates]
+                };
             }
-            : null;
-
+            console.log("REG", reg);
             const response = await axios.post(API_URL, {
-                "nom": name,
-                "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+                "geom": geometry,
+                "departement": dept,
+                "maire": maire,
+                "superficie": area, 
+                "nom": name
+            }, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -73,30 +120,45 @@ const EntityCommuneForm = ()  => {
     const handleEdit = async (e) => {
         e.preventDefault();
 
-        try
-        {
+        try {
             const token = localStorage.getItem("token");
 
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
+            let geometry = currentEditionFig;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            if (currentEditionFig && currentProjectionSystem !== 4326) {
+                // Conversion des coordonnées si nécessaire
+                geometry = {
+                    ...currentEditionFig,
+                    coordinates: currentEditionFig.type === "Polygon" 
+                        ? [currentEditionFig.coordinates[0].map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )]
+                        : currentEditionFig.coordinates.map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )
+                };
             }
-            : null;
+
+            // Convertir Polygon en MultiPolygon
+            if (geometry && geometry.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [geometry.coordinates]
+                };
+            }
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+                "geom": geometry,
+                "departement": dept,
+                "maire": maire,
+                "superficie": area,
+                "nom": name
+            }, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -140,12 +202,12 @@ const EntityCommuneForm = ()  => {
                             className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
                             htmlFor="area"
                         >
-                            Superficie
+                            Superficie  (m²)
                         </label>
                         <input
                             type="number"
                             className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                            placeholder="Superficie"
+                            placeholder="Superficie  (m²)"
                             id="area"
                             value={area}
                             onChange={(e) => setArea(e.target.value)}
@@ -167,6 +229,46 @@ const EntityCommuneForm = ()  => {
                             value={maire}
                             onChange={(e) => setMaire(e.target.value)}
                         />
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="region"
+                        >
+                            Région
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="region"
+                            value={reg}
+                            onChange={(e) => setReg(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UNE REGION ---</option>
+                            {regions?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="relative w-full mb-3">
+                        <label
+                            className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                            htmlFor="dept"
+                        >
+                            Département
+                        </label>
+                        <select
+                            className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
+                            id="dept"
+                            value={dept}
+                            onChange={(e) => setDept(e.target.value)}
+                        >
+                            <option value={0}>--- SELECTIONNER UN DEPARTEMENT ---</option>
+                            {departements?.features?.map((t) => (
+                                <option key={t.id} value={t.id}>{t.properties.nom}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <Actions 

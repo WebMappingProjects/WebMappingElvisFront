@@ -7,7 +7,7 @@ import { convertCoords } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/regions/`;
 
 const EntityRegionForm = ()  => {
 
@@ -18,7 +18,9 @@ const EntityRegionForm = ()  => {
     const [ name, setName ] = useState("");
     const [ area, setArea ] = useState(0);
 
-    const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
+    const { currentEditionPoint, currentProjectionSystem,
+        currentEditionFig
+     } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
@@ -34,31 +36,29 @@ const EntityRegionForm = ()  => {
     const handleSave = async (e) => {
         e.preventDefault();
 
-        try
-        {
+        try {
             const token = localStorage.getItem("token");
-
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            // Convertir Polygon en MultiPolygon pour correspondre au modèle Django
+            let geometry = currentEditionFig;
+            
+            if (currentEditionFig && currentEditionFig.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [currentEditionFig.coordinates]
+                };
             }
-            : null;
 
             const response = await axios.post(API_URL, {
+                "geom": geometry,
                 "nom": name,
-                "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+                "superficie": area
+            }, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -71,30 +71,43 @@ const EntityRegionForm = ()  => {
     const handleEdit = async (e) => {
         e.preventDefault();
 
-        try
-        {
+        try {
             const token = localStorage.getItem("token");
 
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
+            let geometry = currentEditionFig;
             
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
+            if (currentEditionFig && currentProjectionSystem !== 4326) {
+                // Conversion des coordonnées si nécessaire
+                geometry = {
+                    ...currentEditionFig,
+                    coordinates: currentEditionFig.type === "Polygon" 
+                        ? [currentEditionFig.coordinates[0].map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )]
+                        : currentEditionFig.coordinates.map(coord => 
+                            convertCoords([coord[1], coord[0]]).coords.reverse()
+                        )
+                };
             }
-            : null;
+
+            // Convertir Polygon en MultiPolygon
+            if (geometry && geometry.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [geometry.coordinates]
+                };
+            }
 
             const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+                "geom": geometry,
+                "nom": name,
+                "superficie": area
+            }, { 
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -138,7 +151,7 @@ const EntityRegionForm = ()  => {
                             className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
                             htmlFor="area"
                         >
-                            Superficie
+                            Superficie (m²)
                         </label>
                         <input
                             type="number"

@@ -3,7 +3,10 @@ import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/agences-de-voyages-font"
+const API_URL = "/gis/centres-sante"
+const API_COMMUNE_URL = "/gis/communes";
+const API_DEPARTEMENT_URL = "/gis/departements";
+
 const CentresDeSanteTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
@@ -36,24 +39,28 @@ const CentresDeSanteTable = () => {
                     {
                         let data = datas.features[i];
                         
+                        const response2 = await axios.get(`${API_DEPARTEMENT_URL}/${data.properties.departement}`, {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            }
+                        });
+    
                         let tb = [
                             data.id,
                             data.properties.nom,
-                            data.properties.quartier,
-                            data.properties.arrondisse
+                            data.properties.superficie,
+                            data.properties.maire,
+                            [ data.properties.departement_nom, data.properties.departement ],
+                            [ data.properties.region_nom, response2?.data?.properties.region.id ]
                         ];
                         
-                        let c = null;
                         if(data.geometry != null && data.geometry != undefined)
                         {
-                            c = [
-                                data.geometry.coordinates[1],
-                                data.geometry.coordinates[0]
-                            ]
+                            cDatasRows.push(data.geometry);
                         }
 
                         returnDatas.push(tb);
-                        cDatasRows.push(c);
                     }
     
                     setDatasRows(returnDatas);
