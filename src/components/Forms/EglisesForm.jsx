@@ -1,13 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
-import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import axios, { API_COMMUNE_URL, API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import { useAppMainContext } from "../../context/AppProvider";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+import Selections from "../Forms_blocks/Selections";
 
-const API_URL = `/gis/agences-de-voyages-font/`;
+const API_URL = `/gis/eglises/`;
 
 const EglisesForm = ()  => {
 
@@ -19,7 +20,10 @@ const EglisesForm = ()  => {
     const [ capacity, setCapacity ] = useState("");
     const [ type, setType ] = useState("");
     const [ structure, setStructure ] = useState("");
-    const [ community, setCommunity ] = useState("");
+
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
@@ -27,29 +31,33 @@ const EglisesForm = ()  => {
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
     
     const typeEglise = [
-        "CATHOLIQUE",
-        "PROTESTANTE",
-        "PRESBYTERIENNE",
-        "MUSULMANE"
+        [ "CATHOLIQUE" , "catholique" ],
+        [ "PROTESTANTE" , "protestant" ],
+        [ "PRESBYTERIENNE" , "musulman" ],
+        [ "MUSULMANE" , "presbyterienne"],
+        [ "ADVENTISTE" , "adventiste"]
     ];
 
     const typeStructure = [
-        "PAROISSE",
-        "SEMINAIRE",
-        "MOSQUEE",
-        "BASILIQUE"
+        [ "PAROISSE", "paroisse" ],
+        [ "SEMINAIRE", "seminaire" ],
+        [ "MOSQUEE", "mosquee" ],
+        [ "BASILIQUE", "basilique" ]
     ];
 
     useEffect(() => {
         if(datas != null)
         {
-            setName(datas[1]);
-            setCapacity(datas[2]);
-            setType(datas[3]);
-            setStructure(datas[4]);
-            setCommunity(datas[5]);
+            setName(getValueFromIdx(datas, 1));
+            setCapacity(getValueFromIdx(datas, 2));
+            setType(getValueFromIdx(datas, 3));
+            setStructure(getValueFromIdx(datas, 4));
+            setCom(getValueFromIdx(datas, 5));
+            setDept(getValueFromIdx(datas, 6));
+            setReg(getValueFromIdx(datas, 7));
         }
     }, []);
+
 
     const handleSave = async (e) =>  {
         e.preventDefault();
@@ -76,7 +84,7 @@ const EglisesForm = ()  => {
                 "capacite": capacity,
                 "type": type,
                 "structure": structure,
-                "commune": community,
+                "commune": com,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -111,12 +119,12 @@ const EglisesForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
                 "nom": name,
                 "capacite": capacity,
                 "type": type,
                 "structure": structure,
-                "commune": community,
+                "commune": com,
                 "geom": geometry
             }, { headers: {
                 "Content-Type": "application/json",
@@ -191,7 +199,7 @@ const EglisesForm = ()  => {
                         >
                             <option value="">Sélectionner un type</option>
                             {typeEglise.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
@@ -210,10 +218,19 @@ const EglisesForm = ()  => {
                         >
                             <option value="">Sélectionner une structure</option>
                             {typeStructure.map((s) => (
-                                <option key={s} value={s}>{s}</option>
+                                <option key={s[1]} value={s[1]}>{s[0]}</option>
                             ))}
                         </select>
                     </div>
+
+                    <Selections
+                        reg={reg}
+                        setReg={setReg}
+                        dept={dept}
+                        setDept={setDept}
+                        com={com}
+                        setCom={setCom}
+                    />
 
                     <Actions
                         handleSave={handleSave}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
-import axios from "../../api/axios";
+import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
 const API_URL = "/gis/eglises"
@@ -13,57 +13,72 @@ const EglisesTable = () => {
     const [ datasRows, setDatasRows ] = useState([]);
     const [ coordsRows, setCoordsRows ] = useState([]);
 
-        useEffect(() => {
-            const loadDatasRows = async () => {
-            
-                    try
-                    {
-                    const token = localStorage.getItem("token");
+    useEffect(() => {
+        const loadDatasRows = async () => {
         
-                    const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
+                try
+                {
+                const token = localStorage.getItem("token");
+    
+                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+        
+                const datas = response.data;
+                
+                let returnDatas = [];
+                let cDatasRows = [];
+                for(let i = 0; i < datas.features.length; i++)
+                {
+                    let data = datas.features[i];
+                    
+                    const response2 = await axios.get(`${API_COMMUNE_URL}/${data.properties.commune}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
                         }
                     });
-            
-                    const datas = response.data;
-    
-                    let returnDatas = [];
-                    let cDatasRows = [];
-                    for(let i = 0; i < datas.features.length; i++)
-                    {
-                        let data = datas.features[i];
-                        
-                        let tb = [
-                            data.id,
-                            data.properties.nom,
-                            data.properties.quartier,
-                            data.properties.arrondisse
-                        ];
-                        
-                        let c = null;
-                        if(data.geometry != null && data.geometry != undefined)
-                        {
-                            c = [
-                                data.geometry.coordinates[1],
-                                data.geometry.coordinates[0]
-                            ]
-                        }
 
-                        returnDatas.push(tb);
-                        cDatasRows.push(c);
+                    const centerName = data.properties.nom;
+
+                    console.log("response2?.data.properties.departement.properties", response2?.data.properties.departement.properties)
+                    let tb = [
+                        data.properties.id,
+                        centerName,
+                        data.properties.capacite,
+                        data.properties.type,
+                        data.properties.structure,
+                        [ data.properties.commune_nom, data.properties.commune ],
+                        [ response2?.data.properties.departement.properties.nom, response2?.data.properties.departement.id ],
+                        [ response2?.data.properties.departement.properties.region_nom, response2?.data.properties.departement.properties.region ],
+                    ];
+                    
+                    let c = null;
+                    if(data.geometry != null && data.geometry != undefined)
+                    {
+                        c = [
+                            data.geometry.coordinates[1],
+                            data.geometry.coordinates[0]
+                        ]
                     }
-    
-                    setDatasRows(returnDatas);
-                    setCoordsRows(cDatasRows);
-                    } catch (err) {
+
+
+                    returnDatas.push(tb);
+                    cDatasRows.push(c);
+                }
+
+                setDatasRows(returnDatas);
+                setCoordsRows(cDatasRows);
+                } catch (err) {
                     console.log("ERROR", err);
-                    }
-            }
-    
-            loadDatasRows();
-        }, [dataSearch, reloadDatas]);
+                }
+        }
+
+        loadDatasRows();
+    }, [dataSearch, reloadDatas]);
 
     return (
         <>
