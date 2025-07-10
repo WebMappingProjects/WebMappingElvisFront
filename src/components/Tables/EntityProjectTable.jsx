@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
-import axios from "../../api/axios";
+import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
+import { getCorrectId } from "../../utils/tools";
 
 const API_URL = "/gis/projets";
 
@@ -33,28 +34,33 @@ const EntityProjectTable = () => {
 
                 let returnDatas = [];
                 let cDatasRows = [];
-                for(let i = 0; i < datas.features.length; i++)
+                for(let i = 0; i < datas.length; i++)
                 {
-                    let data = datas.features[i];
+                    let data = datas[i];
                     
+                    const response2 = await axios.get(`${API_COMMUNE_URL}/${data.commune}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
                     let tb = [
                         data.id,
-                        data.properties.nom,
-                        data.properties.quartier,
-                        data.properties.arrondisse
+                        data.nom_contractant,
+                        data.description,
+                        data.montant,
+                        data.date_debut,
+                        data.date_livraison,
+                        data.service,
+                        [ data.commune_nom, data.commune ],
+                        [ response2?.data.properties.departement.properties.nom, response2?.data.properties.departement.id ],
+                        [ response2?.data.properties.departement.properties.region_nom, response2?.data.properties.departement.properties.region ],
+
                     ];
-                    
-                    let c = null;
-                    if(data.geometry != null && data.geometry != undefined)
-                    {
-                        c = [
-                            data.geometry.coordinates[1],
-                            data.geometry.coordinates[0]
-                        ]
-                    }
 
                     returnDatas.push(tb);
-                    cDatasRows.push(c);
+                    //cDatasRows.push(c);
                 }
 
                 setDatasRows(returnDatas);
@@ -71,7 +77,7 @@ const EntityProjectTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/entities/projets"
+                mainRoute="/admin/forms/projets"
                 headRow={headRow}
                 datasRows={datasRows}
                 title="Projets"

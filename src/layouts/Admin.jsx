@@ -13,7 +13,7 @@ export default function Admin() {
   return (
     <>
       <Sidebar />
-      <div className="relative bg-neutral-100 md:ml-64">
+      <div className="relative bg-neutral-100 md:ml-72">
         <AdminNavbar />
         {/* Header */}
         <HeaderStats />

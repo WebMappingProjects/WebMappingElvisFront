@@ -3,42 +3,7 @@ import axios from "../api/axios";
 import { useAppMainContext } from "../context/AppProvider";
 import PieChart from "../components/PieChart";
 import PolygonChart from "../components/PolygonChart";
-
-// Liste des services dynamiquement récupérée depuis la sidebar
-const allLayers = [
-  { name: "enseignement_de_base_font_point", label: "Enseignement de base", dtName: "Écoles de base" },
-  { name: "ecoles_mat_primaire_point", label: "Ecoles maternelles et primaires", dtName: "Écoles primaires" },
-  { name: "enseignements_secondaires_final_point", label: "Enseignement Secondaire", dtName: "Enseignement secondaire" },
-  { name: "enseignement_superieur_custom_point", label: "Enseignement superieur", dtName: "Enseignement supérieur" },
-  { name: "pharmacies_point", label: "Pharmacies", dtName: "Pharmacies" },
-  { name: "eglises_catholiques_font_point", label: "Eglises Catholiques", dtName: "Églises catholiques" },
-  { name: "eglises_presbyteriennes_font_point", label: "Eglises Presbyteriennes", dtName: "Églises presbytériennes" },
-  { name: "eglises_protestantes_point", label: "Eglises Protestantes", dtName: "Églises protestantes" },
-  { name: "mosquees_font_point", label: "Mosquées", dtName: "Mosquées" },
-  { name: "nations_unies_point", label: "Nations Unies", dtName: "Nations Unies" },
-  { name: "banques_et_microfinances_custom_point", label: "Banques et microfinances", dtName: "Banques et microfinances" },
-  { name: "cites_municipales_cuy_point", label: "Cites Municipales", dtName: "Cités municipales" },
-  { name: "centre_special_detat_civil_font_point", label: "Centres special detat civil", dtName: "Centre spécial état civil" },
-  { name: "mairies_yaounde_custom_point", label: "Mairies Yaounde", dtName: "Mairies" },
-  { name: "prefectures_sous-prefectures_custom_point", label: "Prefectures/sous-prefectures", dtName: "Préfectures et sous-préfectures" },
-  { name: "ambassades_point", label: "Ambassades", dtName: "Ambassades" },
-  { name: "gendarmeries_point", label: "Gendarmeries", dtName: "Gendarmeries" },
-  { name: "commissariats_yde_font_point", label: "Commissariats", dtName: "Commissariats" },
-  { name: "restaurants_yaounde_font_point", label: "Restaurants", dtName: "Restaurants" },
-  { name: "boulangeries_custom_point", label: "Boulangeries", dtName: "Boulangeries" },
-  { name: "centres_culturels_custom_point", label: "Centres Culturels", dtName: "Centres culturels" },
-  { name: "hotels_font_point", label: "Hotels", dtName: "Hôtels" },
-  { name: "monuments_custom_point", label: "Monuments", dtName: "" },
-  { name: "lieux_remarquables_point", label: "Lieux remarquables", dtName: "Lieux remarquables" },
-  { name: "auberges_custom_point", label: "Auberges", dtName: "Auberges" },
-  { name: "bouches_incendies_yde_custom_point", label: "Bouches incendies", dtName: "Bouches incendie" },
-  { name: "garages_custom_point", label: "Garages", dtName: "Garages" },
-  { name: "complexes_sportifs_custom_point", label: "Complexes Sportifs", dtName: "Complexes sportifs" },
-  { name: "sapeurs_pompier_point", label: "Sapeur pompier", dtName: "Sapeurs-pompiers" },
-  { name: "laveries_font_point", label: "Laveries", dtName: "Laveries" },
-  { name: "stations_sevices_font_point", label: "Stations Services", dtName: "Stations service" },
-  { name: "agences_de_voyages_font_point", label: "Agences de Voyages", dtName: "Agences de voyage" },
-];
+import { getCorrectId } from "../utils/tools";
 
 // Colonnes groupables par service (à adapter selon le backend)
 const groupableColumns = {
@@ -177,6 +142,7 @@ const StatsDashboard = () => {
   const [ distanceDatas, setDistanceDatas ] = useState(null);
   const [totalAllServices, setTotalAllServices] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [adminLevel, setAdminLevel] = useState("commune");
   const rowsPerPage = 20;
   const totalPages = Math.ceil(groupedData.length / rowsPerPage);
   const paginatedData = groupedData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
@@ -189,13 +155,16 @@ const StatsDashboard = () => {
       statsSelectedLayers.forEach(async (service) => {
         try {
           const token = localStorage.getItem("token");
-          const res = await axios.get(`/gis/count/`, { 
+
+          console.log("TEL");
+          //const res = await axios.get(`/gis/count`, { 
+          const res = await axios.get(`/gis/dashboard/global_statistics`, { 
             headers: { 
               "Content-Type": "application/json",
               "Authorization": `Bearer ${token}`
             }
           });
-          const serviceCount = res.data.services[service.dtName];
+          const serviceCount =  getCorrectId(res.data[`${service.dtName}_count`], res.data.services_count[service.dtName]);
           setCounts((prev) => ({ ...prev, [service.name]: serviceCount }));
           total += serviceCount;
           setTotalAllServices(total);
@@ -231,15 +200,16 @@ const StatsDashboard = () => {
 
   useEffect(() => {
     // Récupère les données groupées
-    if (selectedService && selectedColumn) {
+    if (selectedService) {
       let token = localStorage.getItem("token");
-      const modelName = transformToUpperCamelCase(selectedService.name);
+      const modelName = transformToUpperCamelCase(selectedService.model);
+      console.log("SELECTED SERVICE", selectedService);
       axios
-        .get(`/gis/group?model=${modelName}&group_by=${selectedColumn?.data}`, { headers : { "Authorization" : `Bearer ${token}` }})
-      .then((res) => { setGroupedData(res.data.results) })
-        .catch(() => setGroupedData([]));
+        .get(`/gis/dashboard/group_by_admin?model=${selectedService.model}&admin_level=${adminLevel}`, { headers : { "Authorization" : `Bearer ${token}` }})
+      .then((res) => { console.log("RES", res); setGroupedData(res.data.results) })
+        .catch((err) => { console.error("ERROR", err); setGroupedData([])});
     }
-  }, [selectedService, selectedColumn]);
+  }, [selectedService, adminLevel]);
 
   useEffect(() => {
     // Récupère la distance moyenne
@@ -315,6 +285,13 @@ const StatsDashboard = () => {
           ))}
         </select>
         <select
+        value={adminLevel}
+        onChange={(e) => setAdminLevel(e.target.value)}>
+          <option value="commune">COMMUNE</option>
+          <option value="departement">DEPARTEMENT</option>
+          <option value="region">REGION</option>
+        </select>
+        {/* <select
           value={selectedColumn?.name}
           onChange={e => {
             let filtered = groupableColumns[selectedService?.name].filter(l => l.name.toLowerCase() === e.target.value.toLowerCase());
@@ -327,7 +304,7 @@ const StatsDashboard = () => {
               {item.name}
             </option>
           )) : null }
-        </select>
+        </select> */}
       </div>
       <table className="min-w-full mb-8 bg-white rounded shadow">
         <thead>

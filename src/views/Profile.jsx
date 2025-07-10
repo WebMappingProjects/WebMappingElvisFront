@@ -40,32 +40,45 @@ export default function Profile() {
   };
   const handleCancel = () => setEditField(null);
   const handleSave = async () => {
+    let savedDatas = null;
     if (editField === "username") {
-      
-        try
-        {
-            const token = localStorage.getItem("token");
-            //const userId = localStorage.getItem("userId");
-            const response = await axios.patch(`${API_URL}/${userId}`, {
-                "username": tempUsername
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
-
-            console.log("RESPONSE", response);
-            const user = JSON.parse(localStorage.getItem("authUser"));
-            localStorage.setItem("authUser", JSON.stringify({ ...user, username }))
-            alert("Modification effectuee avec success")
-          } catch (e) {
-            alert("Echec de la modification")
-            console.error("ERROR", e);
-        }
+      savedDatas = {
+            "username": tempUsername
+      }
     }
-    if (editField === "email") setEmail(tempEmail);
+    if (editField === "email") {
+      savedDatas = {
+            "email": tempEmail
+      }
+      //setEmail(tempEmail);
+    }
     if (editField === "password") {
       // Ici, vous pouvez ajouter la logique de validation et d'envoi du mot de passe
     }
+
+    if(savedDatas != null)
+      try
+      {
+          const token = localStorage.getItem("token");
+          //const userId = localStorage.getItem("userId");
+          const response = await axios.patch(`${API_URL}/${userId}/`, savedDatas, { headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+          }});
+
+          console.log("RESPONSE", response);
+          const user = JSON.parse(localStorage.getItem("authUser"));
+          const updatedUser = { ...user, ...savedDatas };
+          localStorage.setItem("authUser", JSON.stringify(updatedUser))
+
+          setUsername(updatedUser.username);
+          setEmail(updatedUser.email);
+          
+          alert("Modification effectuee avec success")
+        } catch (e) {
+          alert("Echec de la modification")
+          console.error("ERROR", e);
+        }
     setEditField(null);
   };
 

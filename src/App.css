@@ -48,3 +48,58 @@
 {
     background: url("./assets/7181.jpg") fixed center;
 }
+
+/* Style des popups */
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 6px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.15);
+  padding: 0;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+}
+
+.custom-popup .leaflet-popup-tip-container {
+  margin-top: -1px;
+}
+
+/* Animation des marqueurs */
+.custom-marker {
+  transition: transform 0.2s ease;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+}
+
+/* Style des clusters */
+.custom-cluster-icon {
+  transition: all 0.2s ease;
+}
+
+.custom-cluster-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Animation de la barre de recherche */
+input {
+  transition: all 0.3s ease;
+}
+
+/* Style pour le bouton effacer */
+.clear-btn {
+  transition: transform 0.2s ease;
+}
+
+.clear-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Adaptation mobile */
+@media (max-width: 640px) {
+  .search-container {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}

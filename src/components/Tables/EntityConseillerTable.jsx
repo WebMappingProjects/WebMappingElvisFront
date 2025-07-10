@@ -1,27 +1,24 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
-import axios from "../../api/axios";
+import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
 
-const API_URL = "/gis/conseillers";
+const API_URL = "gis/conseillers";
 
-const EntityConseillerTable = () => {
+const ConseillerTable = () => {
     
     const { dataSearch, reloadDatas } = useAppMainContext();
 
-    const headRow = [ "N°", "Nom", "Telephone", "Fin mandat", "Role", "Commune", "Département", "Région" ];
-
+    const headRow = [ "N°", "Nom", "Téléphone", "Fin de mandat", "Rôle", "Région" ];
 
     const [ datasRows, setDatasRows ] = useState([]);
     const [ coordsRows, setCoordsRows ] = useState([]);
 
     useEffect(() => {
         const loadDatasRows = async () => {
-        
-                try
-                {
+            try {
                 const token = localStorage.getItem("token");
-    
+
                 const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",
@@ -33,35 +30,28 @@ const EntityConseillerTable = () => {
 
                 let returnDatas = [];
                 let cDatasRows = [];
-                for(let i = 0; i < datas.features.length; i++)
+                for(let i = 0; i < datas.length; i++)
                 {
-                    let data = datas.features[i];
+                    let data = datas[i];
                     
+
                     let tb = [
                         data.id,
-                        data.properties.nom,
-                        data.properties.quartier,
-                        data.properties.arrondisse
+                        data.nom,
+                        data.telephone,
+                        data.fin_mandat,
+                        data.role,
+                        [ data.region_nom, data.region ]
                     ];
-                    
-                    let c = null;
-                    if(data.geometry != null && data.geometry != undefined)
-                    {
-                        c = [
-                            data.geometry.coordinates[1],
-                            data.geometry.coordinates[0]
-                        ]
-                    }
 
                     returnDatas.push(tb);
-                    cDatasRows.push(c);
+                    //cDatasRows.push(c);
                 }
-
                 setDatasRows(returnDatas);
                 setCoordsRows(cDatasRows);
-                } catch (err) {
+            } catch (err) {
                 console.log("ERROR", err);
-                }
+            }
         }
 
         loadDatasRows();
@@ -71,16 +61,16 @@ const EntityConseillerTable = () => {
         <>
             <CardTable 
                 color="light"
-                mainRoute="/admin/forms/entities/conseillers"
+                mainRoute="/admin/forms/conseillers"
                 headRow={headRow}
                 datasRows={datasRows}
-                title="Conseiller"
                 coordsRows={coordsRows}
+                title="Liste des conseillers"
                 apiRoute={`${API_URL}/`}
-                originalEpsg={4326}
+                hasCoords={false} // Pas de coordonnées géographiques pour les conseillers
             />
         </>
     );
 }
 
-export default EntityConseillerTable;
+export default ConseillerTable;

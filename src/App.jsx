@@ -65,19 +65,19 @@ function App() {
         </ProtectedRoute>*/
       }>
           <Route path="/admin/dashboard" element={
+              <ProtectedRoute>
                 <Dashboard />
-              /*<ProtectedRoute>
-              </ProtectedRoute>*/
+              </ProtectedRoute>
           } />
           {/* <Route path="/admin/settings" element={<Settings />} /> */}
           
           {/*  Sub layouts for admin data forms */}
           <Route path="/admin/forms" element={
-            <Forms />
-            /*<ProtectedRoute>
+            <ProtectedRoute>
               <IsTechnicianProtectedRoute>
+                <Forms />
               </IsTechnicianProtectedRoute>
-            </ProtectedRoute>*/
+            </ProtectedRoute>
           }>
             <Route path="/admin/forms/services" element={<ServiceForm />} >
               <Route path="/admin/forms/services/centre-sante" element={<CentresDeSanteForm />} />
@@ -97,22 +97,23 @@ function App() {
               <Route path="/admin/forms/entities/regions" element={<EntityRegionForm />} />
               <Route path="/admin/forms/entities/hydrographie" element={<EntityHydrographyForm />} />
               <Route path="/admin/forms/entities/routes" element={<EntityRoadForm />} />
-              <Route path="/admin/forms/entities/projets" element={<EntityProjectForm />} />
-              <Route path="/admin/forms/entities/conseillers" element={<EntityConseillerForm />} />
               
               <Route path="/admin/forms/entities" element={<Navigate  to="/admin/forms/entities/communes" />} />
             </Route>
+            
+            <Route path="/admin/forms/projets" element={<EntityProjectForm />} />
+            <Route path="/admin/forms/conseillers" element={<EntityConseillerForm />} />
 
             <Route path="/admin/forms" element={<Navigate  to="/admin/forms/services" />} />
           </Route>
 
           {/*  Sub Layouts for admin data tables */}
           <Route path="/admin/tables" element={
-            <Tables />
-            /*<ProtectedRoute>
+            <ProtectedRoute>
               <IsTechnicianProtectedRoute>
+                <Tables />
               </IsTechnicianProtectedRoute>
-            </ProtectedRoute>*/
+            </ProtectedRoute>
           }>
               <Route path="/admin/tables/centre-sante" element={<CentresDeSanteTable />} />
               <Route path="/admin/tables/eglises" element={<EglisesTable />} />
@@ -138,9 +139,9 @@ function App() {
 
       {/* Map Route */}
       <Route path="/map" element={
-        <Maps />
-        /*<ProtectedRoute>
-        </ProtectedRoute>*/
+        <ProtectedRoute>
+          <Maps />
+        </ProtectedRoute>
       } />
 
       {/* Auth Routes */}
@@ -152,31 +153,31 @@ function App() {
 
       {/* add routes without layouts */}
       <Route path="/stats" element={
-        <StatsPage />
-        /*<ProtectedRoute>
+        <ProtectedRoute>
           <IsDeciderProtectedRoute>
+            <StatsPage />
           </IsDeciderProtectedRoute>
-        </ProtectedRoute>*/
+        </ProtectedRoute>
       } />
 
       <Route path="/profile" element={
-        <Profile />
-        /*<ProtectedRoute>
-        </ProtectedRoute>*/
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
       } />
 
       <Route path="/users-administration" element={
-        <AdminPage />
-        /*<ProtectedRoute>
+        <ProtectedRoute>
           <IsAdminProtectedRoute>
+            <AdminPage />
           </IsAdminProtectedRoute>
-        </ProtectedRoute>*/
+        </ProtectedRoute>
       } />
 
       <Route path="/" element={
-        <Index />
-        /*<ProtectedRoute>
-        </ProtectedRoute>*/
+        <ProtectedRoute>
+          <Index />
+        </ProtectedRoute>
       } />
 0
       <Route path="/403" element={

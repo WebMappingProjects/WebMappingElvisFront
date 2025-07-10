@@ -8,7 +8,7 @@ const StatsPage = () => {
     return (
         <>
             <StatsSidebar />
-            <div className="relative pt-10 bg-neutral-100 md:ml-64">
+            <div className="relative pt-10 bg-neutral-100 md:ml-72">
                 <StatsNavbar />
                 <div className="w-full px-0 mx-auto md:px-10">
                     <StatsDashboard />

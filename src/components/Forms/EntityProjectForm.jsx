@@ -3,11 +3,21 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, getValueFromIdx } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
+import Selections from "../Forms_blocks/Selections";
 
-const API_URL = `/gis/ambassades/`;
+const API_URL = `/gis/projets/`;
+
+const typeService = [
+    [ "EGLISE", "eglise" ],
+    [ "ENSEIGNEMENT", "enseignement" ],
+    [ "HEBERGEMENT", "hebergement" ],
+    [ "SANTE", "sante" ],
+    [ "SECURITE", "securite" ],
+    [ "SERVICE PUBLIQUE" , "service_publique" ]
+];
 
 const EntityProjectForm = ()  => {
 
@@ -20,31 +30,31 @@ const EntityProjectForm = ()  => {
     const [ montant, setMontant ] = useState("");
     const [ dateDebut, setDateDebut ] = useState("");
     const [ dateLivraison, setDateLivraison ] = useState("");
-    const [ service, setService ] = useState("");
+    const [ service, setService ] = useState(typeService[0][1]);
+
+    const [ reg, setReg ] = useState("");
+    const [ dept, setDept ] = useState("");
+    const [ com, setCom ] = useState("");
 
     const { currentEditionPoint, currentProjectionSystem } = useAppMainContext();
 
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
 
-    const typeService = [
-        "EGLISE",
-        "ENSEIGNEMENT",
-        "HEBERGEMENT",
-        "SANTE",
-        "SECURITE",
-        "SERVICE PUBLIQUE"
-    ];
 
     useEffect(() => {
         if(datas != null)
         {
-            setNomContractant(datas[1]);
-            setDescription(datas[2]);
-            setMontant(datas[3]);
-            setDateDebut(datas[4]);
-            setDateLivraison(datas[5]);
-            setService(datas[6]);
+            setNomContractant(getValueFromIdx(datas, 1));
+            setDescription(getValueFromIdx(datas, 2));
+            setMontant(getValueFromIdx(datas, 3));
+            setDateDebut(getValueFromIdx(datas, 4));
+            setDateLivraison(getValueFromIdx(datas, 5));
+            setService(getValueFromIdx(datas, 6));
+
+            setCom(getValueFromIdx(datas, 7));
+            setDept(getValueFromIdx(datas, 8));
+            setReg(getValueFromIdx(datas, 9));
         }
     }, []);
 
@@ -55,23 +65,14 @@ const EntityProjectForm = ()  => {
         {
             const token = localStorage.getItem("token");
 
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
-            
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
-            }
-            : null;
-
             const response = await axios.post(API_URL, {
-                "nom": name,
-                "geom": geometry
+                "nom_contractant" : nomContractant,
+                "description" : description,
+                "montant" : montant,
+                "date_debut" : dateDebut,
+                "date_livraison" : dateLivraison,
+                "service" : service,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -92,22 +93,14 @@ const EntityProjectForm = ()  => {
         {
             const token = localStorage.getItem("token");
 
-            const returnToOriginalCoordSys = currentEditionPoint ? 
-                (currentProjectionSystem == 4326 ? currentEditionPoint : convertCoords(currentEditionPoint).coords)
-                  : null;
-            
-            const geometry = returnToOriginalCoordSys
-            ? {
-                type: "Point",
-                coordinates: [
-                    returnToOriginalCoordSys[1],
-                    returnToOriginalCoordSys[0]
-                ]
-            }
-            : null;
-
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
-                "geom": geometry
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+                "nom_contractant" : nomContractant,
+                "description" : description,
+                "montant" : montant,
+                "date_debut" : dateDebut,
+                "date_livraison" : dateLivraison,
+                "service" : service,
+                "commune": com
             }, { headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -174,12 +167,12 @@ const EntityProjectForm = ()  => {
                             className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
                             htmlFor="amount"
                         >
-                            Montant
+                            Montant (FCFA)
                         </label>
                         <input
                             type="number"
                             className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"
-                            placeholder="Montant"
+                            placeholder="Montant (FCFA)"
                             id="amount"
                             value={montant}
                             onChange={(e) => setMontant(e.target.value)}
@@ -233,11 +226,19 @@ const EntityProjectForm = ()  => {
                         >
                             <option value="">Sélectionner un type de service</option>
                             {typeService.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t[1]} value={t[1]}>{t[0]}</option>
                             ))}
                         </select>
                     </div>
-
+                    
+                    <Selections
+                        reg={reg}
+                        setReg={setReg}
+                        dept={dept}
+                        setDept={setDept}
+                        com={com}
+                        setCom={setCom}
+                    />
                     <Actions 
                         handleSave={handleSave}
                         handleEdit={handleEdit}

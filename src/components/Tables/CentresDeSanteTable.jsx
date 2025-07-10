@@ -53,7 +53,7 @@ const CentresDeSanteTable = () => {
                         }
                     });*/
 
-                    console.log("response2?.data.properties.departement.properties", response2?.data.properties.departement.properties)
+                    //console.log("response2?.data.properties.departement.properties", response2?.data.properties.departement.properties)
                     let tb = [
                         getCorrectId(data.properties.id, data.id),
                         centerName,

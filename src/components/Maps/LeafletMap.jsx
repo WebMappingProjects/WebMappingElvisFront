@@ -61,11 +61,31 @@ const LeafletMap = ({ selectedLayers = [] }) => {
 
   // Correspondance couche -> icône personnalisée (chaque icône dans un cercle blanc)
   const makeCircleIcon = (iconUrl) => L.divIcon({
-    html: `<div style="background:#fff;border-radius:50%;box-shadow:0 2px 8px #0002;border:2px solid #fff;width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><img src='${iconUrl}' style='width:22px;height:22px;display:block;'/></div>`,
-    className: '',
-    iconSize: [36, 36],
-    iconAnchor: [18, 18],
-    popupAnchor: [0, -18],
+    html: `
+      <div style="
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        border: 2px solid white;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      ">
+        <img src='${iconUrl}' style='
+          width: 24px;
+          height: 24px;
+          display: block;
+          filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+        '/>
+      </div>
+    `,
+    className: 'custom-marker',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20],
   });
 
   const layerIcons = {
@@ -196,17 +216,42 @@ const LeafletMap = ({ selectedLayers = [] }) => {
           const geoJsonLayer = L.geoJSON(geojson, {
             pointToLayer: (feature, latlng) => L.marker(latlng, { icon }),
             onEachFeature: (feature, lyr) => {
-              lyr.on('click', (e) => {
-                const properties = feature.properties;
-                let popupContent = '<div style="max-height: 300px; overflow-y: auto;"><h3 class="font-bold text-lg mb-3 text-center text-primary-dark">Propriétés</h3><table>';
-                for (const [key, value] of Object.entries(properties)) {
-                  popupContent += `<tr class="border"><td class="px-3 py-2 border"><strong>${key}</strong></td><td class="px-2 py-2">${value || 'N/A'}</td></tr>`;
-                }
-                popupContent += '</table></div>';
-                if (popupRef.current) map.closePopup(popupRef.current);
-                popupRef.current = L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map);
-              });
-            }
+                lyr.on('click', (e) => {
+                  const properties = feature.properties;
+                  let popupContent = `
+                    <div style="max-width: 300px; max-height: 400px; overflow-y: auto; font-family: 'Segoe UI', sans-serif;">
+                      <div style="
+                        background: #2563eb;
+                        color: white;
+                        padding: 8px 12px;
+                        margin: -10px -10px 10px -10px;
+                        border-radius: 4px 4px 0 0;
+                        font-weight: 600;
+                        font-size: 16px;
+                      ">
+                        ${properties.nom || properties.name || 'Détails'}
+                      </div>
+                      <table style="width: 100%; border-collapse: collapse;">
+                  `;
+                  
+                  for (const [key, value] of Object.entries(properties)) {
+                    popupContent += `
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 6px 8px; font-weight: 500; color: #555;">${key}</td>
+                        <td style="padding: 6px 8px; color: #333;">${value || 'N/A'}</td>
+                      </tr>
+                    `;
+                  }
+                  
+                  popupContent += `</table></div>`;
+                  
+                  if (popupRef.current) map.closePopup(popupRef.current);
+                  popupRef.current = L.popup({
+                    maxWidth: 320,
+                    className: 'custom-popup'
+                  }).setLatLng(e.latlng).setContent(popupContent).openOn(map);
+                });
+              }
           });
           markers.addLayer(geoJsonLayer);
           markers.addTo(map);
@@ -234,14 +279,55 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       alert("La géolocalisation n'est pas supportée par ce navigateur.");
       return;
     }
+
+    // Afficher un indicateur de chargement
+    const loadingIndicator = L.divIcon({
+      html: `<div class="animate-pulse flex items-center justify-center">
+        <div class="w-8 h-8 bg-blue-500 rounded-full"></div>
+      </div>`,
+      className: '',
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
+    });
+    const tempMarker = L.marker(mapInstance.current.getCenter(), { icon: loadingIndicator }).addTo(mapInstance.current);
+
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        mapInstance.current.removeLayer(tempMarker);
         const { latitude, longitude } = pos.coords;
         setUserPosition([latitude, longitude]);
+        
+        // Créer un cercle de précision
+        L.circle([latitude, longitude], {
+          radius: pos.coords.accuracy,
+          fillColor: '#3388ff',
+          color: '#3388ff',
+          weight: 1,
+          opacity: 0.5,
+          fillOpacity: 0.2
+        }).addTo(mapInstance.current);
+
+        // Marqueur personnalisé avec animation
+        const userIcon = L.divIcon({
+          html: `<div class="relative">
+            <div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>
+            <div class="relative w-6 h-6 bg-blue-600 rounded-full border-2 border-white"></div>
+          </div>`,
+          className: '',
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+
+        L.marker([latitude, longitude], { icon: userIcon })
+          .addTo(mapInstance.current)
+          .bindPopup("Votre position");
+        
         mapInstance.current.setView([latitude, longitude], 15);
-        L.marker([latitude, longitude], { icon: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png', iconSize: [32, 32], iconAnchor: [16, 32] }) }).addTo(mapInstance.current);
       },
-      () => alert("Impossible de récupérer la position."),
+      () => {
+        mapInstance.current.removeLayer(tempMarker);
+        alert("Impossible de récupérer la position.");
+      },
       { enableHighAccuracy: true }
     );
   };
@@ -263,6 +349,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     let minDist = Infinity, closest = null;
     Object.values(mapInstance.current._customGeoJsonLayers || {}).forEach(cluster => {
       cluster.getLayers().forEach(marker => {
+        console.log("CURRENT MARKER", marker);
         const { lat, lng } = marker.getLatLng();
         const dist = getDistance(userPosition[0], userPosition[1], lat, lng);
         if (dist < minDist) {
@@ -282,6 +369,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     }
     // Utilisation de OSRM public API
     const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
+    console.log("itinerary to", url);
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -342,13 +430,30 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   }, [selectingService, userPosition]);
 
   return (
-    <div className="relative w-full rounded h-[600px]">
-      <div className="absolute top-20 left-2 z-[1000] flex flex-col gap-2">
-        <button onClick={handleLocateAndRoute} className="px-3 py-1 text-white bg-blue-600 rounded shadow">Itinéraire vers le plus proche</button>
-        {/* <button onClick={handleCancelAndSelect} className="px-3 py-1 text-white bg-red-600 rounded shadow">Choisir un autre service</button> */}
-        {distanceToService && <div className="p-2 text-black bg-white rounded shadow">Distance : {(distanceToService/1000).toFixed(2)} km</div>}
+    <div className="relative w-full rounded-lg h-[600px] shadow-xl overflow-hidden">
+      {/* Contrôles de carte */}
+      <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-3">
+        <button 
+          onClick={handleLocateAndRoute} 
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg shadow-md hover:bg-blue-700"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Itinéraire vers le plus proche
+        </button>
+        
+        {distanceToService && (
+          <div className="p-3 text-sm bg-white rounded-lg shadow-md backdrop-blur-sm bg-opacity-90">
+            <span className="font-semibold text-gray-700">Distance : </span>
+            <span className="font-bold text-blue-600">{(distanceToService/1000).toFixed(2)} km</span>
+          </div>
+        )}
       </div>
-      <div className="h-full rounded" ref={mapRef} />
+
+      {/* Carte */}
+      <div className="w-full h-full" ref={mapRef} />
     </div>
   );
 };

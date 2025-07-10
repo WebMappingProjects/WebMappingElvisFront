@@ -14,7 +14,7 @@ export default function Maps() {
   return (
     <>
       <MapSidebar />
-      <div className="relative bg-neutral-100 md:ml-64">
+      <div className="relative bg-neutral-100 md:ml-80">
         <MapNavbar />
         {/* Header */}
         <HeaderStats />

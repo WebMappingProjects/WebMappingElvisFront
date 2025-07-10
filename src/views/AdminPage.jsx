@@ -192,7 +192,7 @@ export default function AdminPage() {
           <table className="w-full text-left border-t">
             <thead>
               <tr className="border-b text-primary-dark">
-                <th className="px-3 py-2">Nom</th>
+                <th className="px-3 py-2">Nom d&apos;utilisateur</th>
                 <th className="px-3 py-2">Email</th>
                 <th className="px-3 py-2">Role</th>
                 <th className="px-3 py-2 text-center">Actions</th>

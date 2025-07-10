@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
+import { FaUser } from "react-icons/fa";
 
 export default function Login() {
   const { setAuthUser } = useAppMainContext();
@@ -67,7 +68,7 @@ export default function Login() {
         <div className="flex items-center content-center justify-center h-full">
           <div className="w-full px-2 lg:px-4 lg:w-6/12 xl:w-4/12">
             <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-gray-200 border-0 rounded-lg shadow-lg">
-              <h3 className="my-4 text-xl font-semibold text-center">Connexion</h3>
+              <h3 className="my-4 text-3xl font-semibold text-center">Connexion</h3>
               
               <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
                 <div className="mb-3 font-bold text-center text-primary-dark">

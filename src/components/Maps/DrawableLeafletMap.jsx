@@ -25,6 +25,30 @@ const DrawableLeafletMap = () => {
   const drawControlRef = useRef(null);
   const selectedMarkerRef = useRef(null);
   const vertexMarkersRef = useRef([]);
+  const geoJsonLayerRef = useRef(null); // For drawing currentEditionFig
+  // Draw currentEditionFig on the map if present
+  useEffect(() => {
+    if (!mapInstance.current) return;
+    // Remove previous geometry
+    if (geoJsonLayerRef.current) {
+      mapInstance.current.removeLayer(geoJsonLayerRef.current);
+      geoJsonLayerRef.current = null;
+    }
+    if (currentEditionFig) {
+      try {
+        geoJsonLayerRef.current = L.geoJSON(currentEditionFig, {
+          style: { color: '#3B82F6', weight: 3, fillOpacity: 0.2 },
+          pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 7, color: '#3B82F6', fillColor: '#3B82F6', fillOpacity: 0.8 })
+        }).addTo(mapInstance.current);
+        // Optionally fit bounds
+        if (geoJsonLayerRef.current.getBounds && geoJsonLayerRef.current.getBounds().isValid()) {
+          mapInstance.current.fitBounds(geoJsonLayerRef.current.getBounds(), { maxZoom: 15 });
+        }
+      } catch (e) {
+        // Ignore invalid geometry
+      }
+    }
+  }, [currentEditionFig]);
 
   // Ajout d'état pour la popup de confirmation et le message à afficher
   const [confirmPopupVisible, setConfirmPopupVisible] = useState(false);
