@@ -221,7 +221,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
                 lyr.on('click', (e) => {
                   const properties = feature.properties;
                   let popupContent = `
-                    <div style="max-width: 300px; max-height: 400px; overflow-y: auto; font-family: 'Segoe UI', sans-serif;">
+                    <div style="max-width: 300px; max-height: 400px; overflow-y: auto; font-family: 'Segoe UI', sans-serif; border-radius: 5px; padding: 5px;">
                       <div style="
                         background: #2563eb;
                         color: white;
@@ -237,6 +237,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
                   `;
                   
                   for (const [key, value] of Object.entries(properties)) {
+                    if(key != "id" && key != "commune" && key != "departement" && key != "region" )
                     popupContent += `
                       <tr style="border-bottom: 1px solid #eee;">
                         <td style="padding: 6px 8px; font-weight: 500; color: #555;">${key}</td>
@@ -399,8 +400,8 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       setRouteLayer(null);
     }
     // Utilisation de OSRM public API
+    console.log("itinerary to", "https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson");
     const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`;
-    console.log("itinerary to", url);
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -417,13 +418,13 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   // Bouton 1 : Localiser et tracer vers le plus proche
   const handleLocateAndRoute = async () => {
     locateUser();
+    const closest = findClosestService();
     setTimeout(async () => {
-      const closest = findClosestService();
       if (closest && userPosition) {
         await drawRoute(userPosition, [closest.getLatLng().lat, closest.getLatLng().lng]);
         setDistanceToService(getDistance(userPosition[0], userPosition[1], closest.getLatLng().lat, closest.getLatLng().lng));
       }
-    }, 1500);
+    }, 2500);
   };
 
   // Bouton 2 : Annuler et choisir un autre service
