@@ -58,6 +58,8 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   const [userPosition, setUserPosition] = useState(null);
   const [selectingService, setSelectingService] = useState(false);
   const [distanceToService, setDistanceToService] = useState(null);
+  const userPositionMarkerRef = useRef(null);
+  const accuracyCircleRef = useRef(null);
 
   // Correspondance couche -> icône personnalisée (chaque icône dans un cercle blanc)
   const makeCircleIcon = (iconUrl) => L.divIcon({
@@ -294,35 +296,39 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         mapInstance.current.removeLayer(tempMarker);
-        const { latitude, longitude } = pos.coords;
-        setUserPosition([latitude, longitude]);
-        
-        // Créer un cercle de précision
-        L.circle([latitude, longitude], {
-          radius: pos.coords.accuracy,
-          fillColor: '#3388ff',
-          color: '#3388ff',
-          weight: 1,
-          opacity: 0.5,
-          fillOpacity: 0.2
-        }).addTo(mapInstance.current);
+      const { latitude, longitude } = pos.coords;
+      setUserPosition([latitude, longitude]);
+      
+      // Supprimer les anciens éléments s'ils existent
+      if (userPositionMarkerRef.current) mapInstance.current.removeLayer(userPositionMarkerRef.current);
+      if (accuracyCircleRef.current) mapInstance.current.removeLayer(accuracyCircleRef.current);
 
-        // Marqueur personnalisé avec animation
-        const userIcon = L.divIcon({
-          html: `<div class="relative">
-            <div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>
-            <div class="relative w-6 h-6 bg-blue-600 rounded-full border-2 border-white"></div>
-          </div>`,
-          className: '',
-          iconSize: [24, 24],
-          iconAnchor: [12, 12]
-        });
+      // Créer un cercle de précision
+      accuracyCircleRef.current = L.circle([latitude, longitude], {
+        radius: pos.coords.accuracy,
+        fillColor: '#3388ff',
+        color: '#3388ff',
+        weight: 1,
+        opacity: 0.5,
+        fillOpacity: 0.2
+      }).addTo(mapInstance.current);
 
-        L.marker([latitude, longitude], { icon: userIcon })
-          .addTo(mapInstance.current)
-          .bindPopup("Votre position");
-        
-        mapInstance.current.setView([latitude, longitude], 15);
+      // Marqueur personnalisé avec animation
+      const userIcon = L.divIcon({
+        html: `<div class="relative">
+          <div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>
+          <div class="relative w-6 h-6 bg-blue-600 rounded-full border-2 border-white"></div>
+        </div>`,
+        className: '',
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+
+      userPositionMarkerRef.current = L.marker([latitude, longitude], { icon: userIcon })
+        .addTo(mapInstance.current)
+        .bindPopup("Votre position");
+      
+      mapInstance.current.setView([latitude, longitude], 15);
       },
       () => {
         mapInstance.current.removeLayer(tempMarker);
@@ -330,6 +336,31 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       },
       { enableHighAccuracy: true }
     );
+  };
+
+  const resetMap = () => {
+    // Supprimer l'itinéraire
+    if (routeLayer) {
+      mapInstance.current.removeLayer(routeLayer);
+      setRouteLayer(null);
+    }
+    
+    // Supprimer le marqueur de position
+    if (userPositionMarkerRef.current) {
+      mapInstance.current.removeLayer(userPositionMarkerRef.current);
+      userPositionMarkerRef.current = null;
+    }
+    
+    // Supprimer le cercle de précision
+    if (accuracyCircleRef.current) {
+      mapInstance.current.removeLayer(accuracyCircleRef.current);
+      accuracyCircleRef.current = null;
+    }
+    
+    // Réinitialiser les états
+    setUserPosition(null);
+    setDistanceToService(null);
+    setSelectingService(false);
   };
 
   // Fonction pour calculer la distance (Haversine)
@@ -443,7 +474,20 @@ const LeafletMap = ({ selectedLayers = [] }) => {
           </svg>
           Itinéraire vers le plus proche
         </button>
-        
+
+        {/* Bouton pour arrêter l'itinéraire */}
+        {(routeLayer || userPositionMarkerRef.current) && (
+          <button
+            onClick={resetMap}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-gray-600 rounded-lg shadow-md hover:bg-gray-700"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Réinitialiser la carte
+          </button>
+        )}
+
         {distanceToService && (
           <div className="p-3 text-sm bg-white rounded-lg shadow-md backdrop-blur-sm bg-opacity-90">
             <span className="font-semibold text-gray-700">Distance : </span>

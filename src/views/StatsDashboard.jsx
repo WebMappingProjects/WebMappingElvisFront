@@ -5,166 +5,49 @@ import PieChart from "../components/PieChart";
 import PolygonChart from "../components/PolygonChart";
 import { getCorrectId } from "../utils/tools";
 
-// Colonnes groupables par service (à adapter selon le backend)
-const groupableColumns = {
-  enseignement_de_base_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  ecoles_mat_primaire_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  enseignements_secondaires_final_point: [
-    { name: "fondateur", data: "fondateur" },
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  enseignement_superieur_custom_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  pharmacies_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  eglises_catholiques_font_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  eglises_presbyteriennes_font_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  eglises_protestantes_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  mosquees_font_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  nations_unies_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  banques_et_microfinances_custom_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-    { name: "type", data: "type" },
-  ],
-  cites_municipales_cuy_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  centre_special_detat_civil_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  mairies_yaounde_custom_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  prefectures_sous_prefectures_custom_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  ambassades_point: [
-    { name: "quartier", data: "quartier" }
-  ],
-  gendarmeries_point: [
-    { name: "localisation", data: "localisati" },
-    { name: "specialisation", data: "sp_cialisa" },
-  ],
-  commissariats_yde_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  restaurants_yaounde_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "commune", data: "commune" },
-    { name: "standing", data: "standing" },
-  ],
-  boulangeries_custom_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-    { name: "standing", data: "standing" },
-    { name: "proprietaire", data: "propri_tai" },
-  ],
-  centres_culturels_custom_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "promoteur", data: "promoteur" },
-    { name: "commune", data: "commune" },
-  ],
-  hotels_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "commune", data: "commune" },
-    { name: "standing", data: "standing" },
-  ],
-  monuments_custom_point: [ ],
-  lieux_remarquables_point: [ ],
-  auberges_custom_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  bouches_incendies_yde_custom_point: [ ],
-  garages_custom_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "standing", data: "standing" },
-  ],
-  complexes_sportifs_custom_point: [
-    { name: "type", data: "type" },
-    { name: "quartier", data: "quartier" },
-    { name: "discipline", data: "discipline" },
-    { name: "commune", data: "commune" },
-    { name: "standing", data: "standing" },
-  ],
-  sapeurs_pompier_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  laveries_font_point: [
-    { name: "adresse", data: "adresse" },
-    { name: "quartier", data: "quartier" },
-    { name: "standing", data: "standing" },
-  ],
-  stations_sevices_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-  agences_de_voyages_font_point: [
-    { name: "quartier", data: "quartier" },
-    { name: "arrondissement", data: "arrondisse" },
-  ],
-};
-
 const StatsDashboard = () => {
   const { statsSelectedLayers } = useAppMainContext();
-  // Service sélectionné : le premier de la sélection ou le premier de la liste
-  //const selectedService = statsSelectedLayers[0]?.name || allLayers[0].name;
-  const [ selectedService, setSelectedService ] = useState(null);
-  //const [selectedColumn, setSelectedColumn] = useState(groupableColumns[selectedService][0]);
-  const [selectedColumn, setSelectedColumn] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
   const [counts, setCounts] = useState({});
   const [groupedData, setGroupedData] = useState([]);
-  const [ distanceDatas, setDistanceDatas ] = useState(null);
+  const [distanceDatas, setDistanceDatas] = useState(null);
   const [totalAllServices, setTotalAllServices] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [adminLevel, setAdminLevel] = useState("commune");
+  const [totalGroupedCount, setTotalGroupedCount] = useState(0);
+  
   const rowsPerPage = 20;
   const totalPages = Math.ceil(groupedData.length / rowsPerPage);
   const paginatedData = groupedData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
+  // Fonction pour obtenir le nom de la colonne selon le niveau administratif
+  const getColumnName = (adminLevel) => {
+    switch (adminLevel) {
+      case "commune":
+        return "commune__nom";
+      case "departement":
+        return "commune__departement__nom";
+      case "region":
+        return "commune__departement__region__nom";
+      default:
+        return "commune__nom";
+    }
+  };
+
   useEffect(() => {
     // Récupère le nombre d'enregistrements pour chaque service
-    if(statsSelectedLayers.length > 0)
-    {
+    if (statsSelectedLayers.length > 0) {
       let total = 0;
       statsSelectedLayers.forEach(async (service) => {
         try {
           const token = localStorage.getItem("token");
-
-          console.log("TEL");
-          //const res = await axios.get(`/gis/count`, { 
           const res = await axios.get(`/gis/dashboard/global_statistics`, { 
             headers: { 
               "Content-Type": "application/json",
               "Authorization": `Bearer ${token}`
             }
           });
-          const serviceCount =  getCorrectId(res.data[`${service.dtName}_count`], res.data.services_count[service.dtName]);
+          const serviceCount = getCorrectId(res.data[`${service.dtName}_count`], res.data.services_count[service.dtName]);
           setCounts((prev) => ({ ...prev, [service.name]: serviceCount }));
           total += serviceCount;
           setTotalAllServices(total);
@@ -172,59 +55,65 @@ const StatsDashboard = () => {
           console.log("ERROR", e);
         }
       });
-      if(selectedService == null || statsSelectedLayers.filter(l => l.name === selectedService?.name).length < 1)
-      {
+      
+      if (selectedService == null || statsSelectedLayers.filter(l => l.name === selectedService?.name).length < 1) {
         setSelectedService(statsSelectedLayers[0]);
       }
-    } else { setTotalAllServices(0); setDistanceDatas(null); setSelectedService(null); setGroupedData([]); }
-  }, [statsSelectedLayers]);
-
-  useEffect(() => {
-    // Met à jour la colonne sélectionnée si le service change
-    if(selectedService != null)
-    {
-      if(Array.isArray(groupableColumns[selectedService?.name]))
-      {
-        const gc = groupableColumns[selectedService?.name];
-        setSelectedColumn(gc.length > 0 ? gc[0] : null);
-      }
-      else setSelectedColumn(null);
+    } else { 
+      setTotalAllServices(0); 
+      setDistanceDatas(null); 
+      setSelectedService(null); 
+      setGroupedData([]);
     }
-  }, [selectedService]);
-
-  const transformToUpperCamelCase = (str) => {
-    return str.split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join('');
-  }
+  }, [statsSelectedLayers]);
 
   useEffect(() => {
     // Récupère les données groupées
     if (selectedService) {
-      let token = localStorage.getItem("token");
-      const modelName = transformToUpperCamelCase(selectedService.model);
+      const token = localStorage.getItem("token");
       console.log("SELECTED SERVICE", selectedService);
+      
       axios
-        .get(`/gis/dashboard/group_by_admin?model=${selectedService.model}&admin_level=${adminLevel}`, { headers : { "Authorization" : `Bearer ${token}` }})
-      .then((res) => { console.log("RES", res); setGroupedData(res.data.results) })
-        .catch((err) => { console.error("ERROR", err); setGroupedData([])});
+        .get(`/gis/dashboard/group_by_admin?model=${selectedService.model}&admin_level=${adminLevel}`, { 
+          headers: { "Authorization": `Bearer ${token}` }
+        })
+        .then((res) => { 
+          console.log("RES", res); 
+          setGroupedData(res.data.results);
+          setTotalGroupedCount(res.data.total);
+        })
+        .catch((err) => { 
+          console.error("ERROR", err); 
+          setGroupedData([]);
+          setTotalGroupedCount(0);
+        });
     }
   }, [selectedService, adminLevel]);
 
   useEffect(() => {
-    // Récupère la distance moyenne
+    // Récupère les statistiques de distance
     if (selectedService) {
-      let token = localStorage.getItem("token");
-      const modelName = transformToUpperCamelCase(selectedService.name);
+      const token = localStorage.getItem("token");
+      
       axios
-        .get(`/gis/distance?model=${modelName}`, { headers : { "Authorization" : `Bearer ${token}` } })
-        .then((res) => { console.log("DISTANCE DATAS", res); setDistanceDatas(res.data); })
-        .catch((error) => { setDistanceDatas(null)});
+        .get(`/gis/dashboard/distance_stats?model=${selectedService.model}&admin_level=${adminLevel}`, { 
+          headers: { "Authorization": `Bearer ${token}` } 
+        })
+        .then((res) => { 
+          console.log("DISTANCE DATAS", res); 
+          setDistanceDatas(res.data); 
+        })
+        .catch((error) => { 
+          console.error("Distance error:", error);
+          setDistanceDatas(null);
+        });
     }
-  }, [selectedService]);
+  }, [selectedService, adminLevel]);
 
   // Reset page when groupedData changes
-  useEffect(() => { setCurrentPage(1); }, [groupedData]);
+  useEffect(() => { 
+    setCurrentPage(1); 
+  }, [groupedData]);
 
   // Mémoïse les données du PieChart pour éviter les updates inutiles
   const pieChartData = useMemo(() => statsSelectedLayers.map((service) => counts[service.name] ?? 0), [statsSelectedLayers, counts]);
@@ -233,6 +122,7 @@ const StatsDashboard = () => {
   return (
     <div className="p-6">
       <h2 className="mb-4 text-2xl font-bold">Statistiques globales</h2>
+      
       {/* Diagramme circulaire + polygonal */}
       <div className="flex flex-wrap justify-center gap-8 mb-8">
         <PieChart
@@ -251,30 +141,32 @@ const StatsDashboard = () => {
           colors={["rgba(79,70,229,0.2)", "#4F46E5", "#4F46E5"]}
         />
       </div>
+      
+      {/* Cartes de statistiques */}
       <div className="flex flex-wrap gap-4 mb-8">
         {statsSelectedLayers.length > 0 ? statsSelectedLayers.map((service) => (
           <div key={service.name} className="bg-white rounded shadow p-4 min-w-[250px]">
             <div className="font-semibold text-gray-700">{service.label}</div>
             <div className="text-3xl text-right text-primary-dark">{counts[service.name] ?? "..."}</div>
           </div>
-        )) : null }
+        )) : null}
 
         <div className="bg-primary-default text-white rounded shadow p-4 min-w-[250px]">
           <div className="font-semibold">Total</div>
           <div className="text-3xl text-right">{totalAllServices}</div>
         </div>
       </div>
-      <h3 className="mb-2 text-xl font-semibold">Regroupement par colonne</h3>
-      <p className="mb-4">Activez un service a votre</p>
+      
+      {/* Section de regroupement par niveau administratif */}
+      <h3 className="mb-2 text-xl font-semibold">Regroupement par niveau administratif</h3>
+      <p className="mb-4">Sélectionnez un service et un niveau administratif pour voir les statistiques</p>
+      
       <div className="flex flex-wrap gap-4 mb-4">
         <select
-          value={selectedService?.name}
+          value={selectedService?.name || ""}
           onChange={e => {
-            console.log("SELECTION CHANGED", groupableColumns[e.target.value][0]);
-            setSelectedColumn(groupableColumns[e.target.value][0]);
-
-            const filteredService = statsSelectedLayers.filter(l => l.name.toLowerCase() == e.target.value.toLowerCase());
-            if(filteredService.length > 0) setSelectedService(filteredService[0]);
+            const filteredService = statsSelectedLayers.filter(l => l.name.toLowerCase() === e.target.value.toLowerCase());
+            if (filteredService.length > 0) setSelectedService(filteredService[0]);
           }}
           className="p-2 border rounded min-w-[200px]"
         >
@@ -284,67 +176,71 @@ const StatsDashboard = () => {
             </option>
           ))}
         </select>
+        
         <select
-        value={adminLevel}
-        onChange={(e) => setAdminLevel(e.target.value)}>
+          value={adminLevel}
+          onChange={(e) => setAdminLevel(e.target.value)}
+          className="p-2 border rounded min-w-[200px]"
+        >
           <option value="commune">COMMUNE</option>
           <option value="departement">DEPARTEMENT</option>
           <option value="region">REGION</option>
         </select>
-        {/* <select
-          value={selectedColumn?.name}
-          onChange={e => {
-            let filtered = groupableColumns[selectedService?.name].filter(l => l.name.toLowerCase() === e.target.value.toLowerCase());
-            setSelectedColumn(filtered.length > 0 ? filtered[0] : null);
-          }}
-          className="p-2 border rounded min-w-[200px]"
-        >
-          {selectedService != null ? groupableColumns[selectedService.name]?.map((item) => (
-            <option key={item.name} value={item.name}>
-              {item.name}
-            </option>
-          )) : null }
-        </select> */}
       </div>
+      
+      {/* Affichage du total pour le niveau sélectionné */}
+      {selectedService && (
+        <div className="p-4 mb-4 rounded shadow bg-blue-50">
+          <div className="font-semibold text-blue-700">
+            Total pour {selectedService.label} regroupé par {adminLevel}
+          </div>
+          <div className="text-2xl text-right text-blue-800">{totalGroupedCount}</div>
+        </div>
+      )}
+      
+      {/* Tableau des données groupées */}
       <table className="min-w-full mb-8 bg-white rounded shadow">
         <thead>
           <tr>
-            <th className="p-2 text-left">{selectedColumn?.name}</th>
-            <th className="p-2 text-left">Nombre</th>
+            <th className="p-2 text-left bg-gray-50">
+              {adminLevel.charAt(0).toUpperCase() + adminLevel.slice(1)}
+            </th>
+            <th className="p-2 text-left bg-gray-50">Nombre</th>
           </tr>
         </thead>
         <tbody>
           {groupedData.length === 0 ? (
             <tr>
               <td colSpan={2} className="p-2 text-center text-gray-400">
-                Aucune donnée
+                {selectedService ? "Aucune donnée disponible" : "Sélectionnez un service"}
               </td>
             </tr>
           ) : (
             paginatedData?.map((row, idx) => (
-              <tr key={idx}>
-                <td className="p-2">{row[selectedColumn.data]}</td>
-                <td className="p-2">{row.count}</td>
+              <tr key={idx} className="hover:bg-gray-50">
+                <td className="p-2 border-b">{row[getColumnName(adminLevel)]}</td>
+                <td className="p-2 font-semibold border-b">{row.count}</td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+      
       {/* Pagination controls */}
       {groupedData.length > rowsPerPage && (
         <div className="flex items-center justify-center gap-2 mb-8">
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-100"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
           >
             Précédent
           </button>
-          <span>
+          <span className="px-3 py-1">
             Page {currentPage} / {totalPages}
           </span>
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-100"
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
           >
@@ -352,17 +248,17 @@ const StatsDashboard = () => {
           </button>
         </div>
       )}
+      
+      {/* Section des statistiques de distance */}
       <h3 className="mb-2 text-xl font-semibold">Statistiques de distance</h3>
-      <p className="mb-4">Activez un service a votre </p>
+      <p className="mb-4">Sélectionnez un service et un niveau administratif pour voir les statistiques de distance</p>
+      
       <div className="flex flex-wrap gap-4 mb-4">
         <select
-          value={selectedService?.name}
+          value={selectedService?.name || ""}
           onChange={e => {
-            console.log("SELECTION CHANGED", groupableColumns[e.target.value][0]);
-            setSelectedColumn(groupableColumns[e.target.value][0]);
-
-            const filteredService = statsSelectedLayers.filter(l => l.name.toLowerCase() == e.target.value.toLowerCase());
-            if(filteredService.length > 0) setSelectedService(filteredService[0]);
+            const filteredService = statsSelectedLayers.filter(l => l.name.toLowerCase() === e.target.value.toLowerCase());
+            if (filteredService.length > 0) setSelectedService(filteredService[0]);
           }}
           className="p-2 border rounded min-w-[200px]"
         >
@@ -372,60 +268,151 @@ const StatsDashboard = () => {
             </option>
           ))}
         </select>
-      </div>  
-            {/* 'distance_moyenne_metres': round(avg_distance, 2),
-      'distance_minimale_metres': round(min_distance, 2),
-      'distance_maximale_metres': round(max_distance, 2),
-      'distance_mediane_metres': round(median_distance, 2),
-      'message': f'En moyenne, il faut parcourir {round(avg_distance, 2)} mètres pour trouver un autre {model_name}' */}
-      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
-        <div>
-          <div className="text-lg font-semibold">Distance moyenne (en metres)</div>
-          <div className="text-xl font-bold text-right text-primary-dark-op">
-            {distanceDatas === null ? "..." : `${distanceDatas.distance_moyenne_metres} m`}
-          </div>
-        </div>
+        
+        <select
+          value={adminLevel}
+          onChange={(e) => setAdminLevel(e.target.value)}
+          className="p-2 border rounded min-w-[200px]"
+        >
+          <option value="commune">COMMUNE</option>
+          <option value="departement">DEPARTEMENT</option>
+          <option value="region">REGION</option>
+        </select>
       </div>
-      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
-        <div>
-          <div className="text-lg font-semibold">Distance minimale (en metres)</div>
-          <div className="text-xl font-bold text-right text-primary-dark-op">
-            {distanceDatas === null ? "..." : `${distanceDatas.distance_minimale_metres} m`}
+      
+      {/* Affichage des résultats de distance */}
+      {distanceDatas && distanceDatas.results && distanceDatas.results.length > 0 ? (
+        <div className="space-y-6">
+          <div className="p-4 rounded shadow bg-blue-50">
+            <div className="font-medium text-blue-700">
+              Statistiques de distance pour {selectedService?.label} regroupées par {adminLevel}
+            </div>
+            <div className="mt-1 text-sm text-blue-600">
+              {distanceDatas.results.length} divisions analysées
+            </div>
           </div>
+          
+          {distanceDatas.results.map((division, index) => (
+            <div key={index} className="p-4 bg-white rounded shadow">
+              <h4 className="mb-4 text-lg font-semibold text-gray-800">
+                {division.division_name} ({division.count} points)
+              </h4>
+              
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="p-3 rounded bg-gray-50">
+                  <div className="text-sm font-medium text-gray-600">Distance moyenne</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {division.distance_moyenne_metres} m
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded bg-gray-50">
+                  <div className="text-sm font-medium text-gray-600">Distance minimale</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {division.distance_minimale_metres} m
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded bg-gray-50">
+                  <div className="text-sm font-medium text-gray-600">Distance maximale</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {division.distance_maximale_metres} m
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded bg-gray-50">
+                  <div className="text-sm font-medium text-gray-600">Distance médiane</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {division.distance_mediane_metres} m
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded bg-gray-50">
+                  <div className="text-sm font-medium text-gray-600">Nombre de paires</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {division.nombre_paires}
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded bg-gray-50">
+                  <div className="text-sm font-medium text-gray-600">Points analysés</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {division.nombre_points_analysés}
+                  </div>
+                </div>
+              </div>
+              
+              {division.message && (
+                <div className="p-3 mt-3 text-sm text-blue-700 rounded bg-blue-50">
+                  {division.message}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-      </div>
-      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
+      ) : (
+        <div className="p-4 text-center text-gray-500 rounded shadow bg-gray-50">
+          {selectedService ? "Aucune statistique de distance disponible" : "Sélectionnez un service"}
+        </div>
+      )}
+      
+      {/* Anciennes cartes des statistiques de distance (pour compatibilité) */}
+      {distanceDatas && !distanceDatas.results && (
         <div>
-          <div className="text-lg font-semibold">Distance maximale (en metres)</div>
-          <div className="text-xl font-bold text-right text-primary-dark-op">
-            {distanceDatas === null ? "..." : `${distanceDatas.distance_maximale_metres} m`}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="p-4 bg-white rounded shadow text-primary-default">
+              <div className="text-lg font-semibold">Distance moyenne</div>
+              <div className="text-xl font-bold text-right text-primary-dark-op">
+                {distanceDatas.distance_moyenne_metres} m
+              </div>
+            </div>
+            
+            <div className="p-4 bg-white rounded shadow text-primary-default">
+              <div className="text-lg font-semibold">Distance minimale</div>
+              <div className="text-xl font-bold text-right text-primary-dark-op">
+                {distanceDatas.distance_minimale_metres} m
+              </div>
+            </div>
+            
+            <div className="p-4 bg-white rounded shadow text-primary-default">
+              <div className="text-lg font-semibold">Distance maximale</div>
+              <div className="text-xl font-bold text-right text-primary-dark-op">
+                {distanceDatas.distance_maximale_metres} m
+              </div>
+            </div>
+            
+            <div className="p-4 bg-white rounded shadow text-primary-default">
+              <div className="text-lg font-semibold">Distance médiane</div>
+              <div className="text-xl font-bold text-right text-primary-dark-op">
+                {distanceDatas.distance_mediane_metres} m
+              </div>
+            </div>
+            
+            <div className="p-4 bg-white rounded shadow text-primary-default">
+              <div className="text-lg font-semibold">Points analysés</div>
+              <div className="text-xl font-bold text-right text-primary-dark-op">
+                {distanceDatas.nombre_points_analysés}
+              </div>
+            </div>
+            
+            <div className="p-4 bg-white rounded shadow text-primary-default">
+              <div className="text-lg font-semibold">Nombre de paires</div>
+              <div className="text-xl font-bold text-right text-primary-dark-op">
+                {distanceDatas.nombre_paires}
+              </div>
+            </div>
           </div>
+          
+          {/* Message descriptif pour les distances */}
+          {distanceDatas.message && (
+            <div className="p-4 mt-4 rounded shadow bg-blue-50">
+              <div className="font-medium text-blue-700">
+                {distanceDatas.message}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
-        <div>
-          <div className="text-lg font-semibold">Distance mediane (en metres)</div>
-          <div className="text-xl font-bold text-right text-primary-dark-op">
-            {distanceDatas === null ? "..." : `${distanceDatas.distance_mediane_metres} m`}
-          </div>
-        </div>
-      </div>
-      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
-        <div>
-          <div className="text-lg font-semibold">Nombre de points analyses</div>
-          <div className="text-xl font-bold text-right text-primary-dark-op">
-            {distanceDatas === null ? "..." : `${distanceDatas.nombre_points_analysés}`}
-          </div>
-        </div>
-      </div>
-      <div className="bg-white rounded shadow p-4 min-w-[200px] my-3 text-primary-default">
-        <div>
-          <div className="text-lg font-semibold">Nombre de paires</div>
-          <div className="text-xl font-bold text-right text-primary-dark-op">
-            {distanceDatas === null ? "..." : `${distanceDatas.nombre_paires}`}
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
