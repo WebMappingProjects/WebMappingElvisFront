@@ -55,6 +55,10 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
       });
   }
 
+  useEffect(() => {
+    console.log("COORDS ROW", coordsRows);
+  }, [coordsRows]);
+  
   const handleEdition = (e, index) => {
     e.preventDefault();
     const globalIndex = (currentPage - 1) * rowsPerPage + index;

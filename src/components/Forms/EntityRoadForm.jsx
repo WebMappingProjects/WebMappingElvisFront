@@ -107,7 +107,7 @@ const EntityRoadForm = ()  => {
         {
             const token = localStorage.getItem("token");
 
-            let geometry = currentEditionFig;
+            /*let geometry = currentEditionFig;
             
             if (currentEditionFig && currentProjectionSystem !== 4326) {
                 // Conversion des coordonnées si nécessaire
@@ -128,6 +128,16 @@ const EntityRoadForm = ()  => {
                 geometry = {
                     type: "MultiLineString",
                     coordinates: [geometry.coordinates]
+                };
+            }*/
+
+            // Convertir Polygon en MultiPolygon pour correspondre au modèle Django
+            let geometry = currentEditionFig;
+            
+            if (currentEditionFig && currentEditionFig.type === "LineString") {
+                geometry = {
+                    type: "MultiLineString",
+                    coordinates: [currentEditionFig.coordinates]
                 };
             }
 

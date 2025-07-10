@@ -96,7 +96,7 @@ const EntityDepartmentForm = ()  => {
         try {
             const token = localStorage.getItem("token");
 
-            let geometry = currentEditionFig;
+            /*let geometry = currentEditionFig;
             
             if (currentEditionFig && currentProjectionSystem !== 4326) {
                 // Conversion des coordonnées si nécessaire
@@ -110,17 +110,27 @@ const EntityDepartmentForm = ()  => {
                             convertCoords([coord[1], coord[0]]).coords.reverse()
                         )
                 };
+            }*/
+
+            // Convertir Polygon en MultiPolygon pour correspondre au modèle Django
+            let geometry = currentEditionFig;
+            
+            if (currentEditionFig && currentEditionFig.type === "Polygon") {
+                geometry = {
+                    type: "MultiPolygon",
+                    coordinates: [currentEditionFig.coordinates]
+                };
             }
 
             // Convertir Polygon en MultiPolygon
-            if (geometry && geometry.type === "Polygon") {
+            /*if (geometry && geometry.type === "Polygon") {
                 geometry = {
                     type: "MultiPolygon",
                     coordinates: [geometry.coordinates]
                 };
-            }
+            }*/
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
                 "geom": geometry,
                 "nom": name,
                 "superficie": area,

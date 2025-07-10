@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
-import axios from "../../api/axios";
+import axios, { API_REGIONS_URL } from "../../api/axios";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 import { getValueFromIdx } from "../../utils/tools";

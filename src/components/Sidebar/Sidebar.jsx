@@ -28,7 +28,7 @@ export default function Sidebar() {
     { name: "Hydrographie", icon: <FaWater className="mr-3 text-base" />, route: "/admin/tables/hydrographie" },
     { name: "Routes", icon: <FaRoad className="mr-3 text-base" />, route: "/admin/tables/routes" },
     { name: "Projets Communautaires", icon: <FaHandsHelping className="mr-3 text-base" />, route: "/admin/tables/projets" },
-    { name: "Conseillers Regionaux", icon: <FaUserAlt className="mr-3 text-base" />, route: "/admin/tables/projets" },
+    { name: "Conseillers Regionaux", icon: <FaUserAlt className="mr-3 text-base" />, route: "/admin/tables/conseillers" },
   ];
 
   const toggleSection = (section) => {

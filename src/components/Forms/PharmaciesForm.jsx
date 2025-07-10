@@ -88,7 +88,7 @@ const PharmaciesForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}`, {
+            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
                 "nom": name,
                 "geom": geometry
             }, { headers: {
