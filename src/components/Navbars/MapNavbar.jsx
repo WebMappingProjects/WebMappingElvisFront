@@ -1,5 +1,6 @@
-import { FaSearch, FaMapMarkedAlt } from "react-icons/fa";
+import { FaSearch, FaMapMarkedAlt, FaHome } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
+import { Home } from "lucide-react";
 
 export default function MapNavbar() {
   const { dataOnMapSearch, setDataOnMapSearch } = useAppMainContext();
@@ -9,14 +10,15 @@ export default function MapNavbar() {
       <div className="container flex items-center justify-between mx-auto">
         {/* Brand Logo avec icône */}
         <div className="flex items-center space-x-2">
-          <FaMapMarkedAlt className="text-2xl text-white" />
+          <FaHome className="text-2xl text-white" />
           <a
             href="/"
             className="text-lg font-bold text-white transition-colors hover:text-blue-200"
           >
-            <span className="hidden sm:inline">Portail</span> Géospatial
+            Accueil
           </a>
         </div>
+        
 
         {/* Barre de recherche améliorée */}
         <div className="relative w-full max-w-md mx-4">

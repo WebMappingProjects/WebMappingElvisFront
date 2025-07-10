@@ -1,4 +1,4 @@
-import { FaSearch, FaMapMarkedAlt } from "react-icons/fa";
+import { FaSearch, FaMapMarkedAlt, FaHome } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
 
 export default function AdminNavbar() {
@@ -9,12 +9,12 @@ export default function AdminNavbar() {
       <div className="container flex items-center justify-between mx-auto">
         {/* Brand Logo avec icône */}
         <div className="flex items-center space-x-2">
-          <FaMapMarkedAlt className="text-2xl text-white" />
+          <FaHome className="text-2xl text-white" />
           <a
             href="/"
             className="text-lg font-bold text-white transition-colors hover:text-blue-200"
           >
-            <span className="hidden sm:inline">Tables</span> de Données
+            Accueil
           </a>
         </div>
 

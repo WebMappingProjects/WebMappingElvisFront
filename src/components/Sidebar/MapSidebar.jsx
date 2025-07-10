@@ -140,7 +140,7 @@ export default function MapSidebar() {
                 className="inline-block p-6 px-6 mr-0 text-lg font-bold text-left text-white uppercase transition-colors md:block md:pb-4 whitespace-nowrap hover:text-blue-300"
                 to="/"
               >
-                🗺️ Couches Carte
+                🗺️ Portail Géospatial
               </Link>
 
               {/* Catégories dynamiques */}

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState } from "react";
-import { FaBars, FaBreadSlice, FaBuilding, FaCar, FaChargingStation, FaChurch, FaCog, FaCreditCard, FaCross, FaHamburger, FaHandsHelping, FaHome, FaHospital, FaHotel, FaMap, FaMoneyBill, FaMosque, FaPersonBooth, FaPiggyBank, FaPlus, FaRoad, FaRunning, FaSchool, FaServicestack, FaShieldAlt, FaTimes, FaTruck, FaUniversity, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured, FaWater, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaBars, FaBreadSlice, FaBuilding, FaCar, FaChargingStation, FaChurch, FaCog, FaCreditCard, FaCross, FaHamburger, FaHandsHelping, FaHome, FaHospital, FaHotel, FaMap, FaMoneyBill, FaMosque, FaPersonBooth, FaPiggyBank, FaPlus, FaRoad, FaRunning, FaSchool, FaServicestack, FaShieldAlt, FaTimes, FaTruck, FaUniversity, FaUser, FaUserAlt, FaUserCog, FaUserGraduate, FaUserInjured, FaWater, FaChevronDown, FaChevronUp, FaMapMarkedAlt } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
 
 export default function Sidebar() {
@@ -56,7 +56,7 @@ export default function Sidebar() {
             className="inline-block p-6 px-6 mr-0 text-lg font-bold text-left text-white uppercase transition-colors md:block md:pb-4 whitespace-nowrap hover:text-blue-300"
             to="/"
           >
-            🏛️ Dashboard
+            <FaMapMarkedAlt className="inline ml-4"/> Tables de données
           </Link>
           
           <div

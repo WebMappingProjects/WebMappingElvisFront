@@ -250,13 +250,13 @@ export default function Profile() {
                         <span className="flex-1 mb-2 text-lg leading-normal text-left text-blueGray-700">
                           ********
                         </span>
-                        <button
+                        {/* <button
                           onClick={() => handleEdit("password")}
                           className="ml-2 text-xl cursor-pointer text-primary-default"
                           title="Modifier le mot de passe"
                         >
                           <FaPen />
-                        </button>
+                        </button> */}
                       </>
                     )}
                   </div>
