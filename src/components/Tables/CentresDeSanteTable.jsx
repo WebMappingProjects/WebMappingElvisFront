@@ -22,7 +22,21 @@ const CentresDeSanteTable = () => {
                 try
                 {
                 const token = localStorage.getItem("token");
-    
+                /*const url = "/auth/logout/";
+                        
+                const refreshDatas = await refreshAccess(url, RequestType.POST);
+                
+                let response = null;
+                if(refreshDatas.response) response = refreshDatas.response;
+                else {
+                    const token = refreshDatas.token;
+                    response = await axios.post(url, {}, {
+                        headers: {
+                        "Content-Type": "Application/json",
+                        "Authorization": `Bearer ${token}`
+                        }
+                    }); // , { headers: { "Authorization" : }}
+                }*/
                 const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
                     headers: {
                         "Content-Type": "application/json",

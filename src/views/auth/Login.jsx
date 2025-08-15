@@ -7,15 +7,15 @@ import { FaUser } from "react-icons/fa";
 export default function Login() {
   const { setAuthUser } = useAppMainContext();
 
-  const [ username, setUsername ] = useState(null);
+  const [ identifier, setIdentifier ] = useState(null);
   const [ password, setPassword ] = useState(null);
 
   const navigate = useNavigate();
   
   const [ errorMessage, setErrorMessage ] = useState("");
 
-  const onUsernameChange = (e) => {
-      setUsername(e.target.value);
+  const onIdentifierChange = (e) => {
+      setIdentifier(e.target.value);
       setErrorMessage("");
   }
 
@@ -29,7 +29,7 @@ export default function Login() {
       try
       {
         const datas = {
-            "username": username,
+            "identifier": identifier,
             "password": password
         };
 
@@ -37,15 +37,16 @@ export default function Login() {
 
         //console.log("RESPONSE", response);
         const token = response.data.access;
-        const userId = response.data.user_id;
+        // const userId = response.data.user_id;
+        const user = response.data.user;
 
-        const responseForUserRole = await axios.get(`/auth/users/me`, { headers: { "Authorization": `Bearer ${token}`}});
+        // const responseForUserRole = await axios.get(`/auth/users/me`, { headers: { "Authorization": `Bearer ${token}`}});
 
         const authUser = {
-          "id": userId,
-          "username": response.data.username,
-          "email": response.data.email,
-          "role": responseForUserRole.data.role
+          "id": user.id,
+          "username": user.username,
+          "email": user.email,
+          "role": user.role
         };
 
         localStorage.setItem("token", token);
@@ -98,23 +99,23 @@ export default function Login() {
                   <div className="relative w-full mb-3">
                     <label
                       className="block mb-2 text-xs font-bold text-black uppercase"
-                      htmlFor="grid-username"
+                      htmlFor="grid-identifier"
                     >
-                      Nom d&apos;utilisateur
+                      Nom d&apos;utilisateur ou email
                     </label>
                     <input
                       type="text"
                       className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring"
-                      placeholder="example : armand1855"
-                      id="grid-username"
+                      placeholder="Nom d'utilisateur ou email"
+                      id="grid-identifier"
 
-                      onChange={onUsernameChange}
+                      onChange={onIdentifierChange}
                     />
                   </div>
 
                   <div className="relative w-full mb-3">
                     <label
-                      className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
+                      className="block mb-2 text-xs font-bold uppercase text-black"
                       htmlFor="grid-password"
                     >
                       Password

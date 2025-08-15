@@ -6,10 +6,14 @@ import IndexDropdown from "../Dropdowns/IndexDropdown";
 import { useEffect, useState } from "react";
 import { FaAlignJustify, FaArrowCircleDown, FaBars, FaChartArea, FaFacebook, FaFileAlt, FaGithub, FaHamburger, FaPersonBooth, FaPlusCircle, FaPlusSquare, FaStackExchange, FaStackOverflow, FaTimes, FaTwitter, FaUnlock, FaUser, FaUserAltSlash, FaUserFriends, FaUserShield, FaUserTimes } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
+import axios from "../../api/axios";
+import { refreshAccess, RequestType } from "../../utils/tools";
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [ userDatas, setUserDatas ] = useState({ role: "lambda" });
+  
+  const { setAuthUser } = useAppMainContext();
 
   useEffect(() => {
     const loadUserDatas = () => {
@@ -20,12 +24,40 @@ export default function Navbar(props) {
     loadUserDatas();
   }, []);
   
-  const handleLogout = (e) => {
+  const handleLogout = async (e) => {
       e.preventDefault();
+      try
+      {
+        // const token = localStorage.getItem("token");
+        const url = "/auth/logout/";
+        
+        const refreshDatas = await refreshAccess(url, RequestType.POST);
+        
+        let response = null;
+        if(refreshDatas.response) response = refreshDatas.response;
+        else {
+          const token = refreshDatas.token;
+          response = await axios.post(url, {}, {
+              headers: {
+                "Content-Type": "Application/json",
+                "Authorization": `Bearer ${token}`
+              }
+          }); // , { headers: { "Authorization" : }}
+        }
 
-      localStorage.clear();
-      
-      window.location.reload();
+        if(response.status == 200 || response.status == 201 || response.status == 204)
+        {
+          localStorage.clear();
+          setAuthUser(null);
+  
+          window.location.reload();
+        } else {
+
+        }
+              
+      } catch (err) {
+        console.log("ERROR", err);
+      }
   }
 
   return (
