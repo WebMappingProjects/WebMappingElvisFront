@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import axios, { API_COMMUNE_URL, API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
-import { convertCoords, getValueFromIdx } from "../../utils/tools";
+import { convertCoords, getValueFromIdx, refreshAccess, RequestType } from "../../utils/tools";
 import { useAppMainContext } from "../../context/AppProvider";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
@@ -27,13 +27,15 @@ const CentresDeSanteForm = ()  => {
     const [ messagePopupVisible, setMessagePopupVisible ] = useState(false);
     const [ errorPopupVisible, setErrorPopupVisible ] = useState(false);
     
-    const token = localStorage.getItem("token");
+    //const token = localStorage.getItem("token");
 
     const typeCentre = [
+        [ "Centre de sante", "centre_sante"],
         [ "clinique", "clinique"],
         [ "Hopital d'arrondissement", "hopital_arrondissement"],
         [ "Hopital regional", "hopital_regional"],
-        [ "Hopital de district", "hopital_district"]
+        [ "Hopital de district", "hopital_district"],
+        [ "Pharmacie", "pharmacie"]
     ];
 
 
@@ -69,15 +71,24 @@ const CentresDeSanteForm = ()  => {
 
             console.log("GEOM", geometry);
             
-            const response = await axios.post(API_URL, {
+            const data = {
                 "geom": geometry,
                 "nom": name,
                 "type": type,
                 "commune": com
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            };
+
+            const refreshDatas = await refreshAccess(API_URL, RequestType.POST, data);
+            
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.post(API_URL, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -107,16 +118,27 @@ const CentresDeSanteForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+            const url = `${API_URL}${datas[0]}/`;
+            const data = {
                 "geom": geometry,
                 "nom": name,
                 "type": type,
                 "commune": com
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            }
 
+            const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+            
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.patch(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
+
+            
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
         } catch (e) {
@@ -130,9 +152,9 @@ const CentresDeSanteForm = ()  => {
             <SimpleMessagePopup message="Operation effectuee avec succes" onClose={() => { setMessagePopupVisible(false); navigate(-1); }} open={messagePopupVisible} />
             <ErrorMessagePopup message="ERREUR : Veuillez remplir tous les champs pour pouvoir continuer" onClose={() => { setErrorPopupVisible(false); }} open={errorPopupVisible} />
             <div className="relative flex-auto px-4 py-10 rounded shadow lg:px-10 bg-neutral-200">
-                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Centre de sante</h1>
+                <h1 className="text-lg font-bold text-center text-primary-default md:text-2xl">Structure de sante</h1>
                 <div className="mt-4 mb-3 text-center text-primary-dark">
-                    Veuillez specifier les informations pour le centre de sante
+                    Veuillez specifier les informations pour la structure de sante
                 </div>
                 <form>
                     <div className="relative w-full mb-3">
@@ -158,7 +180,7 @@ const CentresDeSanteForm = ()  => {
                             className="block mb-2 text-xs font-bold uppercase text-blueGray-600"
                             htmlFor="typeCentre"
                         >
-                            Type de centre
+                            Type de structure
                         </label>
                         <select
                             className="w-full px-3 py-3 text-sm transition-all duration-150 ease-linear bg-white border-0 rounded shadow placeholder:text-neutral-400 text-blueGray-600 focus:outline-none focus:ring"

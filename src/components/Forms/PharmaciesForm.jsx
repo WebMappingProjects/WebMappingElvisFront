@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
-import { convertCoords } from "../../utils/tools";
+import { convertCoords, refreshAccess, RequestType } from "../../utils/tools";
 import { useAppMainContext } from "../../context/AppProvider";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
@@ -52,13 +52,23 @@ const PharmaciesForm = ()  => {
             }
             : null;
 
-            const response = await axios.post(API_URL, {
+            const url = API_URL;
+            const data = {
                 "nom": name,
                 "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            };
+
+            const refreshDatas = await refreshAccess(url, RequestType.POST, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.post(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -88,13 +98,23 @@ const PharmaciesForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+            const url = `${API_URL}${datas[0]}/`;
+            const data = {
                 "nom": name,
                 "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            }
+
+            const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.patch(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);

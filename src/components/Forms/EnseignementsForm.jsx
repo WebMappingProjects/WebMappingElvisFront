@@ -3,7 +3,7 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
-import { convertCoords, getValueFromIdx } from "../../utils/tools";
+import { convertCoords, getValueFromIdx, refreshAccess, RequestType } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 import Selections from "../Forms_blocks/Selections";
@@ -101,9 +101,8 @@ const EnseignementsForm = ()  => {
                 ]
             }
             : null;
-
-            console.log("ETS TYPE", etsType);
-            const response = await axios.post(API_URL, {
+            const url = API_URL;
+            const data = {
                 "geom": geometry,
                 "nom": name,
                 "nom_responsable" : respName,
@@ -114,10 +113,21 @@ const EnseignementsForm = ()  => {
                 "formation" : formationType,
                 "meilleur_diplome" : bestGraduation,
                 "commune": com
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            };
+
+            console.log("ETS TYPE", etsType);
+
+            const refreshDatas = await refreshAccess(url, RequestType.POST, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.post(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -147,8 +157,8 @@ const EnseignementsForm = ()  => {
                 ]
             }
             : null;
-
-            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+            const url = `${API_URL}${datas[0]}/`;
+            const data = {
                 "geom": geometry,
                 "nom": name,
                 "nom_responsable" : respName,
@@ -159,10 +169,19 @@ const EnseignementsForm = ()  => {
                 "formation" : formationType,
                 "meilleur_diplome" : bestGraduation,
                 "commune": com
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            }
+
+            const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.patch(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);

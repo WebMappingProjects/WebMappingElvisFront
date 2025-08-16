@@ -33,7 +33,9 @@ export default function Login() {
             "password": password
         };
 
-        const response = await axios.post("/auth/login/", datas); // , { headers: { "Authorization" : }}
+        const response = await axios.post("/auth/login/", datas, { 
+          withCredentials: true
+        }); // , { headers: { "Authorization" : }}
 
         //console.log("RESPONSE", response);
         const token = response.data.access;

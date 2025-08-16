@@ -3,7 +3,7 @@ import axios from "../api/axios";
 import { useAppMainContext } from "../context/AppProvider";
 import PieChart from "../components/PieChart";
 import PolygonChart from "../components/PolygonChart";
-import { getCorrectId } from "../utils/tools";
+import { getCorrectId, refreshAccess, RequestType } from "../utils/tools";
 
 const StatsDashboard = () => {
   const { statsSelectedLayers } = useAppMainContext();
@@ -41,12 +41,20 @@ const StatsDashboard = () => {
       statsSelectedLayers.forEach(async (service) => {
         try {
           const token = localStorage.getItem("token");
-          const res = await axios.get(`/gis/dashboard/global_statistics`, { 
-            headers: { 
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            }
-          });
+          const url = `/gis/dashboard/global_statistics`;
+
+          const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+          let res = null;
+          if(refreshDatas.response) res = refreshDatas.response;
+          else {
+              const token = refreshDatas.token;
+              res = await axios.get(url, { headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
+              }, withCredentials: true });
+          }
+
           const serviceCount = getCorrectId(res.data[`${service.dtName}_count`], res.data.services_count[service.dtName]);
           setCounts((prev) => ({ ...prev, [service.name]: serviceCount }));
           total += serviceCount;

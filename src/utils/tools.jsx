@@ -113,93 +113,126 @@ export const RequestType = {
 
 export const refreshAccess = async (route, method = RequestType.GET, body = {}, headers = {}) => {
     const token = localStorage.getItem("token");
+    // console.log("CURRENT TOKEN", token);
+    
+    let message = null;
+    if(!token) {
 
-    if(!token) return {
-        message: "jeton d'acces introuvable",
-        response: null,
-        token,
-    };
+        message = "jeton d'acces introuvable";
+        console.log("MESSAGE RAFRAICHISSEMENT", message);
 
-    let response = null;
-    if(method == RequestType.GET) {   
-        response = await axios.get(route, {
-            headers: {
-                ...headers,
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
-    } else if (method == RequestType.POST) {
-        response = await axios.post(route, body, {
-            headers: {
-                ...headers,
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
-    } else if (method == RequestType.PATCH) {
-        response = await axios.patch(route, body, {
-            headers: {
-                ...headers,
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
-    } else if (method == RequestType.PUT) {
-        response = await axios.put(route, body, {
-            headers: {
-                ...headers,
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
-    } else if (method == RequestType.DELETE) {
-        response = await axios.delete(route, {
-            headers: {
-                ...headers,
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
-    } else {
-        return { 
-            message: "Methode non reconnue",
+        return {
+            message,
             response: null,
-            token
+            token,
         };
     }
 
-    // Logique de rafraichissement
-    if(response && response.status == 401)
-    {
-        response = await axios.post(`/auth/refresh/`, {}, {
-            headers: {
-                ...headers,
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        if(response.status == 200)
-        {
-            const newToken = response.data.access;
-            localStorage.setItem("token", newToken);
+    let response = null;
+    try {
+        if(method == RequestType.GET) {   
+            response = await axios.get(route, {
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+        } else if (method == RequestType.POST) {
+            response = await axios.post(route, body, {
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+        } else if (method == RequestType.PATCH) {
+            response = await axios.patch(route, body, {
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+        } else if (method == RequestType.PUT) {
+            response = await axios.put(route, body, {
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+        } else if (method == RequestType.DELETE) {
+            response = await axios.delete(route, {
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+        } else {
+            message = "Methode non reconnue";
+            console.log("MESSAGE RAFRAICHISSEMENT", message);
             return { 
-                message: "Token rafraichi",
+                message,
                 response: null,
-                "token": newToken
+                token
             };
         }
-        else return {
-            message: "Echec du rafraichissement",
-            response: null,
+
+        message = "Rafraichissement non necessaire";
+        //console.log("MESSAGE RAFRAICHISSEMENT", message);
+        return {
+            message,
+            "response": response,
             token
         }
-    }
+    } catch (err) {
+        console.error("ERROR", err);
+        response = err;
+        // Logique de rafraichissement
+        if(response && response.status == 401)
+        {
+            try {
+                response = await axios.post(`/auth/refresh/`, {}, {
+                    headers: {
+                        ...headers
+                    },
+                    withCredentials: true
+                });
 
-    return {
-        message: "Rafraichissement non necessaire",
-        "response": response,
-        token
+                if(response.status == 200)
+                {
+                    const newToken = response.data.access;
+                    localStorage.setItem("token", newToken);
+                    
+                    message = "Token rafraichi";
+                    console.log("MESSAGE RAFRAICHISSEMENT", message);
+
+                    return { 
+                        message,
+                        response: null,
+                        "token": newToken
+                    };
+                }
+                else {
+                    message = "Echec du rafraichissement";
+                    console.log("MESSAGE RAFRAICHISSEMENT", message);
+
+                    return {
+                        message,
+                        response: null,
+                        token
+                    }
+                }
+            } catch (err2) {
+                console.error("ERROR 2", err2);
+            }
+        }
     }
 }

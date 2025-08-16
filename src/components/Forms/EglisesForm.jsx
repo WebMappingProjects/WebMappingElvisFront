@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import axios, { API_COMMUNE_URL, API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
-import { convertCoords, getValueFromIdx } from "../../utils/tools";
+import { convertCoords, getValueFromIdx, refreshAccess, RequestType } from "../../utils/tools";
 import { useAppMainContext } from "../../context/AppProvider";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
@@ -79,17 +79,27 @@ const EglisesForm = ()  => {
             }
             : null;
 
-            const response = await axios.post(API_URL, {
+            const url = API_URL;
+            const data = {
                 "nom": name,
                 "capacite": capacity,
                 "type": type,
                 "structure": structure,
                 "commune": com,
                 "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            };
+
+            const refreshDatas = await refreshAccess(url, RequestType.POST, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.post(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -119,17 +129,27 @@ const EglisesForm = ()  => {
             }
             : null;
 
-            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+            const url = `${API_URL}${datas[0]}/`;
+            const data = {
                 "nom": name,
                 "capacite": capacity,
                 "type": type,
                 "structure": structure,
                 "commune": com,
                 "geom": geometry
-            }, { headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }});
+            }
+
+            const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.patch(url, data, { headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);

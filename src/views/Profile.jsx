@@ -5,6 +5,7 @@ import mountainImage from "../assets/mountain.avif";
 import profileImage from "../assets/profile.avif";
 import { FaCheck, FaPen, FaTimes } from "react-icons/fa";
 import axios from "../api/axios";
+import { refreshAccess, RequestType } from "../utils/tools";
 
 const API_URL = "/auth/users";
 export default function Profile() {
@@ -61,10 +62,20 @@ export default function Profile() {
       {
           const token = localStorage.getItem("token");
           //const userId = localStorage.getItem("userId");
-          const response = await axios.patch(`${API_URL}/${userId}/`, savedDatas, { headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-          }});
+          const url = `${API_URL}/${userId}/`;
+          const data = savedDatas;
+
+          const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+
+          let response = null;
+          if(refreshDatas.response) response = refreshDatas.response;
+          else {
+              const token = refreshDatas.token;
+              response = await axios.patch(url, data, { headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
+              }, withCredentials: true });
+          }
 
           console.log("RESPONSE", response);
           const user = JSON.parse(localStorage.getItem("authUser"));

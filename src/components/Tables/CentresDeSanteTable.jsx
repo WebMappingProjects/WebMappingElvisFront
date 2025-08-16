@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
-import axios, { API_CENTRE_SANTE_URL, API_COMMUNE_URL } from "../../api/axios";
+import axios, { API_COMMUNE_URL } from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
-import { getCorrectId } from "../../utils/tools";
+import { getCorrectId, refreshAccess, RequestType } from "../../utils/tools";
 
 const API_URL = "/gis/centres-sante"
 
@@ -19,30 +19,24 @@ const CentresDeSanteTable = () => {
     useEffect(() => {
         const loadDatasRows = async () => {
         
-                try
-                {
-                const token = localStorage.getItem("token");
-                /*const url = "/auth/logout/";
+            try
+            {
+                //const token = localStorage.getItem("token");
+                const url = `${API_URL}?search=${dataSearch}`;
                         
-                const refreshDatas = await refreshAccess(url, RequestType.POST);
+                const refreshDatas = await refreshAccess(url, RequestType.GET);
                 
                 let response = null;
                 if(refreshDatas.response) response = refreshDatas.response;
                 else {
                     const token = refreshDatas.token;
-                    response = await axios.post(url, {}, {
+                    response = await axios.get(url, {
                         headers: {
-                        "Content-Type": "Application/json",
-                        "Authorization": `Bearer ${token}`
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
                         }
-                    }); // , { headers: { "Authorization" : }}
-                }*/
-                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
+                    });
+                }
         
                 const datas = response.data;
                 
@@ -52,12 +46,19 @@ const CentresDeSanteTable = () => {
                 {
                     let data = datas.features[i];
                     
-                    const response2 = await axios.get(`${API_COMMUNE_URL}/${data.properties.commune}`, {
-                        headers: {
+                    const url = `${API_COMMUNE_URL}/${data.properties.commune}`;
+
+                    const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+                    let response2 = null;
+                    if(refreshDatas.response) response2 = refreshDatas.response;
+                    else {
+                        const token = refreshDatas.token;
+                        response2 = await axios.get(url, { headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
-                        }
-                    });
+                        }, withCredentials: true });
+                    }
 
                     const centerName = data.properties.nom;
                     /*const testCenter = await axios.get(`${API_CENTRE_SANTE_URL}?search=${centerName}`, {
@@ -71,7 +72,7 @@ const CentresDeSanteTable = () => {
                     let tb = [
                         getCorrectId(data.properties.id, data.id),
                         centerName,
-                        data.properties.type || "pharmacie",
+                        data.properties.type_display,
                         [ data.properties.commune_nom, data.properties.commune ],
                         [ response2?.data.properties.departement.properties.nom, response2?.data.properties.departement.id ],
                         [ response2?.data.properties.departement.properties.region_nom, response2?.data.properties.departement.properties.region ],
@@ -93,9 +94,9 @@ const CentresDeSanteTable = () => {
 
                 setDatasRows(returnDatas);
                 setCoordsRows(cDatasRows);
-                } catch (err) {
-                    console.log("ERROR", err);
-                }
+            } catch (err) {
+                console.log("ERROR", err);
+            }
         }
 
         loadDatasRows();
@@ -108,7 +109,7 @@ const CentresDeSanteTable = () => {
                 mainRoute="/admin/forms/services/centre-sante"
                 headRow={headRow}
                 datasRows={datasRows}
-                title="Centres de Sante/Hopitaux"
+                title="Structures de santé"
                 coordsRows={coordsRows}
                 geomType="point"
                 apiRoute={`${API_URL}/`}

@@ -9,7 +9,7 @@ import { useAppMainContext } from "../../context/AppProvider";
 import axios from "../../api/axios";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ConfirmMessagePopup from "../popups/ConfirmMessagePopup";
-import { ensureEPSG4326 } from "../../utils/tools";
+import { ensureEPSG4326, refreshAccess, RequestType } from "../../utils/tools";
 
 export default function CardTable({ color, mainRoute, title, headRow, datasRows, geomType, coordsRows = null, apiRoute, originalEpsg }) {
 
@@ -55,9 +55,9 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
       });
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log("COORDS ROW", coordsRows);
-  }, [coordsRows]);
+  }, [coordsRows]);*/
   
   const handleEdition = (e, index) => {
     e.preventDefault();
@@ -95,12 +95,23 @@ export default function CardTable({ color, mainRoute, title, headRow, datasRows,
 
       const dataId = datasRows[globalIndex][0];
 
-      const token = localStorage.getItem("token");
-      await axios.delete(`${apiRoute}${dataId}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
+      //const token = localStorage.getItem("token");
+      const url = `${apiRoute}${dataId}`;
+              
+      const refreshDatas = await refreshAccess(url, RequestType.DELETE);
+      
+      let response = null;
+      if(refreshDatas.response) response = refreshDatas.response;
+      else {
+        const token = refreshDatas.token;
+        response = await axios.delete(url, {
+            headers: {
+              "Content-Type": "Application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            withCredentials: true
+        });
+      }
 
       setConfirmPopupVisible(false);
       setReloadDatas(!reloadDatas);

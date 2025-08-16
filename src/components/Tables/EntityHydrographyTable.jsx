@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
-import { getCorrectId } from "../../utils/tools";
+import { getCorrectId, refreshAccess, RequestType } from "../../utils/tools";
 
 const API_URL = "/gis/hydrographie";
 
@@ -23,12 +23,19 @@ const EntityHydrographyTable = () => {
                 {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
-                    headers: {
+                const url = `${API_URL}?search=${dataSearch}`;
+
+                const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+                let response = null;
+                if(refreshDatas.response) response = refreshDatas.response;
+                else {
+                    const token = refreshDatas.token;
+                    response = await axios.get(url, { headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
-                    }
-                });
+                    }, withCredentials: true });
+                }
         
                 const datas = response.data;
 

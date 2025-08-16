@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CardTable from "../Cards/CardTable";
 import axios from "../../api/axios";
 import { useAppMainContext } from "../../context/AppProvider";
+import { refreshAccess, RequestType } from "../../utils/tools";
 
 const API_URL = "/gis/communes";
 const API_DEPARTEMENT_URL = "/gis/departements";
@@ -23,12 +24,20 @@ const EntityCommuneTable = () => {
                 {
                 const token = localStorage.getItem("token");
     
-                const response = await axios.get(`${API_URL}?search=${dataSearch}`, {
-                    headers: {
+                const url = `${API_URL}?search=${dataSearch}`;
+
+                const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+                let response = null;
+                if(refreshDatas.response) response = refreshDatas.response;
+                else {
+                    const token = refreshDatas.token;
+                    response = await axios.get(url, { headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
-                    }
-                });
+                    }, withCredentials: true });
+                }
+
         
                 const datas = response.data;
 
@@ -38,12 +47,19 @@ const EntityCommuneTable = () => {
                 {
                     let data = datas.features[i];
                     
-                    const response2 = await axios.get(`${API_DEPARTEMENT_URL}/${data.properties.departement}`, {
-                        headers: {
+                    const url = `${API_DEPARTEMENT_URL}/${data.properties.departement}`;
+
+                    const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+                    let response2 = null;
+                    if(refreshDatas.response) response2 = refreshDatas.response;
+                    else {
+                        const token = refreshDatas.token;
+                        response2 = await axios.get(url, { headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
-                        }
-                    });
+                        }, withCredentials: true });
+                    }
 
                     let tb = [
                         data.properties.id || data.id,

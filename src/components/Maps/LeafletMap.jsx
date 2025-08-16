@@ -40,6 +40,7 @@ import laverieIcon from "../../assets/markers/automatic_car_wash_32px.png";
 import stationServiceIcon from "../../assets/markers/gas_station_32px.png";
 import agenceDeVoyageIcon from "../../assets/markers/trolleybus_32px.png";
 import { useAppMainContext } from "../../context/AppProvider";
+import { refreshAccess, RequestType } from "../../utils/tools";
 
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -132,7 +133,21 @@ const LeafletMap = ({ selectedLayers = [] }) => {
 
     const token = localStorage.getItem("token");
     const finalUrl = dataOnMapSearch != "" ? `${layer.url}?search=${dataOnMapSearch}` : layer.url;
-    const response = await axios.get(`${layer.url}?search=${dataOnMapSearch}`, { headers: { Authorization: `Bearer ${token}` }});
+    
+    const url = `${layer.url}?search=${dataOnMapSearch}`;
+
+    const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+    let response = null;
+    if(refreshDatas.response) response = refreshDatas.response;
+    else {
+        const token = refreshDatas.token;
+        response = await axios.get(url, { headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }, withCredentials: true });
+    }
+    
     if (response.status !== 200) throw new Error("Erreur API");
     return convertGeoJSONTo4326(response.data);
   };

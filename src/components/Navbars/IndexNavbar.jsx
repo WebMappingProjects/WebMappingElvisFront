@@ -29,7 +29,7 @@ export default function Navbar(props) {
       try
       {
         // const token = localStorage.getItem("token");
-        const url = "/auth/logout/";
+        const url = "/auth/users/logout/";
         
         const refreshDatas = await refreshAccess(url, RequestType.POST);
         
@@ -41,7 +41,8 @@ export default function Navbar(props) {
               headers: {
                 "Content-Type": "Application/json",
                 "Authorization": `Bearer ${token}`
-              }
+              },
+              withCredentials: true
           }); // , { headers: { "Authorization" : }}
         }
 
@@ -52,7 +53,7 @@ export default function Navbar(props) {
   
           window.location.reload();
         } else {
-
+            console.log("LOGOUT FAILED", response);
         }
               
       } catch (err) {

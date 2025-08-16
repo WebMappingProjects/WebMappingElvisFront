@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaBars, FaHome, FaUser, FaSignOutAlt, FaUserShield } from "react-icons/fa";
+import { refreshAccess, RequestType } from "../../utils/tools";
+import axios from "../../api/axios";
 
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -11,14 +13,46 @@ export default function Navbar() {
     setAuthUser(localStorage.getItem("authUser") || null);
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log("AUTH USER", authUser);
-  }, [authUser]);
+  }, [authUser]);*/
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+  const handleLogout = async (e) => {
+      e.preventDefault();
+      try
+      {
+        // const token = localStorage.getItem("token");
+        const url = "/auth/users/logout/";
+        
+        const refreshDatas = await refreshAccess(url, RequestType.POST);
+        
+        let response = null;
+        if(refreshDatas.response) response = refreshDatas.response;
+        else {
+          const token = refreshDatas.token;
+          response = await axios.post(url, {}, {
+              headers: {
+                "Content-Type": "Application/json",
+                "Authorization": `Bearer ${token}`
+              },
+              withCredentials: true
+          }); // , { headers: { "Authorization" : }}
+        }
+
+        if(response.status == 200 || response.status == 201 || response.status == 204)
+        {
+          localStorage.clear();
+          setAuthUser(null);
+  
+          window.location.reload();
+        } else {
+          console.log("LOGOUT FAILED", response);
+        }
+              
+      } catch (err) {
+        console.log("ERROR", err);
+      }
+  }
 
   return (
     <nav className="fixed top-0 left-0 z-50 w-full shadow-md bg-white/60 backdrop-blur-md">

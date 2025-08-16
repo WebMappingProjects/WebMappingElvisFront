@@ -18,12 +18,13 @@ import landing from "../assets/img/landing.jpg";
 import centre_divisions from "../assets/img/960px-Centre_divisions.png";
 import { FaBuilding, FaCodeBranch, FaCross, FaDraftingCompass, FaHotel, FaList, FaPlusSquare, FaRunning, FaSchool, FaShieldAlt, FaSitemap } from "react-icons/fa";
 import SimpleMessagePopup from "../components/popups/SimpleMessagePopup";
+import { motion } from "framer-motion";
 
 export default function Index() {
 
   return (
     <>
-      <IndexNavbar fixed />
+      <IndexNavbar fixed /> 
       {/* HERO SECTION AMÉLIORÉE */}
       <section className="relative flex items-center min-h-screen pt-16 overflow-hidden header max-h-860-px bg-gradient-to-br from-primary-dark via-primary-default to-blueGray-700">
         <div className="absolute inset-0 z-0 bg-center bg-cover opacity-30 blur-sm" style={{backgroundImage: `url(${pattern_react})`}}></div>
@@ -31,7 +32,7 @@ export default function Index() {
           <div className="w-full px-4 md:w-8/12 lg:w-6/12 xl:w-6/12">
             <div className="pt-20 md:pt-32 sm:pt-0 animate-fade-in-up">
               <h2 className="text-2xl font-extrabold text-white md:text-5xl drop-shadow-lg">
-                WEB MAPPING - <em className="text-primary-light-op">Plateforme de manipulation des données géospatiales du SIG.</em>
+                MaKarte - <em className="text-primary-light-op">Plateforme de manipulation des données géospatiales du SIG.</em>
               </h2>
               <p className="mt-6 text-sm leading-relaxed text-justify md:text-base md:text-left text-white/90">
                 Cette plateforme s'appuie sur un ensemble de données géospatiales collectées par des experts afin de faciliter l'accès du grand public aux différents services disponibles dans le département du Mfoundi, situé dans la région du Centre Cameroun.

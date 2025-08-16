@@ -6,6 +6,7 @@ import axios from "../api/axios";
 import SimpleMessagePopup from "../components/popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../components/popups/ErrorMessagePopup";
 import ConfirmMessagePopup from "../components/popups/ConfirmMessagePopup";
+import { refreshAccess, RequestType } from "../utils/tools";
 
 const API_URL = "/auth/users";
 
@@ -30,8 +31,16 @@ export default function AdminPage() {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(API_URL, { headers: { Authorization: `Bearer ${token}` } });
+      // const token = localStorage.getItem("token");
+      // const res = await axios.get(API_URL, { headers: { Authorization: `Bearer ${token}` } });
+      const refreshDatas = await refreshAccess(API_URL, RequestType.GET);
+
+      let res = null;
+      if(refreshDatas.response) res = refreshDatas.response;
+      else {
+          const token = refreshDatas.token;
+          res = await axios.get(API_URL, { headers: { Authorization: `Bearer ${token}` } });
+      }
       //console.log("FETCH USERS", res);
       setUsers(res.data);
     } catch {
@@ -44,7 +53,21 @@ export default function AdminPage() {
       if(confirmPassword == newUser.password)
       {
         const token = localStorage.getItem("token");
-        const response = await axios.post(`${API_URL}/`, newUser, { headers: { Authorization: `Bearer ${token}` } });
+
+        const url = `${API_URL}/`;
+        const data = newUser;
+
+        const refreshDatas = await refreshAccess(url, RequestType.POST, data);
+
+        let response = null;
+        if(refreshDatas.response) response = refreshDatas.response;
+        else {
+            const token = refreshDatas.token;
+            response = await axios.post(url, data, { headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }, withCredentials: true });
+        }
         //console.log("RESPONSE ADDING USER", response);
         
         const newUserId = response.data.id;
@@ -52,7 +75,22 @@ export default function AdminPage() {
         // Change user role
         if(newUser.role != "lambda")
         {
-          await axios.post(`${API_URL}/${newUserId}/change-role/`, { "role": newUser.role }, { headers: { Authorization: `Bearer ${token}` } })
+          const url = `${API_URL}/${newUserId}/change-role/`;
+          const data = {
+              "role": newUser.role
+          };
+
+          const refreshDatas = await refreshAccess(url, RequestType.POST, data);
+
+          let response = null;
+          if(refreshDatas.response) response = refreshDatas.response;
+          else {
+              const token = refreshDatas.token;
+              response = await axios.post(url, data, { headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
+              }, withCredentials: true });
+          }
         }
   
         setShowAdd(false);
@@ -75,7 +113,23 @@ export default function AdminPage() {
       setConfirmPopupVisible(false);
       const id = currentItemIndex;
       const token = localStorage.getItem("token");
-      await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const url = `${API_URL}/${id}`;
+              
+      const refreshDatas = await refreshAccess(url, RequestType.DELETE);
+
+      let response = null;
+      if(refreshDatas.response) response = refreshDatas.response;
+      else {
+          const token = refreshDatas.token;
+          response = await axios.delete(url, {
+              headers: {
+                  "Content-Type": "Application/json",
+                  "Authorization": `Bearer ${token}`
+              },
+              withCredentials: true
+          });
+      }
+
       setMessagePopupVisible(true);
     } catch (err) {
       console.log("ERROR", err);
@@ -91,11 +145,41 @@ export default function AdminPage() {
   const handleSaveEdit = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.patch(`${API_URL}/${id}/`, editUser, { headers: { Authorization: `Bearer ${token}` } });
+
+      const url = `${API_URL}/${id}/`;
+      const data = editUser;
+
+      const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+
+      let response = null;
+      if(refreshDatas.response) response = refreshDatas.response;
+      else {
+          const token = refreshDatas.token;
+          response = await axios.patch(url, data, { headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+          }, withCredentials: true });
+      }
+
       const editedUserId = response.data.id;
 
       // Change user role
-      await axios.post(`${API_URL}/${editedUserId}/change-role/`, { "role": editUser.role }, { headers: { Authorization: `Bearer ${token}` } })
+      const url2 = `${API_URL}/${editedUserId}/change-role/`;
+      const data2 = {
+          "role": editUser.role
+      };
+
+      const refreshDatas2 = await refreshAccess(url2, RequestType.POST, data2);
+
+      let response2 = null;
+      if(refreshDatas2.response) response2 = refreshDatas2.response;
+      else {
+          const token = refreshDatas2.token;
+          response2 = await axios.post(url2, data2, { headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+          }, withCredentials: true });
+      }
       setEditUserId(null);
       setMessagePopupVisible(true);
       //fetchUsers();

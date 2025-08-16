@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import axios, { API_COMMUNE_URL, API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
+import { refreshAccess, RequestType } from "../../utils/tools";
 
 const Selections = ({ reg, setReg, dept, setDept, com, setCom }) => {
 
@@ -12,12 +13,19 @@ const Selections = ({ reg, setReg, dept, setDept, com, setCom }) => {
     
     useEffect(() => {
         const loadRegions = async () => {
-            const response = await axios.get(API_REGIONS_URL, { 
-                headers: {
+            const url = API_REGIONS_URL;
+
+            const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.get(url, { headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-                }
-            });
+                }, withCredentials: true });
+            }
 
             setRegions(response?.data);
         }
@@ -29,14 +37,20 @@ const Selections = ({ reg, setReg, dept, setDept, com, setCom }) => {
         const loadDepartments = async () => {
             if(reg != 0)
             {
-                const response = await axios.get(`${API_DEPARTEMENTS_URL}?region=${reg}`, { 
-                    headers: {
+                const url = `${API_DEPARTEMENTS_URL}?region=${reg}`;
+
+                const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+                let response = null;
+                if(refreshDatas.response) response = refreshDatas.response;
+                else {
+                    const token = refreshDatas.token;
+                    response = await axios.get(url, { headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
-                    }
-                });
+                    }, withCredentials: true });
+                }
                 
-
                 setDepartements(response?.data);
             }
         }
@@ -46,10 +60,19 @@ const Selections = ({ reg, setReg, dept, setDept, com, setCom }) => {
 
     useEffect(() => {
         const loadCommunes = async () => {
-            const response = await axios.get(`${API_COMMUNE_URL}?departement=${dept}`, { headers: {
+            const url = `${API_COMMUNE_URL}?departement=${dept}`;
+
+            const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.get(url, { headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-            }});
+                }, withCredentials: true });
+            }
 
             setCommunes(response?.data);
         }

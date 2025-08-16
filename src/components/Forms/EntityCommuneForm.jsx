@@ -3,7 +3,7 @@ import Actions from "../Forms_blocks/Actions";
 import { useEffect, useState } from "react";
 import { useAppMainContext } from "../../context/AppProvider";
 import axios, { API_DEPARTEMENTS_URL, API_REGIONS_URL } from "../../api/axios";
-import { convertCoords, getValueFromIdx } from "../../utils/tools";
+import { convertCoords, getValueFromIdx, refreshAccess, RequestType } from "../../utils/tools";
 import SimpleMessagePopup from "../popups/SimpleMessagePopup";
 import ErrorMessagePopup from "../popups/ErrorMessagePopup";
 
@@ -46,12 +46,19 @@ const EntityCommuneForm = ()  => {
 
     useEffect(() => {
         const loadRegions = async () => {
-            const response = await axios.get(API_REGIONS_URL, { 
-                headers: {
+            const url = API_REGIONS_URL;
+
+            const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.get(url, { headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-                }
-            });
+                }, withCredentials: true });
+            }
 
             setRegions(response?.data);
         }
@@ -63,12 +70,19 @@ const EntityCommuneForm = ()  => {
         const loadDepartments = async () => {
             if(reg != 0)
             {
-                const response = await axios.get(`${API_DEPARTEMENTS_URL}?region=${reg}`, { 
-                    headers: {
+                const url = `${API_DEPARTEMENTS_URL}?region=${reg}`;
+
+                const refreshDatas = await refreshAccess(url, RequestType.GET);
+
+                let response = null;
+                if(refreshDatas.response) response = refreshDatas.response;
+                else {
+                    const token = refreshDatas.token;
+                    response = await axios.get(url, { headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
-                    }
-                });
+                    }, withCredentials: true });
+                }
                 
 
                 setDepartements(response?.data);
@@ -95,18 +109,26 @@ const EntityCommuneForm = ()  => {
                 };
             }
             console.log("REG", reg);
-            const response = await axios.post(API_URL, {
+            const url = API_URL;
+            const data = {
                 "geom": geometry,
                 "departement": dept,
                 "maire": maire,
                 "superficie": area, 
                 "nom": name
-            }, { 
-                headers: {
+            };
+
+            const refreshDatas = await refreshAccess(url, RequestType.POST, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.post(url, data, { headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-                }
-            });
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
@@ -155,18 +177,26 @@ const EntityCommuneForm = ()  => {
                 };
             }*/
 
-            const response = await axios.patch(`${API_URL}${datas[0]}/`, {
+            const url = `${API_URL}${datas[0]}/`;
+            const data = {
                 "geom": geometry,
                 "departement": dept,
                 "maire": maire,
                 "superficie": area,
                 "nom": name
-            }, { 
-                headers: {
+            }
+
+            const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+
+            let response = null;
+            if(refreshDatas.response) response = refreshDatas.response;
+            else {
+                const token = refreshDatas.token;
+                response = await axios.patch(url, data, { headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
-                }
-            });
+                }, withCredentials: true });
+            }
 
             console.log("RESPONSE", response);
             setMessagePopupVisible(true);
