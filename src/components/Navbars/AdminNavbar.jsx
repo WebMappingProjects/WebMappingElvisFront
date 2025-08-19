@@ -25,7 +25,7 @@ export default function AdminNavbar() {
           </div>
           <input
             type="text"
-            placeholder="Rechercher un lieu, une adresse..."
+            placeholder="Rechercher..."
             className="w-full py-2 pl-10 pr-4 text-sm text-gray-800 transition-all duration-200 bg-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={dataSearch}
             onChange={(e) => setDataSearch(e.target.value)}

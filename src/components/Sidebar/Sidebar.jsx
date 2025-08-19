@@ -89,7 +89,7 @@ export default function Sidebar() {
             </div>
 
             {/* Search Form */}
-            <form className="px-6 mb-6 md:block">
+            {/* <form className="px-6 mb-6 md:block">
               <div className="relative">
                 <input
                   type="text"
@@ -104,7 +104,7 @@ export default function Sidebar() {
                   </svg>
                 </div>
               </div>
-            </form>
+            </form> */}
 
             {/* Services Section */}
             <div className="px-6 mb-6">
@@ -128,6 +128,7 @@ export default function Sidebar() {
                     <li key={service.name}>
                       <Link 
                         className="flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white group"
+                        onClick={() => setCollapseShow("hidden")}
                         to={service.route}
                       >
                         <span className="text-blue-400 group-hover:text-blue-300">
@@ -163,6 +164,7 @@ export default function Sidebar() {
                     <li key={entity.name}>
                       <Link 
                         className="flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white group"
+                        onClick={() => setCollapseShow("hidden")}
                         to={entity.route}
                       >
                         <span className="text-green-400 group-hover:text-green-300">

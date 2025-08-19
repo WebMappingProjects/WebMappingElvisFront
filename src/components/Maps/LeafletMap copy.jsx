@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import PropTypes from "prop-types";
 import axios from "../../api/axios";
 import convertGeoJSONTo4326 from "../../utils/convertGeoJSONTo4326";
 
@@ -40,7 +41,6 @@ import stationServiceIcon from "../../assets/markers/gas_station_32px.png";
 import agenceDeVoyageIcon from "../../assets/markers/trolleybus_32px.png";
 import { useAppMainContext } from "../../context/AppProvider";
 import { refreshAccess, RequestType } from "../../utils/tools";
-// MapControls and PropTypes were removed because they're not used in this component
 
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -59,16 +59,8 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   const [userPosition, setUserPosition] = useState(null);
   const [selectingService, setSelectingService] = useState(false);
   const [distanceToService, setDistanceToService] = useState(null);
-  const [ isLoading, setIsLoading ] = useState(false);
-  const [ loadingProgress, setLoadingProgress ] = useState(0);
-
-  const [ tryToShape, setTryToShape ] = useState(false);
-  const [ closest, setClosest ] = useState(null);
-
   const userPositionMarkerRef = useRef(null);
   const accuracyCircleRef = useRef(null);
-  // Counter to identify the latest load cycle - used to ignore stale async results
-  const loadCounterRef = useRef(0);
 
   // Correspondance couche -> icône personnalisée (chaque icône dans un cercle blanc)
   const makeCircleIcon = (iconUrl) => L.divIcon({
@@ -99,7 +91,7 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     popupAnchor: [0, -20],
   });
 
-  const layerIcons = useMemo(() => ({
+  const layerIcons = {
     restaurants_yaounde_font_point: makeCircleIcon(restaurantIcon),
     centre_sante: makeCircleIcon(pharmacieIcon),
     enseignement_de_base_font_point: makeCircleIcon(enseignDeBaseIcon),
@@ -132,100 +124,33 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     laveries_font_point: makeCircleIcon(laverieIcon),
     services_publiques: makeCircleIcon(stationServiceIcon),
     agences_de_voyages_font_point: makeCircleIcon(agenceDeVoyageIcon),
-  }), []);
+  };
 
-  // Modifier fetchPointsFromDB pour gérer le loading
-  /*const fetchPointsFromDB = useCallback(async (layerName) => {
-    setIsLoading(true);
-    setLoadingProgress(0);
+  const fetchPointsFromDB = async (layerName) => {
+    if (!layerName) throw new Error("Layer name is required");
+    const layer = selectedLayers.find(l => l.name === layerName);
+    if (!layer || !layer.url) throw new Error("Layer URL not found in selectedLayers");
+
+    const token = localStorage.getItem("token");
+    const finalUrl = dataOnMapSearch != "" ? `${layer.url}?search=${dataOnMapSearch}` : layer.url;
     
-    try {
-      if (!layerName) throw new Error("Layer name is required");
-      console.log("LAYER NAME", layerName, "selected layers", selectedLayers);
-      const layer = selectedLayers.find(l => l.name === layerName);
-      if (!layer || !layer.url) throw new Error("Layer URL not found in selectedLayers");
+    const url = `${layer.url}?search=${dataOnMapSearch}`;
 
-      const token = localStorage.getItem("token");
-      const finalUrl = dataOnMapSearch != "" 
-        ? `${layer.url}?search=${dataOnMapSearch}` 
-        : layer.url;
+    const refreshDatas = await refreshAccess(url, RequestType.GET);
 
-      const refreshDatas = await refreshAccess(finalUrl, RequestType.GET);
-      setLoadingProgress(50); // Progression à mi-chemin
-
-      let response = null;
-      if(refreshDatas.response) {
-        response = refreshDatas.response;
-      } else {
+    let response = null;
+    if(refreshDatas.response) response = refreshDatas.response;
+    else {
         const token = refreshDatas.token;
-        response = await axios.get(finalUrl, { 
-          headers: {
+        response = await axios.get(url, { headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
-          }, 
-          withCredentials: true 
-        });
-      }
-      
-      setLoadingProgress(80);
-      const convertedData = convertGeoJSONTo4326(response.data);
-      setLoadingProgress(100);
-      
-      return convertedData;
-    } catch (error) {
-      console.error('Erreur chargement des données', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
+        }, withCredentials: true });
     }
-  }, [dataOnMapSearch]);*/
-
-  const fetchPointsFromDB = useCallback(async (layerName) => {
-    /*if(isLoading == false)
-    {
-      setIsLoading(true);
-      setLoadingProgress(0);
-    }*/
     
-    try {
-      if (!layerName) throw new Error("Layer name is required");
-      console.log("LAYER NAME", layerName, "selected layers", selectedLayers);
-      const layer = selectedLayers.find(l => l.name === layerName);
-      if (!layer || !layer.url) throw new Error("Layer URL not found in selectedLayers");
-
-  const finalUrl = dataOnMapSearch.trim() != "" 
-        ? `${layer.url}?search=${dataOnMapSearch}` 
-        : layer.url;
-
-      const refreshDatas = await refreshAccess(finalUrl, RequestType.GET);
-      setLoadingProgress(50); // Progression à mi-chemin
-
-      let response = null;
-      if(refreshDatas.response) {
-        response = refreshDatas.response;
-      } else {
-        const token = refreshDatas.token;
-        response = await axios.get(finalUrl, { 
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }, 
-          withCredentials: true 
-        });
-      }
-      
-      setLoadingProgress(80);
-      const convertedData = convertGeoJSONTo4326(response.data);
-      setLoadingProgress(100);
-      
-      return convertedData;
-    } catch (error) {
-      console.error('Erreur chargement des données', error);
-      throw error;
-    } /*finally {
-      setIsLoading(false);
-    }*/
-  }, [dataOnMapSearch, selectedLayers]);
+    if (response.status !== 200) throw new Error("Erreur API");
+    return convertGeoJSONTo4326(response.data);
+  };
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -249,28 +174,10 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     });
 
     // Ajout des nouvelles couches vectorielles avec clustering
-    /*setIsLoading(true);
-    setLoadingProgress(0);*/
-    // bump the load counter for this effect run
-    const thisLoadId = ++loadCounterRef.current;
-
-  selectedLayers.forEach(async (layer) => {
-      // If a layer already exists (loaded or loading), skip starting another fetch
-      if (map._customGeoJsonLayers[layer.name]) return;
-
-      // mark as loading to prevent duplicate fetches while this one is in flight
-      map._customGeoJsonLayers[layer.name] = { __loading: true };
-
-          try {
+    selectedLayers.forEach(async (layer) => {
+      if (!map._customGeoJsonLayers[layer.name]) {
+        try {
           const geojson = await fetchPointsFromDB(layer.name);
-          // If another effect run started after this one, ignore stale results
-          if (loadCounterRef.current !== thisLoadId) {
-            // remove placeholder if it still exists
-            if (map._customGeoJsonLayers[layer.name] && map._customGeoJsonLayers[layer.name].__loading) {
-              delete map._customGeoJsonLayers[layer.name];
-            }
-            return;
-          }
           // Récupérer l'URL de l'icône d'origine pour le cluster
           const iconUrlMap = {
             restaurants_yaounde_font_point: restaurantIcon,
@@ -367,28 +274,20 @@ const LeafletMap = ({ selectedLayers = [] }) => {
           markers.addLayer(geoJsonLayer);
           markers.addTo(map);
           map._customGeoJsonLayers[layer.name] = markers;
-          } catch (err) {
-            console.error('Erreur chargement des donnees depuis l\'API', layer.name, err);
-            void err;
-            // remove placeholder on error
-            if (map._customGeoJsonLayers[layer.name] && map._customGeoJsonLayers[layer.name].__loading) {
-              delete map._customGeoJsonLayers[layer.name];
-            }
-          }
+        } catch (err) {
+          console.error('Erreur chargement des donnees depuis l\'API', layer.name, err);
+        }
+      }
     });
-    //setIsLoading(false);
 
     // Nettoyage à la désactivation
     return () => {
       if (map._customGeoJsonLayers) {
-        Object.values(map._customGeoJsonLayers).forEach(l => {
-          // only remove actual layer objects (marker cluster groups)
-          if (l && typeof l.getLayers === 'function') map.removeLayer(l);
-        });
+        Object.values(map._customGeoJsonLayers).forEach(l => map.removeLayer(l));
         map._customGeoJsonLayers = {};
       }
     };
-  }, [selectedLayers, layerIcons, dataOnMapSearch, fetchPointsFromDB]);
+  }, [selectedLayers, layerIcons, dataOnMapSearch]);
   // Pour le warning React Hook, layerIcons est une constante statique, on peut l'ignorer avec un commentaire ESLint
   // eslint
 
@@ -455,86 +354,6 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     );
   };
 
-  /*const locateUser = () => {
-    if (!navigator.geolocation) {
-      alert("La géolocalisation n'est pas supportée par ce navigateur.");
-      return;
-    }
-
-    // Indicateur de chargement
-    const loadingIndicator = L.divIcon({
-      html: `<div class="animate-pulse flex items-center justify-center">
-        <div class="w-8 h-8 bg-blue-500 rounded-full"></div>
-      </div>`,
-      className: '',
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
-    });
-    const tempMarker = L.marker(mapInstance.current.getCenter(), { icon: loadingIndicator }).addTo(mapInstance.current);
-
-    // Configuration améliorée
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    };
-
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-        
-        // Seuil de précision (en mètres)
-        if (accuracy > 30) {
-          console.log(`Précision actuelle: ${accuracy}m - attente meilleure mesure...`);
-          return;
-        }
-
-        // Précision satisfaisante - on arrête le watch
-        navigator.geolocation.clearWatch(watchId);
-        mapInstance.current.removeLayer(tempMarker);
-
-        setUserPosition([latitude, longitude]);
-        
-        // Nettoyage des anciens éléments
-        if (userPositionMarkerRef.current) mapInstance.current.removeLayer(userPositionMarkerRef.current);
-        if (accuracyCircleRef.current) mapInstance.current.removeLayer(accuracyCircleRef.current);
-
-        // Cercle de précision
-        accuracyCircleRef.current = L.circle([latitude, longitude], {
-          radius: accuracy,
-          fillColor: '#3388ff',
-          color: '#3388ff',
-          weight: 1,
-          opacity: 0.5,
-          fillOpacity: 0.2
-        }).addTo(mapInstance.current);
-
-        // Marqueur avec animation
-        const userIcon = L.divIcon({
-          html: `<div class="relative">
-            <div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>
-            <div class="relative w-6 h-6 bg-blue-600 rounded-full border-2 border-white"></div>
-          </div>`,
-          className: '',
-          iconSize: [24, 24],
-          iconAnchor: [12, 12]
-        });
-
-        userPositionMarkerRef.current = L.marker([latitude, longitude], { icon: userIcon })
-          .addTo(mapInstance.current)
-          .bindPopup(`Votre position (précision: ${Math.round(accuracy)}m)`);
-        
-        mapInstance.current.setView([latitude, longitude], 15);
-      },
-      (err) => {
-        mapInstance.current.removeLayer(tempMarker);
-        console.error("Erreur de géolocalisation:", err);
-        alert(`Impossible de récupérer la position: ${err.message}`);
-      },
-      options
-    );
-  };*/
-
   const resetMap = () => {
     // Supprimer l'itinéraire
     if (routeLayer) {
@@ -558,7 +377,6 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     setUserPosition(null);
     setDistanceToService(null);
     setSelectingService(false);
-    setTryToShape(false);
   };
 
   // Fonction pour calculer la distance (Haversine)
@@ -575,26 +393,19 @@ const LeafletMap = ({ selectedLayers = [] }) => {
   // Fonction pour trouver le service le plus proche
   const findClosestService = () => {
     if (!userPosition) return null;
-    let minDist = Infinity, localClosest = null;
-    console.log("OK OK", mapInstance.current._customGeoJsonLayers);
+    let minDist = Infinity, closest = null;
     Object.values(mapInstance.current._customGeoJsonLayers || {}).forEach(cluster => {
-      // skip placeholders or unexpected values
-      if (!cluster || typeof cluster.getLayers !== 'function') return;
       cluster.getLayers().forEach(marker => {
-        try {
-          console.log("CURRENT MARKER", marker);
-          const { lat, lng } = marker.getLatLng();
-          const dist = getDistance(userPosition[0], userPosition[1], lat, lng);
-          if (dist < minDist) {
-            minDist = dist;
-            localClosest = marker;
-          }
-        } catch {
-          // ignore malformed markers
+        console.log("CURRENT MARKER", marker);
+        const { lat, lng } = marker.getLatLng();
+        const dist = getDistance(userPosition[0], userPosition[1], lat, lng);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = marker;
         }
       });
     });
-    return localClosest;
+    return closest;
   };
 
   // Fonction pour tracer l'itinéraire voiture (OSRM)
@@ -619,71 +430,16 @@ const LeafletMap = ({ selectedLayers = [] }) => {
     }
   };
 
-  /*useEffect(() => {
-    if(tryToShape == true)
-    {
-      locateUser();
-      console.log("LOCATE PROCEED");
-    }
-  }, [tryToShape]);
-
-  useEffect(() => {
-    console.log("LOCATE CHANGE TO VALUE", userPosition);
-    if(userPosition != null)
-    {
-      setTimeout(() => {
-        const val = findClosestService();
-        setClosest(val);
-        console.log("FIND CLOSEST SERVICE PROCEED ", val);
-      }, 2000);
-    }
-  }, [userPosition]);
-
-  useEffect(() => {
-    console.log("CLOSEST SERVICE CHANGE TO VALUE", closest);
-    const locate = async () => {
+  // Bouton 1 : Localiser et tracer vers le plus proche
+  const handleLocateAndRoute = async () => {
+    locateUser();
+    const closest = findClosestService();
+    setTimeout(async () => {
       if (closest && userPosition) {
         await drawRoute(userPosition, [closest.getLatLng().lat, closest.getLatLng().lng]);
         setDistanceToService(getDistance(userPosition[0], userPosition[1], closest.getLatLng().lat, closest.getLatLng().lng));
       }
-    }
-
-    locate();
-  }, [closest]);*/
-
-  /*useEffect(() => {
-    if(tryToShape)
-    {
-      console.log("LOCATE CHANGE TO VALUE", userPosition);
-      if(closest == null) 
-      {
-        locateUser();
-        //setTryToShape(false);
-  
-        const val = findClosestService();
-        setClosest(val);
-        console.log("FIND CLOSEST SERVICE PROCEED ", val);
-      }
-    }
-  }, [userPosition]);*/
-
-  // Bouton 1 : Localiser et tracer vers le plus proche
-  const handleLocateAndRoute = async () => {
-    locateUser();
-    //setTryToShape(true);
-    //const closest = findClosestService();
-    let val = null;
-    setTimeout(() => {
-      val = findClosestService();
-    }, 1500);
-    //const val = findClosestService();
-    setTimeout(async () => {
-      console.log("CLOSEST", val, "USER POS", userPosition);
-      if (val && userPosition) {
-        await drawRoute(userPosition, [val.getLatLng().lat, val.getLatLng().lng]);
-        setDistanceToService(getDistance(userPosition[0], userPosition[1], val.getLatLng().lat, val.getLatLng().lng));
-      }
-    }, 3500);
+    }, 2500);
   };
 
   // Bouton 2 : Annuler et choisir un autre service
@@ -711,66 +467,22 @@ const LeafletMap = ({ selectedLayers = [] }) => {
       }
     };
     Object.values(map._customGeoJsonLayers || {}).forEach(cluster => {
-      if (!cluster || typeof cluster.getLayers !== 'function') return;
-      cluster.getLayers().forEach(marker => {
-        try { marker.on('click', onMarkerClick); } catch { /* ignore */ }
-      });
+      cluster.getLayers().forEach(marker => marker.on('click', onMarkerClick));
     });
     return () => {
       Object.values(map._customGeoJsonLayers || {}).forEach(cluster => {
-        if (!cluster || typeof cluster.getLayers !== 'function') return;
-        cluster.getLayers().forEach(marker => {
-          try { marker.off('click', onMarkerClick); } catch { /* ignore */ }
-        });
+        cluster.getLayers().forEach(marker => marker.off('click', onMarkerClick));
       });
     };
-  }, [selectingService, userPosition, drawRoute]);
-
-    // Overlay de chargement amélioré
-  const LoadingOverlay = () => (
-    <div className="absolute inset-0 z-[999] flex flex-col items-center justify-center bg-black bg-opacity-20 backdrop-blur-sm">
-      <div className="p-6 bg-white rounded-lg shadow-xl min-w-[300px]">
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full border-4 border-blue-200"></div>
-            <div className="absolute top-0 left-0 w-8 h-8 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
-          </div>
-          <div className="flex-1">
-            <h4 className="font-medium text-gray-800">Chargement en cours</h4>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-              <div 
-                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
-                style={{ width: `${loadingProgress}%` }}
-              ></div>
-            </div>
-            <p className="mt-1 text-sm text-gray-500">
-              {loadingProgress < 30 && "Préparation des données..."}
-              {loadingProgress >= 30 && loadingProgress < 70 && "Récupération des informations..."}
-              {loadingProgress >= 70 && "Affichage sur la carte..."}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  }, [selectingService, userPosition]);
 
   return (
-    <div className="relative w-full h-full rounded-lg overflow-hidden">
-      {/* Overlay de chargement */}
-      {isLoading && <LoadingOverlay />}
-
-      {/* <MapControls 
-        onLocate={handleLocateAndRoute}
-        onReset={resetMap}
-        distance={distanceToService}
-      /> */}
-
+    <div className="relative w-full rounded-lg h-[600px] shadow-xl overflow-hidden">
       {/* Contrôles de carte */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-3">
         <button 
           onClick={handleLocateAndRoute} 
-          //onClick={() => { if(tryToShape == false) setTryToShape(true)} } 
-          className="flex cursor-pointer items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg shadow-md hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg shadow-md hover:bg-blue-700"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

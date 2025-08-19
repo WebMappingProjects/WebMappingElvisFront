@@ -1,52 +1,16 @@
 export default function FooterAdmin() {
   return (
-    <>
-      <footer className="block py-4">
-        <div className="container px-4 mx-auto">
-          <hr className="mb-4 border-b-1 border-blueGray-200" />
-          <div className="flex flex-wrap items-center justify-center md:justify-between">
-            <div className="w-full px-4 md:w-4/12">
-              <div className="py-1 text-sm font-semibold text-center text-blueGray-500 md:text-left">
-                Copyright © {new Date().getFullYear()}{" "}
-                <a
-                  href="#"
-                  className="py-1 text-sm font-semibold text-blueGray-500 hover:text-blueGray-700"
-                >
-                  sig geoportal app
-                </a>
-              </div>
-            </div>
-            <div className="w-full px-4 md:w-8/12">
-              <ul className="flex flex-wrap justify-center list-none md:justify-end">
-                <li>
-                  <a
-                    href="#"
-                    className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                  >
-                    A propos de nous
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                  >
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
-                  >
-                    MIT License
-                  </a>
-                </li>
-              </ul>
-            </div>
+    <footer className="absolute bottom-0 left-0 right-0 z-10 py-2 bg-white bg-opacity-80 backdrop-blur-sm">
+      <div className="container px-4 mx-auto">
+        <div className="flex items-center justify-between">
+          <div className="text-xs text-gray-600">
+            © {new Date().getFullYear()} MaKarte - Portail Géospatial
+          </div>
+          <div className="text-xs text-gray-600">
+            Département du Mfoundi, Cameroun
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 }

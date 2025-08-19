@@ -232,6 +232,8 @@ export const refreshAccess = async (route, method = RequestType.GET, body = {}, 
                 }
             } catch (err2) {
                 console.error("ERROR 2", err2);
+                location.reload();
+                localStorage.clear();
             }
         }
     }

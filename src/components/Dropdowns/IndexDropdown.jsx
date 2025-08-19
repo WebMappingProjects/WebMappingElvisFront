@@ -96,12 +96,6 @@ const IndexDropdown = () => {
           No Layout
         </span>
         <Link
-          to="/landing"
-          className="block w-full px-4 py-2 text-sm font-normal bg-transparent whitespace-nowrap text-blueGray-700"
-        >
-          Landing
-        </Link>
-        <Link
           to="/profile"
           className="block w-full px-4 py-2 text-sm font-normal bg-transparent whitespace-nowrap text-blueGray-700"
         >

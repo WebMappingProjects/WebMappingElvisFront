@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NotificationDropdown from "../Dropdowns/NotificationDropdown";
 import UserDropdown from "../Dropdowns/UserDropdown";
 import { useState, useEffect } from "react";
-import { FaBars, FaTimes, FaUser, FaCheck, FaBuilding, FaUniversity, FaMap, FaWater, FaRoad, FaLayerGroup, FaEye, FaEyeSlash, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaBars, FaTimes, FaUser, FaCheck, FaBuilding, FaUniversity, FaMap, FaWater, FaRoad, FaLayerGroup, FaEye, FaEyeSlash, FaChevronDown, FaChevronUp, FaHome } from "react-icons/fa";
 import { useAppMainContext } from "../../context/AppProvider";
 import pharmacieIcon from "../../assets/markers/doctors_bag_32px.png";
 import restaurantIcon from "../../assets/markers/restaurant_32px.png";
@@ -37,9 +37,10 @@ import laverieIcon from "../../assets/markers/automatic_car_wash_32px.png";
 import stationServiceIcon from "../../assets/markers/gas_station_32px.png";
 import agenceDeVoyageIcon from "../../assets/markers/trolleybus_32px.png";
 
-export default function MapSidebar() {
+export default function MapSidebar({ isSidebarVisible, setIsSidebarVisible }) {
     const { selectedLayers, setSelectedLayers } = useAppMainContext();
-    const [collapseShow, setCollapseShow] = useState("hidden");
+    //const [collapseShow, setCollapseShow] = useState("hidden");
+    const [collapseShow, setCollapseShow] = useState("bg-gradient-to-b from-slate-800 to-slate-900 m-2 py-3 px-2 rounded-lg shadow-lg");
     const [expandedCategories, setExpandedCategories] = useState({ services: true, autres: true });
 
     // Définition de toutes les couches disponibles (nom, label, icône, attribution)
@@ -124,49 +125,61 @@ export default function MapSidebar() {
 
     return (
         <>
-          <nav className="relative z-[1001] flex flex-wrap items-center justify-between px-0 py-0 bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-80">
-            <div className="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-nowrap">
+          {/* <nav className="z-[1100] flex flex-wrap items-center justify-between px-0 py-0 bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl md:left-0 md:block fixed md:top-0 md:bottom-0 overflow-y-auto md:flex-row md:flex-nowrap overflow-hidden md:w-80"> */}
+          <nav className="z-[1100] fixed items-center justify-between px-0 py-0 bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl left-0 block top-0 bottom-0 overflow-y-auto flex-row flex-nowrap overflow-hidden w-80">
+            {/* <div className="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-nowrap"> */}
+            <div className="relative flex justify-between w-full px-0 mx-auto flex-col items-stretch min-h-full flex-nowrap">
               {/* Toggler */}
-              <button
+              {/* <button
                 className="px-3 py-1 text-xl leading-none text-white transition-opacity bg-transparent border border-transparent border-solid rounded cursor-pointer opacity-70 md:hidden hover:opacity-100"
                 type="button"
-                onClick={() => setCollapseShow("bg-gradient-to-b from-slate-800 to-slate-900 m-2 py-3 px-6 rounded-lg shadow-lg")}
+                onClick={() => setCollapseShow("bg-gradient-to-b from-slate-800 to-slate-900 m-2 py-3 px-2 rounded-lg shadow-lg")}
               >
                 <FaBars />
-              </button>
+              </button> */}
+              <div className="flex flex-row flex-nowrap items-center justify-between py-2 px-4 pt-5">
+                {/* Home Buttun */}
+                <Link
+                  className="inline rounded-full bg-blue-400/40 p-2 px-2 mr-0 text-lg font-bold text-left text-white transition-colors whitespace-nowrap hover:text-blue-300"
+                  to="/"
+                >
+                  <FaHome />
+                </Link>
 
-              {/* Brand */}
+                <button
+                  className="px-2 py-1 text-xl leading-none text-white transition-opacity bg-transparent border border-transparent border-solid rounded cursor-pointer opacity-70 md:hidden hover:opacity-100"
+                  type="button"
+                  //onClick={() => setCollapseShow("bg-gradient-to-b from-slate-800 to-slate-900 m-2 py-3 px-2 rounded-lg shadow-lg")}
+                  onClick={() => setIsSidebarVisible(false)}
+                >
+                  <FaTimes />
+                </button>
+              </div>
               <Link
-                className="inline-block p-6 px-6 mr-0 text-lg font-bold text-left text-white uppercase transition-colors md:block md:pb-4 whitespace-nowrap hover:text-blue-300"
+                className="block pt-2 pb-4 px-4 mr-0 text-lg font-bold text-center text-white uppercase transition-colors md:pb-4 whitespace-nowrap hover:text-blue-300"
                 to="/"
               >
                 🗺️ Portail Géospatial
               </Link>
 
               {/* Catégories dynamiques */}
-              <div className={
+              {/* <div className={
                 "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-2 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded " +
                 collapseShow
+              }> */}
+              <div className={
+                "flex flex-col items-stretch opacity-100 relative mt-2 shadow-none top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto flex-1 rounded "
               }>
                 {/* Collapse header */}
                 <div className="block pb-4 mb-4 border-b border-solid md:min-w-full md:hidden border-slate-600">
                   <div className="flex flex-wrap">
-                    <div className="w-6/12">
+                    <div className="w-6/12 mx-4">
                       <Link
                         className="inline-block p-4 px-0 mr-0 text-sm font-bold text-left text-white uppercase md:block md:pb-2 whitespace-nowrap"
                         to="/"
                       >
                         Couches
                       </Link>
-                    </div>
-                    <div className="flex justify-end w-6/12">
-                      <button
-                        type="button"
-                        className="px-3 py-1 text-xl leading-none text-white transition-opacity bg-transparent border border-transparent border-solid rounded cursor-pointer opacity-70 md:hidden hover:opacity-100"
-                        onClick={() => setCollapseShow("hidden")}
-                      >
-                        <FaTimes />
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -194,7 +207,7 @@ export default function MapSidebar() {
                       <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-600">
                         <button
                           onClick={() => toggleCategory(cat.key)}
-                          className="flex items-center flex-1 text-left"
+                          className="flex items-center flex-1 text-left cursor-pointer"
                         >
                           <h6 className={`flex items-center text-sm font-semibold ${cat.color} uppercase tracking-wide`}>
                             <FaLayerGroup className="mr-2 text-sm" />
@@ -207,14 +220,14 @@ export default function MapSidebar() {
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => toggleAllInCategory(categoryLayers)}
-                            className="p-1 text-xs transition-colors text-slate-400 hover:text-white"
+                            className="p-1 text-xs transition-colors cursor-pointer text-slate-400 hover:text-white"
                             title="Tout sélectionner/désélectionner"
                           >
                             {selectedInCategory === categoryLayers.length ? <FaEyeSlash /> : <FaEye />}
                           </button>
                           <button
                             onClick={() => toggleCategory(cat.key)}
-                            className="text-xs transition-colors text-slate-400 hover:text-white"
+                            className="text-xs transition-colors cursor-pointer text-slate-400 hover:text-white"
                           >
                             {expandedCategories[cat.key] ? <FaChevronUp /> : <FaChevronDown />}
                           </button>
@@ -288,7 +301,7 @@ export default function MapSidebar() {
                 <div className="flex-grow"></div>
                 <div className="px-6 py-4 mt-auto border-t border-slate-600">
                   <p className="text-xs text-center text-slate-400">
-                    © 2024 Système d'Information Géographique
+                    © 2025 Système d'Information Géographique
                   </p>
                 </div>
               </div>

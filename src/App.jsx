@@ -48,6 +48,7 @@ import EntityConseillerTable from "./components/Tables/EntityConseillerTable";
 import EntityConseillerForm from "./components/Forms/EntityConseillerForm";
 import ServiceForm from "./views/admin/ServiceForm";
 import EntityForm from "./views/admin/EntityForm";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
 
   return (
     <BrowserRouter>
+    <ToastContainer position="bottom-right" autoClose={5000} />
     <Routes>
 
       {/* add routes with layouts */}
