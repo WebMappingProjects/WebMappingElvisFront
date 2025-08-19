@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import './App.css';
 import Admin from "./layouts/Admin";
 import Auth from "./layouts/Auth";
-import Landing from "./views/Landing";
 import Profile from "./views/Profile";
 import Index from "./views/Index";
 
