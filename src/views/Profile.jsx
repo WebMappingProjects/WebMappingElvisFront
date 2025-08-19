@@ -9,6 +9,8 @@ import Navbar from "../components/Navbars/IndexNavbar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion, useAnimation } from "framer-motion";
+import ConfirmMessagePopup from "../components/popups/ConfirmMessagePopup";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "/auth/users";
 
@@ -16,6 +18,7 @@ export default function Profile() {
   // États pour les champs et l'édition
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [editField, setEditField] = useState(null);
   const [tempUsername, setTempUsername] = useState("");
   const [tempEmail, setTempEmail] = useState("");
@@ -25,6 +28,8 @@ export default function Profile() {
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPopupVisible, setConfirmPopupVisible] = useState(false);
+  const navigate = useNavigate();
 
   // Initialisation
   useEffect(() => {
@@ -33,6 +38,7 @@ export default function Profile() {
       setUserId(user.id);
       setUsername(user.username || "");
       setEmail(user.email || "");
+      setRole(user.role || "");
     }
   }, []);
 
@@ -65,6 +71,39 @@ export default function Profile() {
     return true;
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const url = `${API_URL}/${userId}/delete-account/`;
+              
+      const refreshDatas = await refreshAccess(url, RequestType.DELETE);
+      
+      let response = null;
+      if (refreshDatas.response) {
+        response = refreshDatas.response;
+      } else {
+        const token = refreshDatas.token;
+        response = await axios.delete(url, {
+          headers: {
+            "Content-Type": "Application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          withCredentials: true
+        });
+      }
+
+      if(response.status == 200) {
+        setConfirmPopupVisible(false);
+        
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+        //navigate("/");
+      }
+    } catch (error) {
+      console.error("ERROR", error);
+    }
+  }
+
   const handleSave = async () => {
     setIsLoading(true);
     
@@ -74,9 +113,36 @@ export default function Profile() {
           setIsLoading(false);
           return;
         }
+        
         // Logique pour changer le mot de passe
-        // Vous devrez implémenter l'API correspondante
-        toast.success("Mot de passe changé avec succès");
+        const url = `${API_URL}/change-password/`;
+        const data = {
+          "password": currentPassword,
+          "new_password": password
+        };
+
+        const refreshDatas = await refreshAccess(url, RequestType.PATCH, data);
+        let response = null;
+
+        if (refreshDatas.response) {
+          response = refreshDatas.response;
+        } else {
+          const token = refreshDatas.token;
+          response = await axios.patch(url, data, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            withCredentials: true
+          });
+        }
+        
+        if(response.status == 200 || response.status == 201)
+        {
+          setEditField(null);
+          toast.success("Mot de passe changé avec succès");
+        } else toast.error(response.response.data.error || "Échec de la modification");
+        
       } else {
         let savedDatas = null;
         if (editField === "username") {
@@ -118,15 +184,24 @@ export default function Profile() {
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour:", error);
-      toast.error("Échec de la modification");
+      toast.error(error.response.data.error || "Échec de la modification");
     } finally {
       setIsLoading(false);
-      setEditField(null);
+
+      if(editField !== "password")
+        setEditField(null);
     }
   };
 
   return (
     <>
+      <ConfirmMessagePopup
+        message="Êtes-vous sûr de vouloir continuer, cette opération est irreversible ?" 
+        onConfirm={handleDeleteAccount} 
+        onCancel={() => setConfirmPopupVisible(false)} 
+        open={confirmPopupVisible}
+        danger={false}
+      />
       <Navbar transparent />
       <main className="overflow-y-auto scroll-smooth">
         <section className="relative block h-[500px]">
@@ -176,7 +251,7 @@ export default function Profile() {
                       <img
                         alt="Profil utilisateur"
                         src={profileImage}
-                        className="-m-16 -ml-20 align-middle border-none rounded-full shadow-xl w-60 h-60 lg:-ml-16 max-w-150-px object-cover"
+                        className="object-cover -m-16 -ml-20 align-middle border-none rounded-full shadow-xl w-60 h-60 lg:-ml-16 max-w-150-px"
                       />
                     </div>
                   </div>
@@ -323,14 +398,14 @@ export default function Profile() {
                           <div className="flex justify-end gap-2">
                             <button
                               onClick={handleCancel}
-                              className="px-4 cursor-pointer py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+                              className="px-4 py-2 text-white bg-gray-500 rounded cursor-pointer hover:bg-gray-600"
                               disabled={isLoading}
                             >
                               Annuler
                             </button>
                             <button
                               onClick={handleSave}
-                              className="px-4 py-2 cursor-pointer text-white bg-primary-default rounded hover:bg-primary-dark"
+                              className="px-4 py-2 text-white rounded cursor-pointer bg-primary-default hover:bg-primary-dark"
                               disabled={isLoading}
                             >
                               {isLoading ? "En cours..." : "Enregistrer"}
@@ -361,9 +436,21 @@ export default function Profile() {
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
                         Gérez vos informations personnelles et paramètres liés à l'application.
                       </p>
-                      <button className="px-6 py-2 cursor-pointer text-white bg-red-500 rounded-lg hover:bg-red-600">
-                        Supprimer mon compte
-                      </button>
+                      { role == "admin" ? (
+                        <button 
+                          className="px-6 py-2 text-white bg-red-500 rounded-lg cursor-pointer hover:bg-red-600"
+                          disabled
+                          >
+                          Supprimer mon compte
+                        </button>
+                      ) : (
+                        <button 
+                          className="px-6 py-2 text-white bg-red-500 rounded-lg cursor-pointer hover:bg-red-600"
+                          onClick={() => setConfirmPopupVisible(true)}
+                          >
+                          Supprimer mon compte
+                        </button>
+                      ) }
                     </div>
                   </div>
                 </div>

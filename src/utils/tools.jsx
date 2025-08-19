@@ -235,6 +235,6 @@ export const refreshAccess = async (route, method = RequestType.GET, body = {}, 
                 location.reload();
                 localStorage.clear();
             }
-        }
+        } else return { message: "", response, token }
     }
 }
