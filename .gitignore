@@ -29,6 +29,4 @@ src/components/Cards/CardTable copy.jsx
 src/App copy.jsx
 
 # tmp
-Dockerfile
-docker-compose.yml
 nginx.conf

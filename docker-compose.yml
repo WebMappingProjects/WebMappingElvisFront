@@ -1,0 +1,39 @@
+services:
+  frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3070:3070"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=https://api-makarte.reimca-app.com/api
+
+
+  #nginx:
+  #  build: .
+  #  ports:
+  #    - "80:80"
+  #  depends_on:
+  #    - geoserver
+  #  volumes:
+  #    - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
+  geoserver:
+    container_name: geoserver
+    image: docker.osgeo.org/geoserver:2.22.x
+    environment:
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+      - GEOSERVER_ADMIN_USER=admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - geoserver_data:/opt/geoserver/data_dir
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/geoserver"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  geoserver_data:
