@@ -13,6 +13,7 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/geoserver/, ''),
       }
-    }
+    },
+    allowedHosts: ['makarte.reimca-app.com']
   }
 })
