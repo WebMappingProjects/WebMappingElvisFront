@@ -26,7 +26,8 @@ export default function Navbar(props) {
   const { authUser, setAuthUser } = useAppMainContext();
 
   useEffect(() => {
-    setIsAutheticated(getCookie("authenticated") != null);
+    //setIsAutheticated(getCookie("authenticated") != null);
+    setIsAutheticated(localStorage.getItem("token") != null);
   }, []);
 
   useEffect(() => {

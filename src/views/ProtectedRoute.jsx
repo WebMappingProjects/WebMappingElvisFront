@@ -3,11 +3,11 @@ import { Navigate } from "react-router-dom";
 import { getCookie } from "../utils/tools";
 
 const ProtectedRoute = ({ children }) => {
-  // const token = localStorage.getItem("token");
-  const isAuthenticated = getCookie("authenticated");
+  const token = localStorage.getItem("token");
+  // const isAuthenticated = getCookie("authenticated");
   
-  //if (!token) {
-  if (!isAuthenticated) {
+  if (!token) {
+  //if (!isAuthenticated) {
     return <Navigate to="/auth/login" replace />;
   }
 
