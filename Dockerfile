@@ -17,4 +17,4 @@ RUN yarn build
 
 EXPOSE 3070
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start-production"]
